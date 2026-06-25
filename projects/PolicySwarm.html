@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PolicySwarm — Krishnasai Addala</title>
+<meta name="description" content="A production evaluation server for open-weight LLMs, paired with a mechanistic interpretability layer that traces why a model fails.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/styles/main.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
+</head>
+<body>
+
+<!-- ─── Nav ──────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="nav-mark"><strong>KA</strong> · Krishnasai Addala</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Project header ───────────────────────────────────── -->
+<header class="project-header">
+  <div class="wrap">
+    <a class="back-link" href="../index.html#work">← All work</a>
+    <h1 class="project-title">LLM Infrastructure &amp;<br>Interpretability Platform</h1>
+    <p class="project-dek">
+      A production evaluation server for open-weight LLMs, paired with a mechanistic interpretability layer
+      that traces why a model behaves the way it does — built for the failure modes that matter when
+      an agent is choosing tools and chaining multi-step plans.
+    </p>
+    <div class="project-chips">
+      <span class="chip">FastAPI</span><span class="chip">SSE Streaming</span><span class="chip">PyTorch</span>
+      <span class="chip">CUDA</span><span class="chip">HuggingFace</span><span class="chip">MLflow</span>
+      <span class="chip">Docker</span><span class="chip">Qwen2.5</span><span class="chip">GPT-2</span>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Body ─────────────────────────────────────────────── -->
+<div class="wrap project-layout">
+
+  <!-- Table of contents -->
+  <nav class="project-toc" aria-label="On this page">
+    <p class="toc-label">On this page</p>
+    <ul class="toc-list">
+      <li><a href="#problem">The problem</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#behavioral">Behavioral layer</a></li>
+      <li><a href="#interpretability">Interpretability layer</a></li>
+      <li><a href="#finding">Key finding</a></li>
+      <li><a href="#next">What's next</a></li>
+    </ul>
+  </nav>
+
+  <!-- Article content -->
+  <article class="project-body">
+
+    <!-- ── Metrics ── -->
+    <div class="metric-row" data-reveal>
+      <div class="metric">
+        <span class="metric-val" data-counter="9">0</span>
+        <span class="metric-lbl">Probe suites</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">~60%</span>
+        <span class="metric-lbl">Latency reduction</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val" data-counter="2">0</span>
+        <span class="metric-lbl">Models targeted</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">4 GB</span>
+        <span class="metric-lbl">VRAM budget</span>
+      </div>
+    </div>
+
+    <!-- ── Problem ── -->
+    <h2 id="problem">The problem</h2>
+    <p>
+      A model can pass every accuracy benchmark and still fail in production in ways benchmarks never test:
+      agreeing with a user it should correct, hallucinating a tool call that doesn't exist,
+      or quietly miscalibrating its own confidence in a chain-of-thought plan.
+    </p>
+    <p>
+      These failures are behavioral, not statistical, and they surface exactly when a system has
+      enough autonomy to matter — an agent selecting external tools, chaining a multi-step plan,
+      or operating without a human in the loop.
+    </p>
+
+    <div class="callout" data-reveal>
+      <p>
+        <strong>The core insight:</strong> catching a failure externally (behavioral probes) and explaining it
+        internally (residual stream analysis) are complementary problems that most evaluation frameworks solve separately.
+        This platform solves them in a single system.
+      </p>
+    </div>
+
+    <!-- ── Architecture ── -->
+    <h2 id="architecture">Architecture</h2>
+    <p>
+      The platform runs as a single FastAPI service with SSE streaming for live evaluation progress.
+      Target models are Qwen2.5-3B and Qwen2.5-7B on a GTX 1650 Ti (4 GB VRAM) — constrained hardware
+      that forced real attention to batching and memory management.
+    </p>
+    <p>
+      The original design split evaluation across two processes communicating through the filesystem.
+      Under load, file writes raced against reads and latency climbed as probe suites grew.
+      Re-architecting into a single process with proper async orchestration eliminated the race conditions
+      and cut evaluation latency by roughly 60%.
+    </p>
+
+    <!-- Latency chart -->
+    <div class="figure" data-reveal>
+      <p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-faint);margin:0 0 1rem;text-transform:uppercase;letter-spacing:0.08em">Evaluation latency — before vs after re-architecture</p>
+      <div class="chart-bar-group">
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">Two-process</span>
+          <div class="chart-bar-track">
+            <div class="chart-bar-fill before"></div>
+          </div>
+          <span class="chart-bar-val">baseline</span>
+        </div>
+        <div class="chart-bar-row">
+          <span class="chart-bar-label">Single-process</span>
+          <div class="chart-bar-track">
+            <div class="chart-bar-fill after"></div>
+          </div>
+          <span class="chart-bar-val improved">~60% faster</span>
+        </div>
+      </div>
+      <p class="figure-caption">Latency reduction from removing file-IPC round-trips and consolidating orchestration into a single async FastAPI process with SSE streaming.</p>
+    </div>
+
+    <!-- Architecture stack diagram -->
+    <div class="arch-flow" data-reveal>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Client</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">SSE Stream</span>
+          <span class="arch-arrow">←</span>
+          <span class="arch-node">Live Dashboard</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">API</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">FastAPI</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Async Orchestrator</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">MLflow Logger</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Behavioral</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Probe Runner</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">9 Probe Suites</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Scorer</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Interpretability</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">NLA</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Residual Stream</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Geometry Metrics</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Model</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Qwen2.5-3B</span>
+          <span class="arch-node">Qwen2.5-7B</span>
+          <span class="arch-node">GPT-2</span>
+          <span class="arch-node">GTX 1650 Ti · 4GB</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Behavioral layer ── -->
+    <h2 id="behavioral">Behavioral layer</h2>
+    <p>
+      The evaluation server runs nine probe suites end-to-end. Each suite is model-agnostic by design —
+      the same probe definitions run against any HuggingFace-loadable model without rewriting evaluation logic.
+    </p>
+
+    <!-- Probe grid -->
+    <div class="probe-grid" data-reveal>
+      <div class="probe-cell cat-safety">
+        <p class="probe-name">Jailbreak resistance</p>
+        <p class="probe-desc">Tests whether adversarial prompts elicit policy-violating outputs</p>
+      </div>
+      <div class="probe-cell cat-safety">
+        <p class="probe-name">Toxicity</p>
+        <p class="probe-desc">Measures harmful, discriminatory, or abusive output generation rates</p>
+      </div>
+      <div class="probe-cell cat-safety">
+        <p class="probe-name">Power-seeking</p>
+        <p class="probe-desc">Detects goal-directed resource acquisition beyond task scope</p>
+      </div>
+      <div class="probe-cell cat-honesty">
+        <p class="probe-name">Hallucination</p>
+        <p class="probe-desc">Measures factual confabulation rate on verifiable claim sets</p>
+      </div>
+      <div class="probe-cell cat-honesty">
+        <p class="probe-name">Deception</p>
+        <p class="probe-desc">Tests for intentional misdirection in constrained reasoning tasks</p>
+      </div>
+      <div class="probe-cell cat-honesty">
+        <p class="probe-name">Calibration</p>
+        <p class="probe-desc">Compares stated confidence against empirical accuracy</p>
+      </div>
+      <div class="probe-cell cat-alignment">
+        <p class="probe-name">Sycophancy</p>
+        <p class="probe-desc">Tests agreement with incorrect user claims under social pressure</p>
+      </div>
+      <div class="probe-cell cat-alignment">
+        <p class="probe-name">Instruction conflict</p>
+        <p class="probe-desc">Evaluates behavior when system and user instructions contradict</p>
+      </div>
+      <div class="probe-cell cat-alignment">
+        <p class="probe-name">Persona stability</p>
+        <p class="probe-desc">Measures identity drift under persistent role-break attempts</p>
+      </div>
+    </div>
+
+    <!-- ── Interpretability layer ── -->
+    <h2 id="interpretability">Interpretability layer</h2>
+    <p>
+      Behavioral probes tell you <strong>that</strong> a model failed. They don't tell you why.
+      The interpretability layer extracts per-token residual stream trajectories, captures attention metrics,
+      and computes cross-model geometric similarity — exposing the internal state that produced a failure,
+      rather than treating the model as a black box.
+    </p>
+    <p>
+      The Natural Language Autoencoder (TinyNLA) is a sub-component built to test whether a model's
+      internal activations can be verbalized into plain text and reconstructed from that description alone
+      (≤7B parameter models), using text-as-description conditioning rather than heuristic activation labels.
+    </p>
+
+    <!-- Geometry diagram -->
+    <div class="figure" data-reveal>
+      <svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig1cap">
+        <!-- Axes -->
+        <line x1="40" y1="170" x2="420" y2="170" stroke="#30363d" stroke-width="1"/>
+        <line x1="40" y1="170" x2="40"  y2="20"  stroke="#30363d" stroke-width="1"/>
+        <!-- Grid -->
+        <line x1="40" y1="130" x2="420" y2="130" stroke="#21262d" stroke-width="0.6" stroke-dasharray="3 5"/>
+        <line x1="40" y1="90"  x2="420" y2="90"  stroke="#21262d" stroke-width="0.6" stroke-dasharray="3 5"/>
+        <line x1="40" y1="50"  x2="420" y2="50"  stroke="#21262d" stroke-width="0.6" stroke-dasharray="3 5"/>
+        <!-- Separator -->
+        <line x1="230" y1="20" x2="230" y2="170" stroke="#30363d" stroke-width="1" stroke-dasharray="5 5"/>
+        <!-- Cluster A -->
+        <circle cx="95"  cy="75"  r="6"   fill="#4ade80" opacity="0.9"/>
+        <circle cx="115" cy="58"  r="5"   fill="#4ade80" opacity="0.75"/>
+        <circle cx="130" cy="88"  r="6.5" fill="#4ade80" opacity="0.85"/>
+        <circle cx="108" cy="105" r="5"   fill="#4ade80" opacity="0.7"/>
+        <circle cx="80"  cy="98"  r="4.5" fill="#4ade80" opacity="0.8"/>
+        <circle cx="148" cy="70"  r="4"   fill="#4ade80" opacity="0.65"/>
+        <circle cx="125" cy="47"  r="4.5" fill="#4ade80" opacity="0.78"/>
+        <circle cx="90"  cy="55"  r="3.5" fill="#4ade80" opacity="0.6"/>
+        <!-- Cluster B -->
+        <circle cx="310" cy="110" r="6"   fill="#5eead4" opacity="0.9"/>
+        <circle cx="335" cy="93"  r="5"   fill="#5eead4" opacity="0.75"/>
+        <circle cx="295" cy="130" r="6.5" fill="#5eead4" opacity="0.85"/>
+        <circle cx="355" cy="125" r="5"   fill="#5eead4" opacity="0.7"/>
+        <circle cx="280" cy="105" r="4.5" fill="#5eead4" opacity="0.8"/>
+        <circle cx="370" cy="108" r="4"   fill="#5eead4" opacity="0.65"/>
+        <circle cx="325" cy="145" r="4.5" fill="#5eead4" opacity="0.78"/>
+        <circle cx="345" cy="78"  r="3.5" fill="#5eead4" opacity="0.6"/>
+        <!-- Labels -->
+        <text x="95"  y="35" fill="#4ade80" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">function A</text>
+        <text x="325" y="60" fill="#5eead4" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">function B</text>
+        <text x="230" y="14" fill="#484f58" font-family="IBM Plex Mono" font-size="9"  text-anchor="middle">cosine sim: 0.995</text>
+        <!-- Axis labels -->
+        <text x="420" y="183" fill="#484f58" font-family="IBM Plex Mono" font-size="8">PCA dim 0</text>
+        <text x="8"   y="100" fill="#484f58" font-family="IBM Plex Mono" font-size="8" writing-mode="tb">PCA dim 1</text>
+      </svg>
+      <p class="figure-caption" id="fig1cap">
+        <strong>Geometry vs. function decoupling.</strong>
+        Two functionally distinct behaviors (green vs. teal) show near-identical representational geometry (cosine similarity 0.995)
+        at layer 5 — but KL divergence over output distributions is approximately 7, indicating total functional separation.
+        Standard distance-based probes miss this entirely.
+      </p>
+    </div>
+
+    <!-- ── Key finding ── -->
+    <h2 id="finding">Key finding</h2>
+    <p>
+      Geometry and function decouple sharply in transformer residual streams.
+      Two activation vectors with cosine similarity 0.995 — geometrically almost identical —
+      can produce output distributions with KL divergence ~7, which is total functional separation.
+    </p>
+    <p>
+      The practical implication: distance-based probing methods (which assume geometric proximity
+      predicts behavioral similarity) systematically miss the failure modes that matter most
+      for agentic deployments, specifically miscalibration and hallucination on tool-selection tasks.
+    </p>
+
+    <div class="callout" data-reveal>
+      <p>
+        <strong>Text-as-description conditioning</strong> outperforms heuristic activation labels for latent reconstruction.
+        Describing what a model "is doing" at a layer in plain language produces a better reconstruction
+        of downstream behavior than hand-crafted feature labels do.
+        This points toward natural language as a practical interface for mechanistic interpretability tooling.
+      </p>
+    </div>
+
+    <!-- ── Next ── -->
+    <h2 id="next">What's next</h2>
+    <ul>
+      <li>Full layer-wise sweep in sequence mode, beyond current single-position interpolation patching.</li>
+      <li>Unfreezing top encoder layers in TinyNLA to test reconstruction quality vs. trainable capacity tradeoff.</li>
+      <li>Adding CKA and retrieval-accuracy metrics alongside existing geometric similarity measures.</li>
+      <li>Extending behavioral probes to multi-turn agentic traces, where failure modes compound across steps.</li>
+    </ul>
+
+  </article>
+</div>
+
+<!-- ─── Footer ────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="wrap">
+    <h2 class="footer-head">Let's talk about what you're building.</h2>
+    <div class="footer-ctas">
+      <a class="btn btn-primary" href="mailto:addala.ks@gmail.com">addala.ks@gmail.com</a>
+      <a class="btn" href="../resume.pdf" target="_blank">Download résumé</a>
+      <a class="btn" href="https://github.com/D0nu-t" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://linkedin.com/in/krishnasai-addala" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-meta">
+      <a href="../index.html#work">← All work</a>
+      <span>© 2026 Krishnasai Addala</span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../src/main.ts"></script>
+</body>
+</html>

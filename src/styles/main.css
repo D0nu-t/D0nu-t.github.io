@@ -5,8 +5,8 @@
 :root {
   /* Base */
   --bg:           #98b2a5;
-  --panel:        #161b22;
-  --panel-raised: #1c2330;
+  --panel:        #1f6a4d;
+  --panel-raised: #7addb4;
   --hairline:     #21262d;
   --hairline-hi:  #30363d;
 
@@ -16,7 +16,7 @@
   --text-faint:   #484f58;
 
   /* Green accent scale */
-  --green-bright: #4ade80;   /* primary CTA, active states */
+  --green-bright: #40b86c;   /* primary CTA, active states */
   --green-mid:    #86efac;   /* headings, hover */
   --green-muted:  #bbf7d0;   /* subtle highlights */
   --green-deep:   #166534;   /* filled chip backgrounds */

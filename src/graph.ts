@@ -6,9 +6,9 @@ import type { GraphNode, GraphLink, NodeCategory } from './types'
 const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
   // Projects
   { id: 'llm-platform',   label: 'LLM Interpretability\nPlatform', type: 'project', category: 'project' },
-  { id: 'policy-swarm',   label: 'Policy Simulator',               type: 'project', category: 'project' },
+  { id: 'policy-swarm',   label: 'Policy Discourse Simulator',               type: 'project', category: 'project' },
   { id: 'tinynla',        label: 'TinyNLA',                        type: 'project', category: 'project' },
-  { id: 'capgemini',      label: 'Capgemini',                      type: 'project', category: 'project' },
+  // { id: 'capgemini',      label: 'Capgemini',                      type: 'project', category: 'project' },
   { id: 'geminae',        label: 'Project Geminae',                type: 'project', category: 'project' },
 
   // Languages

@@ -16,7 +16,7 @@ export function initGraphEmbed(containerId: string): void {
 
   // ── Dimensions ──────────────────────────────────────────────────────────────
   let W = container.clientWidth
-  let H = container.clientHeight * 3
+  let H = container.clientHeight
 
   // ── SVG ─────────────────────────────────────────────────────────────────────
   const svg = d3.select(container)

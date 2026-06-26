@@ -1,3 +1,5 @@
+import type * as d3 from 'd3'
+
 // ─── Project types ────────────────────────────────────────────────────────────
 
 export interface ProjectMeta {
@@ -38,4 +40,21 @@ export interface CounterOptions {
 export interface RevealOptions {
   threshold?: number
   rootMargin?: string
+}
+
+// ─── Graph types ──────────────────────────────────────────────────────────────
+
+export type NodeCategory = 'project' | 'lang' | 'ml' | 'genai' | 'infra' | 'cloud' | 'data'
+
+export interface GraphNode extends d3.SimulationNodeDatum {
+  id: string
+  label: string
+  type: 'project' | 'skill'
+  category: NodeCategory
+  degree?: number
+}
+
+export interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
+  source: GraphNode | string
+  target: GraphNode | string
 }

@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         interpretability: resolve(__dirname, 'projects/interpretability-platform.html'),
+        graph: resolve(__dirname, 'projects/graph.html'),
       },
     },
   },

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills Graph — Krishnasai Addala</title>
+<meta name="description" content="Interactive force-directed graph of skills and the projects they are used in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/styles/main.css">
+<link rel="stylesheet" href="src/styles/graph.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
+</head>
+<body class="graph-page">
+
+<!-- ─── Nav ──────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-mark"><strong>KA</strong> · Krishnasai Addala</a>
+    <div class="nav-links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Page layout ──────────────────────────────────────── -->
+<div class="graph-layout">
+
+  <!-- Left panel — controls -->
+  <aside class="graph-panel">
+    <div class="graph-panel-inner">
+
+      <div class="panel-section">
+        <p class="panel-label">Skills Graph</p>
+        <p class="panel-desc">
+          Force-directed map of skills and the projects they appear in.
+          Hover a node to see its connections. Drag to rearrange. Scroll to zoom.
+        </p>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-label">Filter by category</p>
+        <div class="filter-group">
+          <button class="filter-btn" data-filter="lang">
+            <span class="filter-pip" style="background:#5eead4"></span>Languages
+          </button>
+          <button class="filter-btn" data-filter="ml">
+            <span class="filter-pip" style="background:#86efac"></span>ML / DL
+          </button>
+          <button class="filter-btn" data-filter="genai">
+            <span class="filter-pip" style="background:#34d399"></span>GenAI
+          </button>
+          <button class="filter-btn" data-filter="infra">
+            <span class="filter-pip" style="background:#6ee7b7"></span>Infrastructure
+          </button>
+          <button class="filter-btn" data-filter="cloud">
+            <span class="filter-pip" style="background:#a7f3d0"></span>Cloud
+          </button>
+          <button class="filter-btn" data-filter="data">
+            <span class="filter-pip" style="background:#d1fae5"></span>Data
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-label">Legend</p>
+        <div class="legend">
+          <div class="legend-row">
+            <svg width="20" height="20" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="8" fill="#4ade8033" stroke="#4ade80" stroke-width="2" filter="url(#glow)"/>
+            </svg>
+            <span>Project</span>
+          </div>
+          <div class="legend-row">
+            <svg width="20" height="20" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="5" fill="#86efac26" stroke="#86efac" stroke-width="1.5"/>
+            </svg>
+            <span>Skill — size = connections</span>
+          </div>
+          <div class="legend-row">
+            <svg width="20" height="4" viewBox="0 0 20 4">
+              <line x1="0" y1="2" x2="20" y2="2" stroke="#30363d" stroke-width="1.5"/>
+            </svg>
+            <span>Used in project</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-label">View</p>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="zoom-in"  aria-label="Zoom in">+</button>
+          <button class="zoom-btn" id="zoom-out" aria-label="Zoom out">−</button>
+          <button class="zoom-btn" id="zoom-reset" aria-label="Reset view">↺</button>
+        </div>
+      </div>
+
+      <!-- Tooltip -->
+      <div class="panel-section">
+        <div id="graph-tooltip" class="graph-tooltip" style="opacity:0">
+          <strong></strong>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- Graph canvas -->
+  <div class="graph-canvas" id="graph-container"></div>
+
+</div>
+
+<script type="module" src="src/graph-entry.ts"></script>
+</body>
+</html>

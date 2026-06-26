@@ -385,9 +385,7 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'capgemini', target: 'langchain' },
 { source: 'capgemini', target: 'openai' },
 { source: 'capgemini', target: 'docker' },
-{ source: 'capgemini', target: 'ETL' },
-{ source: 'capgemini', target: 'AWS' },
-{ source: 'capgemini', target: 'BigQuery' },
+
 
 
 ]

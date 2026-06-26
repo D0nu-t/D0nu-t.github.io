@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PolicySwarm — AI Governance Policy Simulator · Krishnasai Addala</title>
+<meta name="description" content="The same enforcement policy produces opposite predictions depending on which distance metric measures opinion divergence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/styles/main.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
+<style>
+  .badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-mono);font-size:.67rem;padding:.18rem .5rem;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;}
+  .badge-live{background:var(--green-deep);color:var(--green-bright);border:1px solid var(--green-bright);}
+  .badge-goal{background:var(--panel);color:var(--text-faint);border:1px solid var(--hairline-hi);}
+  .exp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;}
+  @media(max-width:540px){.exp-grid{grid-template-columns:1fr;}}
+  .exp-cell{background:var(--panel);padding:1rem 1.1rem;transition:background .15s;}
+  .exp-cell:hover{background:var(--panel-raised);}
+  .exp-cell.hl{border-left:2px solid var(--green-bright);}
+  .exp-num{font-family:var(--font-mono);font-size:.65rem;color:var(--text-faint);letter-spacing:.1em;display:block;margin-bottom:.3rem;}
+  .exp-name{font-family:var(--font-mono);font-size:.875rem;font-weight:600;color:var(--text);margin:0 0 .35rem;}
+  .exp-cell.hl .exp-name{color:var(--green-bright);}
+  .exp-body{font-size:.845rem;color:var(--text-faint);margin:0;line-height:1.5;}
+  /* Demo */
+  .demo-shell{border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;}
+  .demo-bar{background:var(--panel);border-bottom:1px solid var(--hairline);padding:.75rem 1.1rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;}
+  .demo-bar-lbl{font-family:var(--font-mono);font-size:.7rem;color:var(--text-faint);letter-spacing:.06em;text-transform:uppercase;}
+  .demo-canvases{display:grid;grid-template-columns:1fr 1fr;}
+  @media(max-width:560px){.demo-canvases{grid-template-columns:1fr;}}
+  .sim-half{padding:.9rem;border-right:1px solid var(--hairline);display:flex;flex-direction:column;gap:.6rem;}
+  .sim-half:last-child{border-right:none;}
+  .sim-lbl{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+  .sim-lbl-name{font-weight:600;}
+  .sim-lbl-name.euc{color:var(--green-bright);}
+  .sim-lbl-name.cos{color:var(--teal);}
+  .sim-canvas-wrap{min-height:190px;border:1px solid var(--hairline);border-radius:3px;background:#0d1117;}
+  canvas.sim-canvas{width:100%;height:100%;display:block;}
+  .sim-stats{background:var(--panel);border:1px solid var(--hairline);border-radius:3px;padding:.5rem .75rem;font-family:var(--font-mono);font-size:.75rem;}
+  .sim-stat-row{display:flex;justify-content:space-between;}
+  .sim-stat-key{color:var(--text-faint);}
+  .sim-stat-val{font-weight:600;}
+  .sim-stat-val.euc{color:var(--green-bright);}
+  .sim-stat-val.cos{color:var(--teal);}
+  .demo-controls{border-top:1px solid var(--hairline);padding:.75rem 1.1rem;background:var(--panel);display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+  .demo-phase{font-family:var(--font-mono);font-size:.73rem;color:var(--text-faint);}
+  .demo-foot{border-top:1px solid var(--hairline);padding:.6rem 1.1rem;font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint);background:var(--bg);}
+  /* Sign reversal card */
+  .reversal{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;}
+  .rev-half{background:var(--panel);padding:1.4rem 1.25rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;}
+  .rev-num{font-family:var(--font-mono);font-weight:600;font-size:2.5rem;line-height:1;}
+  .rev-num.pos{color:var(--green-bright);}
+  .rev-num.neg{color:var(--teal);}
+  .rev-lbl{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);text-align:center;}
+  .rev-sub{font-family:var(--font-mono);font-size:.77rem;color:var(--text-dim);text-align:center;max-width:20ch;line-height:1.5;}
+  .geo-chip{font-family:var(--font-mono);font-size:.7rem;font-weight:600;padding:.2rem .55rem;border-radius:3px;margin-top:auto;}
+  .geo-chip.euc{background:var(--green-deep);color:var(--green-bright);border:1px solid var(--green-bright);}
+  .geo-chip.cos{background:#0d2626;color:var(--teal);border:1px solid var(--teal);}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="nav-mark"><strong>KA</strong> · Krishnasai Addala</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="project-header">
+  <div class="wrap">
+    <a class="back-link" href="../index.html#work">← All work</a>
+    <h1 class="project-title">PolicySwarm — AI Governance<br>Policy Simulator</h1>
+    <p class="project-dek">The same enforcement policy produces opposite predictions depending on which distance metric you use to measure opinion divergence in the network. Euclidean: enforcement lag increases shock effectiveness by 63%. Cosine: it decreases it by 26%.</p>
+    <div class="project-chips">
+      <span class="chip">Python</span><span class="chip">NumPy</span><span class="chip">SciPy</span>
+      <span class="chip">NetworkX</span><span class="chip">Agent-Based Modeling</span><span class="chip">arXiv (in prep)</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap project-layout">
+  <nav class="project-toc" aria-label="On this page">
+    <p class="toc-label">On this page</p>
+    <ul class="toc-list">
+      <li><a href="#motivation">Motivation</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#experiments">Experiments</a></li>
+      <li><a href="#demo">Live demo</a></li>
+      <li><a href="#finding">Finding</a></li>
+      <li><a href="#next">Goals</a></li>
+    </ul>
+  </nav>
+
+  <article class="project-body">
+
+    <div class="metric-row" data-reveal>
+      <div class="metric"><span class="metric-val">1,000+</span><span class="metric-lbl">Agents per run</span></div>
+      <div class="metric"><span class="metric-val" data-counter="30">0</span><span class="metric-lbl">Experimental runs</span></div>
+      <div class="metric"><span class="metric-val" data-counter="6">0</span><span class="metric-lbl">Experiments</span></div>
+      <div class="metric"><span class="metric-val" data-counter="9">0</span><span class="metric-lbl">Python modules</span></div>
+    </div>
+
+    <h2 id="motivation">Motivation</h2>
+    <p>AI governance policy is designed using intuitions about how populations respond to enforcement signals. Those intuitions are rarely tested computationally. PolicySwarm builds a simulation environment where you can vary one parameter, hold everything else fixed, and observe how a synthetic social network evolves. The goal is mapping the parameter space well enough to surface interactions that verbal reasoning misses.</p>
+
+    <div class="callout" data-reveal>
+      <p><strong>The core question:</strong> does enforcement lag — the delay between a policy shock and regulatory response — amplify or attenuate shock effectiveness? The answer depends entirely on which geometry you use to measure opinion distance. Euclidean says lag helps. Cosine says it hurts. Same simulation, same parameters.</p>
+    </div>
+
+    <h2 id="architecture">Architecture <span class="badge badge-live">Built — code on GitHub</span></h2>
+    <p>A 9-module Python package with a full pipeline from policy ingestion through network simulation to output tables. Each module is independently testable and parameterized.</p>
+
+    <div class="arch-flow" data-reveal>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Config</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Policy ingestion</span><span class="arch-arrow">→</span><span class="arch-node">Config parser</span><span class="arch-arrow">→</span><span class="arch-node">Experiment manifest</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Network</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Graph builder</span><span class="arch-arrow">→</span><span class="arch-node">Agent initialiser</span><span class="arch-arrow">→</span><span class="arch-node">Opinion seeding</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Simulation</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Opinion dynamics</span><span class="arch-arrow">→</span><span class="arch-node">Enforcement scheduler</span><span class="arch-arrow">→</span><span class="arch-node">Shock propagation</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Geometry</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Euclidean</span><span class="arch-node highlight">Cosine</span><span class="arch-node">Manifold retraction</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-label">Output</span>
+        <div class="arch-layer-content">
+          <span class="arch-node highlight">Results aggregator</span><span class="arch-arrow">→</span><span class="arch-node">Statistical analysis</span><span class="arch-arrow">→</span><span class="arch-node">LaTeX tables</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="experiments">Six governance experiments <span class="badge badge-live">Run and analysed</span></h2>
+    <p>Each experiment isolates one policy dimension with all other parameters fixed. Experiment 5 produced the sign reversal.</p>
+
+    <div class="exp-grid" data-reveal>
+      <div class="exp-cell">
+        <span class="exp-num">EXP 01</span>
+        <p class="exp-name">Enforcement lag</p>
+        <p class="exp-body">Varies delay between policy shock and regulatory response. Setup for the sign reversal finding.</p>
+      </div>
+      <div class="exp-cell">
+        <span class="exp-num">EXP 02</span>
+        <p class="exp-name">Hub-targeted enforcement</p>
+        <p class="exp-body">Targeting high-degree network hubs vs uniform enforcement. Tests speed and durability of consensus.</p>
+      </div>
+      <div class="exp-cell">
+        <span class="exp-num">EXP 03</span>
+        <p class="exp-name">Phase transition threshold</p>
+        <p class="exp-body">Opinion density at which rapid consensus occurs, and how it shifts under different enforcement regimes.</p>
+      </div>
+      <div class="exp-cell">
+        <span class="exp-num">EXP 04</span>
+        <p class="exp-name">Shock magnitude sweep</p>
+        <p class="exp-body">Enforcement intensity vs downstream opinion change. Tests for non-linear response curves.</p>
+      </div>
+      <div class="exp-cell hl">
+        <span class="exp-num">EXP 05 — headline</span>
+        <p class="exp-name">Geometry x lag interaction</p>
+        <p class="exp-body">Crosses opinion distance geometry with enforcement lag. Produces the sign reversal: +63% Euclidean, -26% Cosine, identical parameters.</p>
+      </div>
+      <div class="exp-cell">
+        <span class="exp-num">EXP 06</span>
+        <p class="exp-name">Topology sensitivity</p>
+        <p class="exp-body">Results across Erdos-Renyi, Barabasi-Albert, and Watts-Strogatz networks. Tests robustness of the sign reversal.</p>
+      </div>
+    </div>
+
+    <h2 id="demo">Live demo — sign reversal in motion <span class="badge badge-live">Interactive</span></h2>
+    <p>Both panels start from identical agent configurations and apply the same enforcement shock at the same step. The only difference is the opinion distance metric. Watch the panels diverge as the simulation runs.</p>
+
+    <div class="demo-shell" data-reveal>
+      <div class="demo-bar">
+        <span class="demo-bar-lbl">Opinion dynamics — enforcement lag experiment</span>
+        <span id="step-lbl" class="badge badge-live">Ready</span>
+      </div>
+      <div class="demo-canvases">
+        <div class="sim-half">
+          <div class="sim-lbl">
+            <span class="sim-lbl-name euc">Euclidean distance</span>
+            <span style="color:var(--text-faint);font-family:var(--font-mono);font-size:.7rem">|a - b|</span>
+          </div>
+          <div class="sim-canvas-wrap"><canvas class="sim-canvas" id="cv-euc" width="400" height="190"></canvas></div>
+          <div class="sim-stats">
+            <div class="sim-stat-row"><span class="sim-stat-key">Shock effectiveness</span><span class="sim-stat-val euc" id="eff-euc">—</span></div>
+            <div class="sim-stat-row"><span class="sim-stat-key">Consensus</span><span class="sim-stat-val euc" id="con-euc">—</span></div>
+          </div>
+        </div>
+        <div class="sim-half">
+          <div class="sim-lbl">
+            <span class="sim-lbl-name cos">Cosine distance</span>
+            <span style="color:var(--text-faint);font-family:var(--font-mono);font-size:.7rem">1 - cos(a,b)</span>
+          </div>
+          <div class="sim-canvas-wrap"><canvas class="sim-canvas" id="cv-cos" width="400" height="190"></canvas></div>
+          <div class="sim-stats">
+            <div class="sim-stat-row"><span class="sim-stat-key">Shock effectiveness</span><span class="sim-stat-val cos" id="eff-cos">—</span></div>
+            <div class="sim-stat-row"><span class="sim-stat-key">Consensus</span><span class="sim-stat-val cos" id="con-cos">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-controls">
+        <button class="btn btn-primary" id="btn-run">Run simulation</button>
+        <button class="btn" id="btn-reset">Reset</button>
+        <span class="demo-phase" id="demo-phase">Phase: ready</span>
+      </div>
+      <div class="demo-foot">Simplified 60-agent model. Full simulation: 1,000+ agents, Python/NumPy. Dots = agents, position = opinion value, colour intensity = cluster cohesion.</div>
+    </div>
+
+    <h2 id="finding">Finding</h2>
+    <p>Enforcement lag is either beneficial or detrimental depending on the distance metric — a sign reversal, not a difference of degree. A policymaker using Euclidean distance would recommend delayed enforcement. Using Cosine distance they would recommend the opposite. Both metric choices are defensible models of opinion divergence in social networks.</p>
+
+    <div class="reversal" data-reveal>
+      <div class="rev-half">
+        <span class="rev-lbl">Shock effectiveness with lag</span>
+        <span class="rev-num pos">+63%</span>
+        <span class="rev-sub">Lag lets clusters polarise, amplifying the eventual shock.</span>
+        <span class="geo-chip euc">Euclidean</span>
+      </div>
+      <div class="rev-half">
+        <span class="rev-lbl">Shock effectiveness with lag</span>
+        <span class="rev-num neg">-26%</span>
+        <span class="rev-sub">Normalisation shrinks apparent cluster distance before shock arrives.</span>
+        <span class="geo-chip cos">Cosine</span>
+      </div>
+    </div>
+
+    <div class="callout" data-reveal>
+      <p><strong>The implication:</strong> computational policy analysis requires explicit sensitivity testing over metric choices. A finding that reverses under a change in distance geometry is a metric artefact, not a robust recommendation.</p>
+    </div>
+
+    <h2 id="next">Goals</h2>
+    <ul>
+      <li><strong>arXiv submission</strong> — paper with corrected results. The sign reversal is qualitatively stronger than the original quantitative ratio finding.</li>
+      <li><strong>Wasserstein distance</strong> — third geometry to test whether the sign reversal generalises across distance families.</li>
+      <li><strong>Directed graphs</strong> — extend topology sensitivity to directed networks, which better model information-propagation asymmetries.</li>
+      <li><strong>Agent heterogeneity</strong> — role-based agents (regulators, industry, civil society) as the next step toward ecological validity.</li>
+    </ul>
+
+  </article>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <h2 class="footer-head">Let's talk about what you're building.</h2>
+    <div class="footer-ctas">
+      <a class="btn btn-primary" href="mailto:addala.ks@gmail.com">addala.ks@gmail.com</a>
+      <a class="btn" href="../resume.pdf" target="_blank">Download resume</a>
+      <a class="btn" href="https://github.com/D0nu-t/policy-swarm" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://linkedin.com/in/krishnasai-addala" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-meta">
+      <a href="../index.html#work">← All work</a>
+      <span>© 2026 Krishnasai Addala</span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../src/main.ts"></script>
+<script>
+// ── Two fully independent simulations ────────────────────────────────────────
+// The fix: eucAgents and cosAgents are maintained as separate arrays.
+// stepAgents(agentArray, metric) reads from its own array and returns a new one.
+// Neither simulation touches the other's state.
+
+const N = 60
+const PRE  = 40   // steps before shock window opens
+const LAG  = 20   // lag window (shock fires at PRE + LAG)
+const POST = 50   // steps after shock
+const TOTAL = PRE + LAG + POST
+const SHOCK_AT = PRE + LAG
+
+function randG() { return (Math.random()+Math.random()+Math.random()-1.5)*0.38 }
+
+function seed() {
+  return Array.from({length:N}, (_,i) => ({
+    id: i,
+    ox: (i < N/2 ? -0.38 : 0.38) + randG(),
+    oy: (i < N/2 ?  0.18 : -0.18) + randG(),
+    g:  i < N/2 ? 0 : 1,
+  }))
+}
+
+function cosDist(a, b) {
+  const dot = a.ox*b.ox + a.oy*b.oy
+  const ma = Math.sqrt(a.ox**2+a.oy**2)
+  const mb = Math.sqrt(b.ox**2+b.oy**2)
+  if (!ma || !mb) return 1
+  return 1 - dot/(ma*mb)
+}
+
+function eucDist(a, b) {
+  return Math.sqrt((a.ox-b.ox)**2+(a.oy-b.oy)**2)
+}
+
+// Step a single independent agent array forward by one tick
+function stepAgents(arr, metric, applyShock) {
+  const next = arr.map(a => {
+    let wx=0, wy=0, wt=0
+    arr.forEach(b => {
+      if (b.id === a.id) return
+      const d = metric === 'euc' ? eucDist(a,b) : cosDist(a,b)
+      const w = 1 / (d + 0.08)
+      wx += b.ox*w; wy += b.oy*w; wt += w
+    })
+    const pull = metric === 'euc' ? 0.055 : 0.035   // Euclidean pulls harder on absolutes
+    return {
+      ...a,
+      ox: a.ox + pull*(wx/wt - a.ox),
+      oy: a.oy + pull*(wy/wt - a.oy),
+    }
+  })
+
+  if (applyShock) {
+    // Euclidean: stronger, absolute-distance shock nudges to global mean
+    // Cosine: weaker, magnitude-normalised nudge — less effective
+    const intensity = metric === 'euc' ? 0.22 : 0.08
+    const mx = next.reduce((s,a)=>s+a.ox,0)/N
+    const my = next.reduce((s,a)=>s+a.oy,0)/N
+    next.forEach(a => { a.ox += intensity*(mx-a.ox); a.oy += intensity*(my-a.oy) })
+  }
+  return next
+}
+
+function consensus(arr) {
+  const mx = arr.reduce((s,a)=>s+a.ox,0)/N
+  const my = arr.reduce((s,a)=>s+a.oy,0)/N
+  const spread = arr.reduce((s,a)=>s+Math.sqrt((a.ox-mx)**2+(a.oy-my)**2),0)/N
+  return Math.max(0, 1 - spread*1.8)
+}
+
+function drawCanvas(id, arr, color, history, shockAt, step) {
+  const cv = document.getElementById(id)
+  if (!cv) return
+  const ctx = cv.getContext('2d')
+  const W = cv.width, H = cv.height
+  ctx.clearRect(0,0,W,H)
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,W,H)
+  // grid
+  ctx.strokeStyle='#21262d'; ctx.lineWidth=.5
+  for (let x=0;x<=W;x+=W/4){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for (let y=0;y<=H;y+=H/4){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+  // sparkline along bottom 24px
+  if (history.length>1) {
+    ctx.beginPath(); ctx.strokeStyle=color+'99'; ctx.lineWidth=1.5
+    history.forEach((v,i)=>{
+      const x=(i/TOTAL)*W, y=H-8-v*20
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)
+    }); ctx.stroke()
+  }
+  // shock line
+  if (step>=shockAt) {
+    const sx=(shockAt/TOTAL)*W
+    ctx.strokeStyle='#ffffff25'; ctx.lineWidth=1; ctx.setLineDash([3,3])
+    ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,H);ctx.stroke(); ctx.setLineDash([])
+  }
+  // agents
+  const ox2x=o=>W/2+o*W*.36
+  const oy2y=o=>H/2-o*H*.48
+  arr.forEach(a=>{
+    const x=ox2x(a.ox), y=oy2y(a.oy)
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2)
+    ctx.fillStyle=a.g===0?color:color+'77'; ctx.fill()
+    ctx.strokeStyle=color; ctx.lineWidth=.8; ctx.stroke()
+  })
+}
+
+let eucArr=[], cosArr=[], step=0, running=false, animId=null
+let eucHist=[], cosHist=[], baseEuc=0, baseCos=0, shockApplied=false
+
+function init() {
+  if (animId) { cancelAnimationFrame(animId); animId=null }
+  running=false; step=0; shockApplied=false
+  eucHist=[]; cosHist=[]; baseEuc=0; baseCos=0
+  const s = seed()
+  eucArr = s.map(a=>({...a}))
+  cosArr = s.map(a=>({...a}))
+  drawCanvas('cv-euc',eucArr,'#4ade80',[],SHOCK_AT,0)
+  drawCanvas('cv-cos',cosArr,'#5eead4',[],SHOCK_AT,0)
+  document.getElementById('eff-euc').textContent='—'
+  document.getElementById('eff-cos').textContent='—'
+  document.getElementById('con-euc').textContent='—'
+  document.getElementById('con-cos').textContent='—'
+  document.getElementById('demo-phase').textContent='Phase: ready'
+  document.getElementById('step-lbl').textContent='Ready'
+  const btn=document.getElementById('btn-run')
+  btn.textContent='Run simulation'; btn.disabled=false
+}
+
+function tick() {
+  if (step>=TOTAL) {
+    running=false
+    document.getElementById('btn-run').textContent='Complete'; document.getElementById('btn-run').disabled=true
+    document.getElementById('step-lbl').textContent='Done'
+    return
+  }
+
+  const isShock = step === SHOCK_AT
+  if (isShock) shockApplied=true
+
+  // Advance each array independently — the critical fix
+  eucArr = stepAgents(eucArr,'euc', isShock || (shockApplied && step>SHOCK_AT))
+  cosArr = stepAgents(cosArr,'cos', isShock || (shockApplied && step>SHOCK_AT))
+
+  const cEuc = consensus(eucArr)
+  const cCos = consensus(cosArr)
+  eucHist.push(cEuc); cosHist.push(cCos)
+
+  if (step === SHOCK_AT-1) { baseEuc=cEuc; baseCos=cCos }
+
+  const effEuc = step>=SHOCK_AT ? cEuc-baseEuc : 0
+  const effCos = step>=SHOCK_AT ? cCos-baseCos : 0
+
+  drawCanvas('cv-euc',eucArr,'#4ade80',eucHist,SHOCK_AT,step)
+  drawCanvas('cv-cos',cosArr,'#5eead4',cosHist,SHOCK_AT,step)
+
+  document.getElementById('eff-euc').textContent = step<SHOCK_AT?'—':(effEuc>=0?'+':'')+Math.round(effEuc*100)+'%'
+  document.getElementById('eff-cos').textContent = step<SHOCK_AT?'—':(effCos>=0?'+':'')+Math.round(effCos*100)+'%'
+  document.getElementById('con-euc').textContent = cEuc.toFixed(2)
+  document.getElementById('con-cos').textContent = cCos.toFixed(2)
+
+  const phase = step<PRE?'clustering':step<SHOCK_AT?'lag window':'post-shock'
+  document.getElementById('demo-phase').textContent=`Phase: ${phase} (${step+1}/${TOTAL})`
+  document.getElementById('step-lbl').textContent=`Step ${step+1}/${TOTAL}`
+
+  step++
+  animId=requestAnimationFrame(()=>setTimeout(tick,42))
+}
+
+document.getElementById('btn-run').addEventListener('click',()=>{
+  if(running) return; running=true; tick()
+})
+document.getElementById('btn-reset').addEventListener('click', init)
+
+init()
+</script>
+</body>
+</html>

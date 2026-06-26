@@ -6,7 +6,7 @@ import type { GraphNode, GraphLink, NodeCategory } from './types'
 const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
   // Projects
   { id: 'llm-platform',   label: 'LLM Interpretability\nPlatform', type: 'project', category: 'project' },
-  { id: 'policy-swarm',   label: 'Policy Discourse Simulator',               type: 'project', category: 'project' },
+  { id: 'policy-swarm',   label: 'Policy Simulator',               type: 'project', category: 'project' },
   { id: 'tinynla',        label: 'TinyNLA',                        type: 'project', category: 'project' },
   { id: 'capgemini',      label: 'Capgemini',                      type: 'project', category: 'project' },
   { id: 'geminae',        label: 'Project Geminae',                type: 'project', category: 'project' },
@@ -76,7 +76,6 @@ const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'cuda',       target: 'tinynla' },
   { source: 'huggingface',target: 'tinynla' },
   { source: 'numpy',      target: 'tinynla' },
-  {source: 'typescript',     target: 'tinynla' },
 
   // Capgemini
   { source: 'python',     target: 'capgemini' },
@@ -159,7 +158,7 @@ export function initGraph(containerId: string): void {
     .attr('width', '100%')
     .attr('height', '100%')
     .attr('viewBox', `0 0 ${W} ${H}`)
-    .style('background', '#274431')
+    .style('background', '#0d1117')
 
   // Glow filter
   const defs = svg.append('defs')
@@ -214,7 +213,7 @@ export function initGraph(containerId: string): void {
     .force('charge', d3.forceManyBody<GraphNode>()
       .strength(d => d.type === 'project' ? -320 : -120)
     )
-    .force('center', d3.forceCenter(W / 2, H / 2).strength(0.5))
+    .force('center', d3.forceCenter(W / 2, H / 2).strength(0.08))
     .force('collide', d3.forceCollide<GraphNode>()
       .radius(d => nodeRadius(d) + 18)
       .strength(0.8)
@@ -227,9 +226,9 @@ export function initGraph(containerId: string): void {
   const linkEl = linkG.selectAll<SVGLineElement, GraphLink>('line')
     .data(links)
     .join('line')
-    .attr('stroke', '#a0c6b4')
+    .attr('stroke', '#30363d')
     .attr('stroke-width', 1)
-    .attr('stroke-opacity', 0.55)
+    .attr('stroke-opacity', 0.5)
 
   // ── Nodes ──────────────────────────────────────────────────────────────────
   const nodeG = zoomG.append('g').attr('class', 'nodes')

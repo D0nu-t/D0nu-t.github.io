@@ -386,29 +386,7 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'capgemini', target: 'openai' },
 { source: 'capgemini', target: 'docker' },
 
-// Java
-{ source: 'learnplay', target: 'java' },
-{ source: 'java', target: 'javascript' },
-{ source: 'java', target: 'typescript' },
 
-// Time Series
-{ source: 'timeseries', target: 'sklearn' },
-{ source: 'timeseries', target: 'xgboost' },
-{ source: 'timeseries', target: 'statistics' },
-{ source: 'timeseries', target: 'python' },
-
-// AWS
-{ source: 'aws', target: 'docker' },
-{ source: 'aws', target: 'python' },
-{ source: 'aws', target: 'gcp' },
-
-
-
-// ETL
-{ source: 'airflowetl', target: 'airflow' },
-{ source: 'airflowetl', target: 'python' },
-{ source: 'airflowetl', target: 'pandas' },
-{ source: 'airflowetl', target: 'bigquery' },
 
 
 

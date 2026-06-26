@@ -11,7 +11,7 @@ export default defineConfig({
         interpretability:  resolve(__dirname, 'projects/interpretability-platform.html'),
         tinynla:           resolve(__dirname, 'projects/tinynla.html'),
         policySimulator:   resolve(__dirname, 'projects/policy-simulator.html'),
-        graph:             resolve(__dirname, 'graph.html'),
+        graph:             resolve(__dirname, 'projects/graph.html'),
       },
     },
   },

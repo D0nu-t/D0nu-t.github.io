@@ -78,17 +78,17 @@ const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'numpy',      target: 'tinynla' },
 
   // Capgemini
-  { source: 'python',     target: 'capgemini' },
-  { source: 'langchain',  target: 'capgemini' },
-  { source: 'langgraph',  target: 'capgemini' },
-  { source: 'openai',     target: 'capgemini' },
-  { source: 'rag',        target: 'capgemini' },
-  { source: 'gcp',        target: 'capgemini' },
-  { source: 'airflow',    target: 'capgemini' },
-  { source: 'bigquery',   target: 'capgemini' },
-  { source: 'pubsub',     target: 'capgemini' },
-  { source: 'docker',     target: 'capgemini' },
-  { source: 'sql',        target: 'capgemini' },
+  // { source: 'python',     target: 'capgemini' },
+  // { source: 'langchain',  target: 'capgemini' },
+  // { source: 'langgraph',  target: 'capgemini' },
+  // { source: 'openai',     target: 'capgemini' },
+  // { source: 'rag',        target: 'capgemini' },
+  // { source: 'gcp',        target: 'capgemini' },
+  // { source: 'airflow',    target: 'capgemini' },
+  // { source: 'bigquery',   target: 'capgemini' },
+  // { source: 'pubsub',     target: 'capgemini' },
+  // { source: 'docker',     target: 'capgemini' },
+  // { source: 'sql',        target: 'capgemini' },
 
   // Project Geminae
   { source: 'python',     target: 'geminae' },

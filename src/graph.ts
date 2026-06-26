@@ -158,7 +158,7 @@ export function initGraph(containerId: string): void {
     .attr('width', '100%')
     .attr('height', '100%')
     .attr('viewBox', `0 0 ${W} ${H}`)
-    .style('background', '#305a3f')
+    .style('background', '#274431')
 
   // Glow filter
   const defs = svg.append('defs')
@@ -228,7 +228,7 @@ export function initGraph(containerId: string): void {
     .join('line')
     .attr('stroke', '#a0c6b4')
     .attr('stroke-width', 1)
-    .attr('stroke-opacity', 0.5)
+    .attr('stroke-opacity', 0.65)
 
   // ── Nodes ──────────────────────────────────────────────────────────────────
   const nodeG = zoomG.append('g').attr('class', 'nodes')

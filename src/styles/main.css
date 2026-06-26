@@ -909,7 +909,7 @@ section + section { border-top: 1px solid var(--hairline); }
 .chart-bar-val.improved { color: var(--green-bright); }
 
 /* ─── Skills graph teaser ────────────────────────────────── */
-
+ 
 .skills-teaser {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -920,12 +920,12 @@ section + section { border-top: 1px solid var(--hairline); }
   border-radius: 6px;
   padding: clamp(1.5rem, 4vw, 2.25rem);
 }
-
+ 
 @media (max-width: 680px) {
   .skills-teaser { grid-template-columns: 1fr; }
   .skills-preview { display: none; }
 }
-
+ 
 .skills-teaser-head {
   font-family: var(--font-mono);
   font-weight: 600;
@@ -933,29 +933,29 @@ section + section { border-top: 1px solid var(--hairline); }
   margin: 0 0 0.75rem;
   color: var(--text);
 }
-
+ 
 .skills-teaser-body {
   font-size: 0.9375rem;
   color: var(--text-dim);
   margin: 0 0 1.25rem;
   max-width: 48ch;
 }
-
+ 
 .skills-preview {
   border: 1px solid var(--hairline);
   border-radius: 4px;
   background: var(--bg);
   overflow: hidden;
 }
-
+ 
 .skills-preview svg {
   width: 100%;
   height: auto;
   display: block;
 }
-
+ 
 /* ─── Embedded graph widget ──────────────────────────────── */
-
+ 
 .embed-controls {
   display: flex;
   align-items: center;
@@ -964,13 +964,13 @@ section + section { border-top: 1px solid var(--hairline); }
   gap: 0.75rem;
   margin-bottom: 0.85rem;
 }
-
+ 
 .embed-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
-
+ 
 .embed-pill {
   display: inline-flex;
   align-items: center;
@@ -986,24 +986,24 @@ section + section { border-top: 1px solid var(--hairline); }
   transition: border-color 0.15s, color 0.15s, background 0.15s;
   white-space: nowrap;
 }
-
+ 
 .embed-pill:hover { border-color: var(--green-bright); color: var(--green-bright); }
-
+ 
 .embed-pill.active {
   background: var(--green-deep);
   border-color: var(--green-bright);
   color: var(--green-bright);
 }
-
+ 
 .pill-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
-
+ 
 .embed-actions { display: flex; gap: 0.4rem; }
-
+ 
 /* Canvas wrapper — relative so tooltip can overlay */
 .embed-wrap {
   position: relative;
@@ -1012,12 +1012,12 @@ section + section { border-top: 1px solid var(--hairline); }
   overflow: hidden;
   background: var(--bg);
 }
-
+ 
 .graph-embed-canvas {
   width: 100%;
   height: clamp(400px, 52vh, 560px);
 }
-
+ 
 /* Tooltip overlay — top-left of canvas */
 .embed-tooltip {
   position: absolute;
@@ -1036,22 +1036,22 @@ section + section { border-top: 1px solid var(--hairline); }
   backdrop-filter: blur(4px);
   min-width: 140px;
 }
-
+ 
 .embed-tooltip.visible { opacity: 1; }
-
+ 
 .tt-name {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--green-bright);
 }
-
+ 
 .tt-cat, .tt-links {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-faint);
 }
-
+ 
 /* Interaction hint — fades after first mouseover */
 .embed-hint {
   position: absolute;
@@ -1065,9 +1065,7 @@ section + section { border-top: 1px solid var(--hairline); }
   white-space: nowrap;
   transition: opacity 0.4s;
 }
-
+ 
 .graph-embed-canvas:hover ~ .embed-hint,
 .embed-wrap:hover .embed-hint { opacity: 0; }
-
-/* Remove old teaser styles */
-.skills-teaser, .skills-teaser-head, .skills-teaser-body, .skills-preview { display: none; }
+ 

@@ -199,6 +199,194 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source:'cnn', target:'food-retrieval'},
 { source:'selenium', target:'food-retrieval'},
 { source:'streamlit', target:'food-retrieval'},
+// ---------- Shared ML ----------
+{ source: 'python', target: 'keras' },
+{ source: 'python', target: 'tensorflow' },
+{ source: 'python', target: 'pytorch' },
+{ source: 'python', target: 'sklearn' },
+{ source: 'python', target: 'xgboost' },
+{ source: 'python', target: 'opencv' },
+{ source: 'python', target: 'numpy' },
+{ source: 'python', target: 'pandas' },
+{ source: 'python', target: 'scipy' },
+
+// ---------- Deep Learning ----------
+{ source: 'keras', target: 'tensorflow' },
+{ source: 'keras', target: 'cnn' },
+{ source: 'tensorflow', target: 'cnn' },
+{ source: 'tensorflow', target: 'computervision' },
+{ source: 'pytorch', target: 'cuda' },
+{ source: 'pytorch', target: 'huggingface' },
+{ source: 'pytorch', target: 'llms' },
+{ source: 'huggingface', target: 'llms' },
+
+// ---------- NLP ----------
+{ source: 'nlp', target: 'llms' },
+{ source: 'nlp', target: 'rag' },
+{ source: 'nlp', target: 'langchain' },
+{ source: 'nlp', target: 'langgraph' },
+{ source: 'nlp', target: 'openai' },
+{ source: 'nlp', target: 'embeddings' },
+{ source: 'nlp', target: 'vectorsearch' },
+
+// ---------- GenAI ----------
+{ source: 'langchain', target: 'langgraph' },
+{ source: 'langchain', target: 'openai' },
+{ source: 'langchain', target: 'rag' },
+{ source: 'langchain', target: 'embeddings' },
+
+{ source: 'langgraph', target: 'agents' },
+{ source: 'langgraph', target: 'openai' },
+
+{ source: 'openai', target: 'llms' },
+{ source: 'openai', target: 'embeddings' },
+{ source: 'openai', target: 'evaluation' },
+{ source: 'openai', target: 'prompteng' },
+
+{ source: 'rag', target: 'embeddings' },
+{ source: 'rag', target: 'vectorsearch' },
+{ source: 'rag', target: 'knowledgegraph' },
+
+{ source: 'embeddings', target: 'vectorsearch' },
+{ source: 'embeddings', target: 'llms' },
+
+{ source: 'agents', target: 'llms' },
+{ source: 'agents', target: 'evaluation' },
+
+{ source: 'knowledgegraph', target: 'networkx' },
+{ source: 'knowledgegraph', target: 'llms' },
+
+// ---------- Explainability ----------
+{ source: 'lime', target: 'shap' },
+{ source: 'lime', target: 'sklearn' },
+{ source: 'shap', target: 'xgboost' },
+{ source: 'shap', target: 'tensorflow' },
+
+// ---------- Data ----------
+{ source: 'numpy', target: 'pandas' },
+{ source: 'numpy', target: 'scipy' },
+{ source: 'numpy', target: 'sklearn' },
+{ source: 'numpy', target: 'tensorflow' },
+{ source: 'numpy', target: 'pytorch' },
+
+{ source: 'pandas', target: 'sklearn' },
+{ source: 'pandas', target: 'xgboost' },
+{ source: 'pandas', target: 'bigquery' },
+
+{ source: 'statistics', target: 'sklearn' },
+{ source: 'statistics', target: 'xgboost' },
+
+// ---------- Computer Vision ----------
+{ source: 'opencv', target: 'computervision' },
+{ source: 'opencv', target: 'cnn' },
+{ source: 'opencv', target: 'tensorflow' },
+
+// ---------- Cloud ----------
+{ source: 'gcp', target: 'airflow' },
+{ source: 'gcp', target: 'pubsub' },
+{ source: 'gcp', target: 'bigquery' },
+{ source: 'gcp', target: 'cloudfunc' },
+{ source: 'gcp', target: 'gcs' },
+{ source: 'gcp', target: 'vertex' },
+
+{ source: 'bigquery', target: 'pubsub' },
+{ source: 'bigquery', target: 'airflow' },
+{ source: 'airflow', target: 'cloudfunc' },
+
+// ---------- Infrastructure ----------
+{ source: 'docker', target: 'fastapi' },
+{ source: 'docker', target: 'mlflow' },
+{ source: 'docker', target: 'gcp' },
+{ source: 'docker', target: 'streamlit' },
+
+{ source: 'fastapi', target: 'sse' },
+{ source: 'fastapi', target: 'openai' },
+
+{ source: 'git', target: 'github' },
+{ source: 'git', target: 'docker' },
+
+{ source: 'react', target: 'typescript' },
+{ source: 'react', target: 'vite' },
+
+{ source: 'streamlit', target: 'plotly' },
+{ source: 'streamlit', target: 'matplotlib' },
+
+// ---------- Languages ----------
+{ source: 'javascript', target: 'typescript' },
+{ source: 'typescript', target: 'vite' },
+{ source: 'typescript', target: 'react' },
+
+{ source: 'sql', target: 'bigquery' },
+{ source: 'sql', target: 'pandas' },
+
+{ source: 'bash', target: 'docker' },
+{ source: 'bash', target: 'gcp' },
+
+// ---------- Misc ----------
+{ source: 'selenium', target: 'streamlit' },
+{ source: 'selenium', target: 'opencv' },
+
+{ source: 'tableau', target: 'plotly' },
+{ source: 'tableau', target: 'statistics' },
+
+{ source: 'matplotlib', target: 'numpy' },
+{ source: 'plotly', target: 'pandas' },
+
+{ source: 'networkx', target: 'scipy' },
+{ source: 'networkx', target: 'numpy' },
+
+{ source: 'mlflow', target: 'tensorflow' },
+{ source: 'mlflow', target: 'pytorch' },
+
+{ source: 'evaluation', target: 'llms' },
+{ source: 'evaluation', target: 'rag' },
+// Organizations → Projects
+{ source: 'iiitd',      target: 'paper-recommender' },
+{ source: 'iiitd',      target: 'food-retrieval' },
+{ source: 'iiitd',      target: 'cv-experiment' },
+{ source: 'iiitd',      target: 'twitter-streamlit' },
+{ source: 'iiitd',      target: 'steganography' },
+
+{ source: 'midas',      target: 'physics-llm' },
+
+{ source: 'cmu',        target: 'geminae' },
+{ source: 'cmu',        target: 'claim-llm' },
+{ source: 'cmu',        target: 'churn-prediction' },
+
+{ source: 'capgemini',  target: 'cfpb-ai-agent' },
+{ source: 'capgemini',  target: 'delay-prediction' },
+
+// Organization → Skills
+
+// IIIT Delhi
+{ source: 'iiitd', target: 'python' },
+{ source: 'iiitd', target: 'tensorflow' },
+{ source: 'iiitd', target: 'keras' },
+{ source: 'iiitd', target: 'opencv' },
+{ source: 'iiitd', target: 'knowledgegraph' },
+
+// MIDAS
+{ source: 'midas', target: 'python' },
+{ source: 'midas', target: 'llms' },
+{ source: 'midas', target: 'nlp' },
+{ source: 'midas', target: 'knowledgegraph' },
+
+// CMU
+{ source: 'cmu', target: 'python' },
+{ source: 'cmu', target: 'sklearn' },
+{ source: 'cmu', target: 'xgboost' },
+{ source: 'cmu', target: 'tensorflow' },
+{ source: 'cmu', target: 'shap' },
+{ source: 'cmu', target: 'lime' },
+
+// Capgemini
+{ source: 'capgemini', target: 'gcp' },
+{ source: 'capgemini', target: 'langgraph' },
+{ source: 'capgemini', target: 'langchain' },
+{ source: 'capgemini', target: 'openai' },
+{ source: 'capgemini', target: 'docker' },
+
+
 ]
 
 // ─── Palette ──────────────────────────────────────────────────────────────────

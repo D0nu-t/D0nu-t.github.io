@@ -158,7 +158,7 @@ export function initGraph(containerId: string): void {
     .attr('width', '100%')
     .attr('height', '100%')
     .attr('viewBox', `0 0 ${W} ${H}`)
-    .style('background', '#0d1117')
+    .style('background', '#305a3f')
 
   // Glow filter
   const defs = svg.append('defs')
@@ -226,7 +226,7 @@ export function initGraph(containerId: string): void {
   const linkEl = linkG.selectAll<SVGLineElement, GraphLink>('line')
     .data(links)
     .join('line')
-    .attr('stroke', '#30363d')
+    .attr('stroke', '#a0c6b4')
     .attr('stroke-width', 1)
     .attr('stroke-opacity', 0.5)
 

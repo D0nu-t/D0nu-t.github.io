@@ -68,6 +68,7 @@ export const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'numpy',       target: 'policy-swarm' },
   { source: 'scipy',       target: 'policy-swarm' },
   { source: 'networkx',    target: 'policy-swarm' },
+  {source: 'typescript',      target: 'policy-swarm' },
 
   // TinyNLA
   { source: 'python',      target: 'tinynla' },
@@ -75,6 +76,7 @@ export const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'cuda',        target: 'tinynla' },
   { source: 'huggingface', target: 'tinynla' },
   { source: 'numpy',       target: 'tinynla' },
+  {source: 'typescript',      target: 'tinynla' },
 
   // Capgemini
   { source: 'python',      target: 'capgemini' },
@@ -88,6 +90,7 @@ export const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'pubsub',      target: 'capgemini' },
   { source: 'docker',      target: 'capgemini' },
   { source: 'sql',         target: 'capgemini' },
+  { source: 'bash',        target: 'capgemini' },
 
   // Project Geminae
   { source: 'python',      target: 'geminae' },

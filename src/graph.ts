@@ -214,7 +214,7 @@ export function initGraph(containerId: string): void {
     .force('charge', d3.forceManyBody<GraphNode>()
       .strength(d => d.type === 'project' ? -320 : -120)
     )
-    .force('center', d3.forceCenter(W / 2, H / 2).strength(0.08))
+    .force('center', d3.forceCenter(W / 2, H / 2).strength(0.5))
     .force('collide', d3.forceCollide<GraphNode>()
       .radius(d => nodeRadius(d) + 18)
       .strength(0.8)

@@ -401,10 +401,6 @@ const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'aws', target: 'python' },
 { source: 'aws', target: 'gcp' },
 
-// BigTable (or rename this node to BigQuery)
-{ source: 'bigtable', target: 'gcp' },
-{ source: 'bigtable', target: 'python' },
-{ source: 'bigtable', target: 'bigquery' },
 
 // ETL
 { source: 'airflowetl', target: 'airflow' },

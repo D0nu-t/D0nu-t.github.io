@@ -33,6 +33,8 @@ body.graph-page .site-nav {
   overflow-y: auto;
   overflow-x: hidden;
   flex-shrink: 0;
+  scrollbar-width: thin;          /* Options: auto | thin | none */
+  scrollbar-color: #a6eeb3 #26704b; /* Formatted as: thumb_color track_color */
 }
 
 .graph-panel-inner {

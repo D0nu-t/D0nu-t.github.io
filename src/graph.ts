@@ -228,7 +228,7 @@ export function initGraph(containerId: string): void {
     .join('line')
     .attr('stroke', '#a0c6b4')
     .attr('stroke-width', 1)
-    .attr('stroke-opacity', 0.65)
+    .attr('stroke-opacity', 0.47)
 
   // ── Nodes ──────────────────────────────────────────────────────────────────
   const nodeG = zoomG.append('g').attr('class', 'nodes')

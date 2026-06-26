@@ -6,6 +6,7 @@ const NAV_SECTIONS: NavSection[] = [
   { id: 'work',         label: 'Work' },
   { id: 'experience',   label: 'Experience' },
   { id: 'publications', label: 'Publications' },
+  {id:'skills', label: 'Skill Graph'},
   { id: 'contact',      label: 'Contact' },
 ]
 

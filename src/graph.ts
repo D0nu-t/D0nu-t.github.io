@@ -558,7 +558,7 @@ export const CATEGORY_LABEL: Record<NodeCategory, string> = {
 // ─── Radius helpers ───────────────────────────────────────────────────────────
 
 function nodeRadius(n: GraphNode): number {
-  if (n.type === 'project') return 22
+  if (n.type === 'project' || n.type === 'work' || n.type === 'academic') return 22
   return Math.max(7, Math.min(14, 7 + (n.degree ?? 1) * 1.2))
 }
 
@@ -649,7 +649,7 @@ export function initGraph(containerId: string): void {
     if (d.type !== 'skill') {
       // Gravity well: attraction proportional to area (mass = r²)
       // r=22 → strength ≈ +170, pulls surrounding skill nodes inward
-      return r * r * 0.35
+      return r * r * 0.3
     }
     const deg = d.degree ?? 1
     if (deg > 8) {
@@ -660,7 +660,7 @@ export function initGraph(containerId: string): void {
     return -(15 + deg * 6)
   })
   .distanceMin(18)    // prevents near-singularity forces
-  .distanceMax(380)   // gravity doesn't reach across the whole canvas
+  // .distanceMax(380)   // gravity doesn't reach across the whole canvas
   .theta(0.8)         // slightly more accurate than default 0.9
 )
     .force('center', d3.forceCenter(W / 2, H / 2).strength(0.08))

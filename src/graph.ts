@@ -8,11 +8,11 @@ const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
   { id: 'llm-platform',  label: 'LLM Interpretability\nPlatform', type: 'project', category: 'project' },
   { id: 'policy-swarm',  label: 'Policy Simulator',               type: 'project', category: 'project' },
   { id: 'tinynla',       label: 'TinyNLA',                        type: 'project', category: 'project' },
-  { id: 'capgemini',     label: 'Capgemini',                      type: 'project', category: 'project' },
+{ id: 'capgemini', label: 'Capgemini', type: 'project', category: 'work' },
   { id: 'geminae',       label: 'Project Geminae',                type: 'project', category: 'project' },
-  { id:'cmu',        label:'CMU',        type:'project', category:'project'},
-{ id:'midas',      label:'MIDAS Lab',  type:'project', category:'project'},
-{ id:'iiitd',      label:'IIIT Delhi', type:'project', category:'project'},
+  { id:'cmu',        label:'CMU',        type:'project', category:'academic'},
+{ id:'midas',      label:'MIDAS Lab',  type:'project', category:'academic'},
+{ id:'iiitd',      label:'IIIT Delhi', type:'project', category:'academic'},
   // Consulting / Industry
 { id: 'cfpb-ai-agent',        label: 'CFPB AI Agent',             type: 'project', category: 'project' },
 { id: 'delay-prediction',     label: 'Delay Prediction',          type: 'project', category: 'project' },
@@ -531,24 +531,28 @@ const RAW_LINKS: { source: string; target: string }[] = [
 
 // ─── Colour palette ───────────────────────────────────────────────────────────
 
-const CATEGORY_COLOR: Record<NodeCategory, string> = {
-  project: '#4ade80',
-  lang:    '#5eead4',
-  ml:      '#86efac',
-  genai:   '#34d399',
-  infra:   '#6ee7b7',
-  cloud:   '#a7f3d0',
-  data:    '#d1fae5',
+export const CATEGORY_COLOR: Record<NodeCategory, string> = {
+  project:  '#4ade80',
+  work:     '#f59e0b',  // amber — professional/industry
+  academic: '#a78bfa',  // violet — scholarly
+  lang:     '#5eead4',
+  ml:       '#86efac',
+  genai:    '#34d399',
+  infra:    '#6ee7b7',
+  cloud:    '#a7f3d0',
+  data:     '#d1fae5',
 }
 
-const CATEGORY_LABEL: Record<NodeCategory, string> = {
-  project: 'Projects',
-  lang:    'Languages',
-  ml:      'ML / DL',
-  genai:   'GenAI',
-  infra:   'Infrastructure',
-  cloud:   'Cloud',
-  data:    'Data',
+export const CATEGORY_LABEL: Record<NodeCategory, string> = {
+  project:  'Projects',
+  work:     'Work Experience',
+  academic: 'Academic',
+  lang:     'Languages',
+  ml:       'ML / DL',
+  genai:    'GenAI',
+  infra:    'Infrastructure',
+  cloud:    'Cloud',
+  data:     'Data',
 }
 
 // ─── Radius helpers ───────────────────────────────────────────────────────────
@@ -669,14 +673,17 @@ export function initGraph(containerId: string): void {
     .style('cursor', 'pointer')
 
   // Circle
-  nodeEl.append('circle')
-    .attr('r', d => nodeRadius(d))
-    .attr('fill', d => CATEGORY_COLOR[d.category])
-    .attr('fill-opacity', d => d.type === 'project' ? 0.2 : 0.15)
-    .attr('stroke', d => CATEGORY_COLOR[d.category])
-    .attr('stroke-width', d => d.type === 'project' ? 2 : 1.2)
-    .attr('filter', d => d.type === 'project' ? 'url(#glow-strong)' : 'url(#glow)')
-
+    nodeEl.append('circle')
+      .attr('r', d => nodeRadius(d))
+      .attr('fill', d => CATEGORY_COLOR[d.category])
+      .attr('fill-opacity', d => d.type === 'project' ? 0.18 : 0.12)
+      .attr('stroke', d => CATEGORY_COLOR[d.category])
+      .attr('stroke-width', d => {
+      if (d.category === 'work') return 2.5
+      if (d.category === 'academic') return 2
+      return d.type === 'project' ? 2 : 1.2})
+      .attr('stroke-dasharray', d => d.category === 'academic' ? '5 3' : 'none')
+    .attr('filter', d => d.type === 'project' ? 'url(#glow-strong)' : 'url(#eg)')
   // Label — split on newline for projects
   nodeEl.each(function(d) {
     const el = d3.select(this)

@@ -7,11 +7,11 @@ export const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
   { id: 'llm-platform',  label: 'LLM Interpretability\nPlatform', type: 'project', category: 'project' },
   { id: 'policy-swarm',  label: 'Policy Simulator',               type: 'project', category: 'project' },
   { id: 'tinynla',       label: 'TinyNLA',                        type: 'project', category: 'project' },
-  { id: 'capgemini',     label: 'Capgemini',                      type: 'project', category: 'project' },
+{ id: 'capgemini', label: 'Capgemini', type: 'project', category: 'work' },
   { id: 'geminae',       label: 'Project Geminae',                type: 'project', category: 'project' },
-  { id:'cmu',        label:'CMU',        type:'project', category:'project'},
-{ id:'midas',      label:'MIDAS Lab',  type:'project', category:'project'},
-{ id:'iiitd',      label:'IIIT Delhi', type:'project', category:'project'},
+{ id: 'cmu',   label: 'CMU',        type: 'project', category: 'academic' },
+{ id: 'midas', label: 'MIDAS Lab',  type: 'project', category: 'academic' },
+{ id:'iiitd',      label:'IIIT Delhi', type:'project', category:'academic'},
   // Consulting / Industry
 { id: 'cfpb-ai-agent',        label: 'CFPB AI Agent',             type: 'project', category: 'project' },
 { id: 'delay-prediction',     label: 'Delay Prediction',          type: 'project', category: 'project' },
@@ -530,27 +530,29 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 ]
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
-
 export const CATEGORY_COLOR: Record<NodeCategory, string> = {
-  project: '#4ade80',
-  lang:    '#5eead4',
-  ml:      '#86efac',
-  genai:   '#34d399',
-  infra:   '#6ee7b7',
-  cloud:   '#a7f3d0',
-  data:    '#d1fae5',
+  project:  '#4ade80',
+  work:     '#f59e0b',  
+  academic: '#a78bfa',  
+  lang:     '#5eead4',
+  ml:       '#86efac',
+  genai:    '#34d399',
+  infra:    '#6ee7b7',
+  cloud:    '#a7f3d0',
+  data:     '#d1fae5',
 }
 
 export const CATEGORY_LABEL: Record<NodeCategory, string> = {
-  project: 'Projects',
-  lang:    'Languages',
-  ml:      'ML / DL',
-  genai:   'GenAI',
-  infra:   'Infrastructure',
-  cloud:   'Cloud',
-  data:    'Data',
+  project:  'Projects',
+  work:     'Work Experience',
+  academic: 'Academic',
+  lang:     'Languages',
+  ml:       'ML / DL',
+  genai:    'GenAI',
+  infra:    'Infrastructure',
+  cloud:    'Cloud',
+  data:     'Data',
 }
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function buildNodes(): GraphNode[] {

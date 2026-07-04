@@ -44,7 +44,7 @@ export interface RevealOptions {
 
 // ─── Graph types ──────────────────────────────────────────────────────────────
 
-export type NodeCategory = 'project' | 'lang' | 'ml' | 'genai' | 'infra' | 'cloud' | 'data'
+export type NodeCategory = 'project' | 'work' | 'academic' | 'lang' | 'ml' | 'genai' | 'infra' | 'cloud' | 'data'
 
 export interface GraphNode extends d3.SimulationNodeDatum {
   id: string

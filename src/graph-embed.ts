@@ -96,8 +96,12 @@ export function initGraphEmbed(containerId: string): void {
     .attr('fill', d => CATEGORY_COLOR[d.category])
     .attr('fill-opacity', d => d.type === 'project' ? 0.18 : 0.12)
     .attr('stroke', d => CATEGORY_COLOR[d.category])
-    .attr('stroke-width', d => d.type === 'project' ? 2 : 1.2)
-    .attr('filter', d => d.type === 'project' ? 'url(#eg-strong)' : 'url(#eg)')
+    .attr('stroke-width', d => {
+    if (d.category === 'work') return 2.5
+    if (d.category === 'academic') return 2
+    return d.type === 'project' ? 2 : 1.2})
+    .attr('stroke-dasharray', d => d.category === 'academic' ? '5 3' : 'none')
+  .attr('filter', d => d.type === 'project' ? 'url(#glow-strong)' : 'url(#eg)')
 
   // Labels — project nodes always visible; skill nodes dimmer
   nodeEl.each(function(d) {

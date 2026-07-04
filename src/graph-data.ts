@@ -569,6 +569,6 @@ export function buildLinks(): GraphLink[] {
 }
 
 export function nodeRadius(n: GraphNode): number {
-  if (n.type === 'project') return 22
+  if (n.type === 'project' || n.type === 'work' || n.type === 'academic') return 22
   return Math.max(7, Math.min(14, 7 + (n.degree ?? 1) * 1.2))
 }

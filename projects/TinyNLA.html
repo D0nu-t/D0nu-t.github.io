@@ -250,8 +250,8 @@
     <h2 id="how">How it works <span class="badge badge-live">Built</span></h2>
     <p>TinyNLA is a two-component system, following the same AV/AR architecture as Anthropic's NLA paper:</p>
     <ul>
-      <li><strong>Active Verbalizer</strong> — a distilgpt2-based model fine-tuned to take a residual stream activation vector and produce a plain English description. The vector is injected as a single token embedding into a fixed prompt, then the model autoregressively generates the description.</li>
-      <li><strong>Active Reconstructor</strong> — takes the plain English description produced by the verbalizer and produces a reconstructed activation vector. Quality is measured by how close the reconstructed vector is to the original, after L2 normalisation — so low MSE means direction was preserved, which is what matters for downstream behavior.</li>
+      <li><strong>Activation Verbalizer</strong> — a distilgpt2-based model fine-tuned to take a residual stream activation vector and produce a plain English description. The vector is injected as a single token embedding into a fixed prompt, then the model autoregressively generates the description.</li>
+      <li><strong>Activation Reconstructor</strong> — takes the plain English description produced by the verbalizer and produces a reconstructed activation vector. Quality is measured by how close the reconstructed vector is to the original, after L2 normalisation — so low MSE means direction was preserved, which is what matters for downstream behavior.</li>
     </ul>
     <p>Both vectors are L2-normalised before comparison, so the round-trip MSE directly measures direction agreement. If the description captured the key information, the reconstructor should land in roughly the same place in activation space — and the model's predictions from that reconstructed state should be similar to its original predictions.</p>
 

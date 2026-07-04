@@ -641,11 +641,28 @@ export function initGraph(containerId: string): void {
         if (src.type === 'project' || tgt.type === 'project') return 110
         return 70
       })
-      .strength(0.6)
+      .strength(0.4)
     )
     .force('charge', d3.forceManyBody<GraphNode>()
-      .strength(d => d.type === 'project' ? -320 : -120)
-    )
+  .strength(d => {
+    const r = nodeRadius(d)
+    if (d.type !== 'skill') {
+      // Gravity well: attraction proportional to area (mass = r²)
+      // r=22 → strength ≈ +170, pulls surrounding skill nodes inward
+      return r * r * 0.35
+    }
+    const deg = d.degree ?? 1
+    if (deg > 8) {
+      // High-degree skills (Python, NumPy etc.) have mild self-attraction
+      return r * r * 0.08
+    }
+    // Peripheral skills repel each other lightly so they don't stack
+    return -(15 + deg * 6)
+  })
+  .distanceMin(18)    // prevents near-singularity forces
+  .distanceMax(380)   // gravity doesn't reach across the whole canvas
+  .theta(0.8)         // slightly more accurate than default 0.9
+)
     .force('center', d3.forceCenter(W / 2, H / 2).strength(0.08))
     .force('collide', d3.forceCollide<GraphNode>()
       .radius(d => nodeRadius(d) + 18)

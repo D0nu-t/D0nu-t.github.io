@@ -95,6 +95,34 @@ export const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
 { id: 'tableau',    label:'Tableau',    type:'skill', category:'data'},
 { id: 'airflowetl', label:'ETL',        type:'skill', category:'data'},
 { id: 'statistics', label:'Statistics', type:'skill', category:'data'},
+// Languages
+{ id: 'r',           label: 'R',            type: 'skill', category: 'lang' },
+
+// ML / DL
+{ id: 'lightgbm',   label: 'LightGBM',     type: 'skill', category: 'ml' },
+{ id: 'jax',        label: 'JAX',          type: 'skill', category: 'ml' },
+{ id: 'dice',       label: 'DiCE',         type: 'skill', category: 'ml' },
+{ id: 'lora',       label: 'LoRA / PEFT',  type: 'skill', category: 'ml' },
+{ id: 'rlhf',       label: 'RLHF',         type: 'skill', category: 'ml' },
+
+// GenAI
+{ id: 'google-adk', label: 'Google ADK',   type: 'skill', category: 'genai' },
+{ id: 'ollama',     label: 'Ollama',       type: 'skill', category: 'genai' },
+
+// Infrastructure
+{ id: 'kubernetes', label: 'Kubernetes',   type: 'skill', category: 'infra' },
+{ id: 'flask',      label: 'Flask',        type: 'skill', category: 'infra' },
+{ id: 'langsmith',  label: 'LangSmith',    type: 'skill', category: 'infra' },
+{ id: 'mcp',        label: 'MCP',          type: 'skill', category: 'infra' },
+{ id: 'd3',         label: 'D3.js',        type: 'skill', category: 'infra' },
+
+// Data
+{ id: 'spark',      label: 'Spark',        type: 'skill', category: 'data' },
+{ id: 'databricks', label: 'Databricks',   type: 'skill', category: 'data' },
+{ id: 'postgresql', label: 'PostgreSQL',   type: 'skill', category: 'data' },
+{ id: 'mongodb',    label: 'MongoDB',      type: 'skill', category: 'data' },
+{ id: 'neo4j',      label: 'Neo4j',        type: 'skill', category: 'data' },
+{ id: 'powerbi',    label: 'Power BI',     type: 'skill', category: 'data' },
 ]
 
 export const RAW_LINKS: { source: string; target: string }[] = [
@@ -412,7 +440,93 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'airflowetl', target: 'pandas' },
 { source: 'airflowetl', target: 'bigquery' },
 
+// LoRA / PEFT / RLHF — used at MIDAS for fine-tuning
+{ source: 'lora',       target: 'midas' },
+{ source: 'rlhf',       target: 'midas' },
+{ source: 'lora',       target: 'physics-llm' },
+{ source: 'rlhf',       target: 'physics-llm' },
+{ source: 'lora',       target: 'pytorch' },
+{ source: 'lora',       target: 'huggingface' },
+{ source: 'rlhf',       target: 'llms' },
 
+// DiCE — explainability, alongside SHAP/LIME
+{ source: 'dice',       target: 'sklearn' },
+{ source: 'dice',       target: 'tensorflow' },
+{ source: 'dice',       target: 'lime' },
+{ source: 'dice',       target: 'shap' },
+{ source: 'dice',       target: 'geminae' },
+
+// LightGBM — sits next to XGBoost
+{ source: 'lightgbm',  target: 'sklearn' },
+{ source: 'lightgbm',  target: 'xgboost' },
+{ source: 'lightgbm',  target: 'pandas' },
+{ source: 'lightgbm',  target: 'geminae' },
+
+// JAX — alongside PyTorch/NumPy
+{ source: 'jax',        target: 'numpy' },
+{ source: 'jax',        target: 'pytorch' },
+
+// Google ADK — Capgemini stack
+{ source: 'google-adk', target: 'capgemini' },
+{ source: 'google-adk', target: 'agents' },
+{ source: 'google-adk', target: 'langgraph' },
+{ source: 'google-adk', target: 'gcp' },
+
+// Ollama — local LLM inference, sits with LLMs
+{ source: 'ollama',     target: 'llms' },
+{ source: 'ollama',     target: 'openai' },
+
+// MCP — Capgemini (mentioned in experience bullets)
+{ source: 'mcp',        target: 'capgemini' },
+{ source: 'mcp',        target: 'agents' },
+{ source: 'mcp',        target: 'langchain' },
+
+// LangSmith — tracing for LangGraph/LangChain
+{ source: 'langsmith',  target: 'capgemini' },
+{ source: 'langsmith',  target: 'langchain' },
+{ source: 'langsmith',  target: 'langgraph' },
+{ source: 'langsmith',  target: 'evaluation' },
+
+// Kubernetes
+{ source: 'kubernetes', target: 'docker' },
+{ source: 'kubernetes', target: 'gcp' },
+{ source: 'kubernetes', target: 'capgemini' },
+
+// Flask
+{ source: 'flask',      target: 'fastapi' },
+{ source: 'flask',      target: 'python' },
+
+// D3.js
+{ source: 'd3',         target: 'javascript' },
+{ source: 'd3',         target: 'typescript' },
+{ source: 'd3',         target: 'plotly' },
+
+// R
+{ source: 'r',          target: 'statistics' },
+{ source: 'r',          target: 'pandas' },
+
+// Spark / Databricks
+{ source: 'spark',      target: 'python' },
+{ source: 'spark',      target: 'pandas' },
+{ source: 'spark',      target: 'bigquery' },
+{ source: 'databricks', target: 'spark' },
+{ source: 'databricks', target: 'gcp' },
+{ source: 'databricks', target: 'capgemini' },
+
+// Databases
+{ source: 'postgresql', target: 'sql' },
+{ source: 'postgresql', target: 'pandas' },
+{ source: 'mongodb',    target: 'python' },
+{ source: 'mongodb',    target: 'fastapi' },
+{ source: 'neo4j',      target: 'knowledgegraph' },
+{ source: 'neo4j',      target: 'networkx' },
+{ source: 'neo4j',      target: 'midas' },
+{ source: 'neo4j',      target: 'physics-llm' },
+
+// Power BI
+{ source: 'powerbi',    target: 'tableau' },
+{ source: 'powerbi',    target: 'statistics' },
+{ source: 'powerbi',    target: 'pandas' },
 
 ]
 

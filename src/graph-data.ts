@@ -544,7 +544,7 @@ export const CATEGORY_COLOR: Record<NodeCategory, string> = {
 
 export const CATEGORY_LABEL: Record<NodeCategory, string> = {
   project:  'Projects',
-  work:     'Work Experience',
+  work:     'Work Experience',//
   academic: 'Academic',
   lang:     'Languages',
   ml:       'ML / DL',

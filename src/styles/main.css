@@ -1060,7 +1060,7 @@ section + section { border-top: 1px solid var(--hairline); }
   transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  color: var(--text-faint);
+  color: #172417;
   pointer-events: none;
   white-space: nowrap;
   transition: opacity 0.4s;

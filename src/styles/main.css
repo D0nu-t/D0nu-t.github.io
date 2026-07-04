@@ -1064,6 +1064,9 @@ section + section { border-top: 1px solid var(--hairline); }
   pointer-events: none;
   white-space: nowrap;
   transition: opacity 0.4s;
+  border-radius: 3px;
+  background: var(--green-deep);
+  padding: 0.35rem 0.75rem;
 }
  
 .graph-embed-canvas:hover ~ .embed-hint,

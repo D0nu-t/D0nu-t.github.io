@@ -49,7 +49,7 @@ export type NodeCategory = 'project' | 'work' | 'academic' | 'lang' | 'ml' | 'ge
 export interface GraphNode extends d3.SimulationNodeDatum {
   id: string
   label: string
-  type: 'project' | 'skill'
+  type: 'project' | 'work' | 'academic'  | 'skill'
   category: NodeCategory
   degree?: number
 }

@@ -234,7 +234,7 @@ img, svg { display: block; }
   border-radius: 4px;
   border: 1px solid var(--hairline-hi);
   color: var(--text-dim);
-  background: transparent;
+  background: var(--panel);
   cursor: pointer;
   transition: border-color 0.18s, color 0.18s, background 0.18s;
   white-space: nowrap;

@@ -867,11 +867,33 @@ export function initGraph(containerId: string): void {
   })
 
   // ── Filter buttons ────────────────────────────────────────────────────────
+
+  
   let activeCategory: NodeCategory | null = null
 
   document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
       const cat = btn.dataset.filter as NodeCategory
+      const connectedProjects = new Set<string>()
+
+RAW_LINKS.forEach(link => {
+  const source = nodes.find(n => n.id === link.source)
+  const target = nodes.find(n => n.id === link.target)
+
+  if (
+    source?.category === cat &&
+    target?.type === 'project'
+  ) {
+    connectedProjects.add(target.id)
+  }
+
+  if (
+    target?.category === cat &&
+    source?.type === 'project'
+  ) {
+    connectedProjects.add(source.id)
+  }
+})
 
       if (activeCategory === cat) {
         activeCategory = null
@@ -881,31 +903,52 @@ export function initGraph(containerId: string): void {
           .attr('stroke-opacity', 1)
         nodeEl.selectAll('text').attr('fill-opacity', 1)
         linkEl.attr('stroke-opacity', 0.5)
-      } else {
-        activeCategory = cat
-        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'))
-        btn.classList.add('active')
+      } 
+      else {
+  activeCategory = cat
 
-        nodeEl.select('circle')
-          .attr('fill-opacity', (n: GraphNode) =>
-            n.category === cat || n.type === 'project' ? (n.type === 'project' ? 0.3 : 0.35) : 0.04
-          )
-          .attr('stroke-opacity', (n: GraphNode) =>
-            n.category === cat || n.type === 'project' ? 1 : 0.15
-          )
+  document
+    .querySelectorAll('[data-filter]')
+    .forEach(b => b.classList.remove('active'))
 
-        nodeEl.selectAll<SVGTextElement, GraphNode>('text')
-          .attr('fill-opacity', function() {
-            const parentData = d3.select((this as SVGTextElement).parentElement!).datum() as GraphNode
-            return parentData.category === cat || parentData.type === 'project' ? 1 : 0.1
-          })
+  btn.classList.add('active')
 
-        linkEl.attr('stroke-opacity', (l: GraphLink) => {
-          const s = l.source as GraphNode
-          const t = l.target as GraphNode
-          return s.category === cat || t.category === cat ? 0.8 : 0.05
-        })
-      }
+  nodeEl.select('circle')
+    .attr('fill-opacity', (n: GraphNode) =>
+      n.category === cat || connectedProjects.has(n.id)
+        ? (n.type === 'project' ? 0.30 : 0.35)
+        : 0.04
+    )
+    .attr('stroke-opacity', (n: GraphNode) =>
+      n.category === cat || connectedProjects.has(n.id)
+        ? 1
+        : 0.15
+    )
+
+  nodeEl.selectAll<SVGTextElement, GraphNode>('text')
+    .attr('fill-opacity', function () {
+      const node = d3
+        .select((this as SVGTextElement).parentElement!)
+        .datum() as GraphNode
+
+      return node.category === cat || connectedProjects.has(node.id)
+        ? 1
+        : 0.1
+    })
+
+  linkEl
+    .attr('stroke-opacity', (l: GraphLink) => {
+      const s = l.source as GraphNode
+      const t = l.target as GraphNode
+
+      return (
+        (s.category === cat && connectedProjects.has(t.id)) ||
+        (t.category === cat && connectedProjects.has(s.id))
+      )
+        ? 0.8
+        : 0.05
+    })
+}
     })
   })
 

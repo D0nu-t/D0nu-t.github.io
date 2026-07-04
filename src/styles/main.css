@@ -1067,6 +1067,7 @@ section + section { border-top: 1px solid var(--hairline); }
   border-radius: 3px;
   background: var(--green-deep);
   padding: 0.35rem 0.75rem;
+  box-shadow: 0 0 6px var(--green-glow);
 }
  
 .graph-embed-canvas:hover ~ .embed-hint,

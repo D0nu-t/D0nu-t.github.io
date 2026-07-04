@@ -74,7 +74,7 @@ export const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
 { id: 'vite',         label: 'Vite',         type:'skill', category:'infra'},
 { id: 'selenium',     label: 'Selenium',     type:'skill', category:'infra'},
 { id: 'cloudfunc',    label: 'Cloud Functions', type:'skill', category:'infra'},
-{ id: 'bigtable',     label: 'BigQuery',     type:'skill', category:'cloud'},
+{ id: 'bigtable',     label: 'BigTable',     type:'skill', category:'cloud'},
 
   // Cloud
   { id: 'gcp',           label: 'GCP',      type: 'skill', category: 'cloud' },
@@ -429,7 +429,6 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'aws', target: 'python' },
 { source: 'aws', target: 'gcp' },
 
-// BigTable (or rename this node to BigQuery)
 { source: 'bigtable', target: 'gcp' },
 { source: 'bigtable', target: 'python' },
 { source: 'bigtable', target: 'bigquery' },

@@ -161,8 +161,8 @@ img, svg { display: block; }
 
 .hero-inner {
   display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: 4rem;
+  grid-template-columns: 1fr 400px;
+  gap: 3.5rem;
   align-items: start;
 }
 

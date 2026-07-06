@@ -154,7 +154,7 @@ img, svg { display: block; }
 /* ─── Hero ───────────────────────────────────────────────── */
 
 .hero {
-  padding: clamp(3.5rem, 9vw, 7rem) 0 clamp(3rem, 7vw, 5rem);
+  padding: clamp(1rem, 3vw, 2rem) 0 clamp(3rem, 7vw, 5rem);
   border-bottom: 1px solid var(--hairline);
 }
 
@@ -162,7 +162,7 @@ img, svg { display: block; }
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 3rem;
-  align-items: center;
+  align-items: start;
 }
 
 @media (max-width: 700px) {

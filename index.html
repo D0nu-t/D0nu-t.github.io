@@ -63,28 +63,27 @@
   border-color: var(--green-bright);
 }
 
-/* Fan positions */
 .tcg-outer.is-open .tcg-card:nth-child(1) {
-    transform: translateX(calc(-50% - 120px)) rotate(-32deg);
+    transform: translateX(-50%) rotate(-27deg);
 }
 
 .tcg-outer.is-open .tcg-card:nth-child(2) {
-    transform: translateX(calc(-50% - 40px)) rotate(-11deg);
+    transform: translateX(-50%) rotate(-9deg);
 }
 
 .tcg-outer.is-open .tcg-card:nth-child(3) {
-    transform: translateX(calc(-50% + 40px)) rotate(11deg);
+    transform: translateX(-50%) rotate(9deg);
 }
 
 .tcg-outer.is-open .tcg-card:nth-child(4) {
-    transform: translateX(calc(-50% + 120px)) rotate(32deg);
+    transform: translateX(-50%) rotate(27deg);
 }
 
 /* Hover lift per card in fan mode — must repeat the fan angle */
-.tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-27deg) translateY(-14px); }
-.tcg-outer.is-open .tcg-card:nth-child(2):hover { transform: translateX(-50%) rotate( -9deg) translateY(-14px); }
-.tcg-outer.is-open .tcg-card:nth-child(3):hover { transform: translateX(-50%) rotate(  9deg) translateY(-14px); }
-.tcg-outer.is-open .tcg-card:nth-child(4):hover { transform: translateX(-50%) rotate( 27deg) translateY(-14px); }
+.tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-27deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(2):hover { transform: translateX(-50%) rotate( -9deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(3):hover { transform: translateX(-50%) rotate(  9deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(4):hover { transform: translateX(-50%) rotate( 27deg) translateY(-22px); }
 
 /* Selected card in fan mode */
 .tcg-outer.is-open .tcg-card.is-active {

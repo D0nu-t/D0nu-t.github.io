@@ -24,15 +24,15 @@
 
 .tcg-stage {
   position: relative;
-  width: 270px;
-  height: 210px;
+  width: 500px;
+  height: 540px;
 }
 
 /* Base card */
 .tcg-card {
   position: absolute;
-  width: 112px;
-  height: 158px;
+  width: 420px;
+  height: 470px;
   bottom: 0;
   left: 50%;
   border-radius: 10px;
@@ -64,10 +64,21 @@
 }
 
 /* Fan positions */
-.tcg-outer.is-open .tcg-card:nth-child(1) { z-index:4; transform: translateX(-50%) rotate(-27deg); }
-.tcg-outer.is-open .tcg-card:nth-child(2) { z-index:3; transform: translateX(-50%) rotate( -9deg); }
-.tcg-outer.is-open .tcg-card:nth-child(3) { z-index:2; transform: translateX(-50%) rotate(  9deg); }
-.tcg-outer.is-open .tcg-card:nth-child(4) { z-index:1; transform: translateX(-50%) rotate( 27deg); }
+.tcg-outer.is-open .tcg-card:nth-child(1) {
+    transform: translateX(calc(-50% - 120px)) rotate(-32deg);
+}
+
+.tcg-outer.is-open .tcg-card:nth-child(2) {
+    transform: translateX(calc(-50% - 40px)) rotate(-11deg);
+}
+
+.tcg-outer.is-open .tcg-card:nth-child(3) {
+    transform: translateX(calc(-50% + 40px)) rotate(11deg);
+}
+
+.tcg-outer.is-open .tcg-card:nth-child(4) {
+    transform: translateX(calc(-50% + 120px)) rotate(32deg);
+}
 
 /* Hover lift per card in fan mode — must repeat the fan angle */
 .tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-27deg) translateY(-14px); }
@@ -204,7 +215,7 @@
 }
 
 .tcg-outer.is-open .tcg-toggle {
-  transform: rotate(90deg);
+  transform: rotate(45deg);
   border-color: var(--green-bright);
   color: var(--green-bright);
 }

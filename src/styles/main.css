@@ -160,7 +160,7 @@ img, svg { display: block; }
 
 .hero-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 300px;
   gap: 3rem;
   align-items: center;
 }

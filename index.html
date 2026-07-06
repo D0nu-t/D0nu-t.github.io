@@ -261,78 +261,175 @@
   <div class="tcg-outer" id="tcg-outer">
 
     <div class="tcg-stage" id="tcg-stage">
+      <!-- ── Card 1 — TinyNLA ──────────────────────────────────── -->
+<div class="tcg-card" data-card-id="tinynla" data-href="projects/tinynla.html">
 
-      <!-- Card 1 — LLM Interpretability Platform (populated example) -->
-      <div class="tcg-card" data-card-id="llm-platform" data-href="projects/interpretability-platform.html">
-        <div class="card-header">
-          <span style="color:var(--green-bright)">●</span>
-          Active
-        </div>
-        <div class="card-art">
-          <!-- Probe network diagram — swap this SVG out for a real graphic later -->
-          <svg viewBox="0 0 76 76" width="168" height="168" xmlns="http://www.w3.org/2000/svg">
-            <!-- Central eval node -->
-            <circle cx="38" cy="28" r="9" fill="#4ade8018" stroke="#4ade80" stroke-width="1.5"/>
-            <text x="38" y="31" text-anchor="middle" font-family="IBM Plex Mono" font-size="5.5" font-weight="600" fill="#4ade80">EVAL</text>
-            <!-- Probe nodes -->
-            <circle cx="12" cy="58" r="5.5" fill="#5eead418" stroke="#5eead4" stroke-width="1.2"/>
-            <circle cx="28" cy="65" r="5.5" fill="#5eead418" stroke="#5eead4" stroke-width="1.2"/>
-            <circle cx="48" cy="65" r="5.5" fill="#5eead418" stroke="#5eead4" stroke-width="1.2"/>
-            <circle cx="64" cy="58" r="5.5" fill="#5eead418" stroke="#5eead4" stroke-width="1.2"/>
-            <!-- Probe labels -->
-            <text x="12" y="61" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#8b949e">SYC</text>
-            <text x="28" y="68" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#8b949e">HAL</text>
-            <text x="48" y="68" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#8b949e">CAL</text>
-            <text x="64" y="61" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#8b949e">JBK</text>
-            <!-- Edges -->
-            <line x1="38" y1="37" x2="12" y2="52" stroke="#30363d" stroke-width="1"/>
-            <line x1="38" y1="37" x2="28" y2="59" stroke="#30363d" stroke-width="1"/>
-            <line x1="38" y1="37" x2="48" y2="59" stroke="#30363d" stroke-width="1"/>
-            <line x1="38" y1="37" x2="64" y2="52" stroke="#30363d" stroke-width="1"/>
-            <!-- Tiny more nodes top -->
-            <circle cx="22" cy="12" r="4" fill="#4ade8010" stroke="#4ade8060" stroke-width="1"/>
-            <circle cx="54" cy="12" r="4" fill="#4ade8010" stroke="#4ade8060" stroke-width="1"/>
-            <line x1="29" y1="21" x2="26" y2="15" stroke="#30363d" stroke-width="0.8"/>
-            <line x1="47" y1="21" x2="51" y2="15" stroke="#30363d" stroke-width="0.8"/>
-            <text x="22" y="15" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#484f58">TOX</text>
-            <text x="54" y="15" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#484f58">DEC</text>
-          </svg>
-        </div>
-        <div class="card-footer">
-          <span class="card-footer-name">LLM Interpretability<br>Platform</span>
-          <div class="card-footer-chips">
-            <span class="card-chip">FastAPI</span>
-            <span class="card-chip">PyTorch</span>
-            <span class="card-chip">9 probes</span>
-          </div>
-        </div>
-      </div>
+  <div class="card-header">
+    <span style="color:var(--green-bright)">●</span>
+    Active · Research
+  </div>
 
-      <!-- Cards 2–4 — blank shells, populate later -->
-      <div class="tcg-card" data-card-id="policy-swarm" data-href="projects/policy-simulator.html">
-        <div class="card-header"><span style="color:#f59e0b">○</span> Paper in prep</div>
-        <div class="card-art"></div>
-        <div class="card-footer">
-          <span class="card-footer-name">Policy Simulator</span>
-        </div>
-      </div>
+  <div class="card-art" style="height:42px;flex:none">
+    <!-- AV → text → AR round-trip -->
+    <svg viewBox="0 0 88 34" width="82" height="32" xmlns="http://www.w3.org/2000/svg">
+      <!-- Input vector bars -->
+      <rect x="1"  y="4"  width="12" height="2.5" rx="0.8" fill="#4ade8035" stroke="#4ade80" stroke-width="0.6"/>
+      <rect x="1"  y="8"  width="12" height="2.5" rx="0.8" fill="#4ade8035" stroke="#4ade80" stroke-width="0.6"/>
+      <rect x="1"  y="12" width="12" height="2.5" rx="0.8" fill="#4ade8035" stroke="#4ade80" stroke-width="0.6"/>
+      <rect x="1"  y="16" width="9"  height="2.5" rx="0.8" fill="#4ade8020" stroke="#4ade8070" stroke-width="0.6"/>
+      <text x="7" y="25" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#484f58">vector</text>
+      <!-- AV arrow -->
+      <line x1="14" y1="12" x2="24" y2="12" stroke="#4ade8070" stroke-width="0.8"/>
+      <polygon points="24,10.8 26,12 24,13.2" fill="#4ade80"/>
+      <text x="20" y="9.5" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#4ade80">AV</text>
+      <!-- Text box -->
+      <rect x="27" y="5" width="18" height="15" rx="2" fill="#0d1117" stroke="#30363d" stroke-width="0.7"/>
+      <line x1="29" y1="9"  x2="43" y2="9"  stroke="#5eead4" stroke-width="0.7"/>
+      <line x1="29" y1="12" x2="41" y2="12" stroke="#5eead4" stroke-width="0.7"/>
+      <line x1="29" y1="15" x2="43" y2="15" stroke="#5eead4" stroke-width="0.7"/>
+      <text x="36" y="25" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#484f58">text</text>
+      <!-- AR arrow -->
+      <line x1="46" y1="12" x2="56" y2="12" stroke="#5eead470" stroke-width="0.8"/>
+      <polygon points="56,10.8 58,12 56,13.2" fill="#5eead4"/>
+      <text x="52" y="9.5" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#5eead4">AR</text>
+      <!-- Reconstructed vector bars (slightly shorter = lossy) -->
+      <rect x="59" y="4"  width="12" height="2.5" rx="0.8" fill="#5eead430" stroke="#5eead4" stroke-width="0.6"/>
+      <rect x="59" y="8"  width="12" height="2.5" rx="0.8" fill="#5eead430" stroke="#5eead4" stroke-width="0.6"/>
+      <rect x="59" y="12" width="10" height="2.5" rx="0.8" fill="#5eead430" stroke="#5eead4" stroke-width="0.6"/>
+      <rect x="59" y="16" width="7"  height="2.5" rx="0.8" fill="#5eead415" stroke="#5eead450" stroke-width="0.6"/>
+      <text x="65" y="25" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#484f58">recon.</text>
+      <!-- Round-trip quality -->
+      <text x="44" y="32" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#4ade80" font-weight="600">57× PPL · layer 1</text>
+    </svg>
+  </div>
 
-      <div class="tcg-card" data-card-id="tinynla" data-href="projects/TinyNLA.html">
-        <div class="card-header"><span style="color:var(--green-bright)">●</span> Active</div>
-        <div class="card-art"></div>
-        <div class="card-footer">
-          <span class="card-footer-name">TinyNLA</span>
-        </div>
-      </div>
+  <div class="card-footer">
+    <span class="card-footer-name">TinyNLA<br>Natural Language Autoencoder</span>
+    <div style="margin-top:5px;font-size:6px;line-height:1.5;color:var(--text-faint)">
+      <strong style="color:var(--text-dim)">Type — AV / AR Pair · SLMs ≤7B</strong><br><br>
+      <strong>Verbalize.</strong><br>
+      Inject a residual-stream activation into a fixed prompt and autoregress a plain-text description. Reconstruct the original vector from that description alone. Measure round-trip direction recovery via normalised MSE.<br><br>
+      <em>"Numbers become words.<br>Words become numbers.<br>The gap measures understanding."</em>
+    </div>
+    <div class="card-footer-chips" style="margin-top:4px">
+      <span class="card-chip">≤7B params</span>
+      <span class="card-chip">Interp.</span>
+      <span class="card-chip">distilgpt2</span>
+    </div>
+  </div>
 
-      <div class="tcg-card" data-card-id="geminae">
-        <div class="card-header"><span style="color:var(--text-faint)">◉</span> Complete</div>
-        <div class="card-art"></div>
-        <div class="card-footer">
-          <span class="card-footer-name">Project Geminae</span>
-        </div>
-      </div>
+</div>
 
+
+<!-- ── Card 2 — PolicySwarm ──────────────────────────────── -->
+<div class="tcg-card" data-card-id="policy-swarm" data-href="projects/policy-simulator.html">
+
+  <div class="card-header">
+    <span style="color:#f59e0b">○</span>
+    Paper in Prep
+  </div>
+
+  <div class="card-art" style="height:42px;flex:none">
+    <!-- Sign reversal mini-chart: Euclidean up, Cosine down -->
+    <svg viewBox="0 0 88 34" width="82" height="32" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axis -->
+      <line x1="12" y1="17" x2="76" y2="17" stroke="#30363d" stroke-width="0.8" stroke-dasharray="2 3"/>
+      <text x="8" y="19" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#484f58">0</text>
+      <!-- Euclidean bar — positive -->
+      <rect x="18" y="6"  width="14" height="11" rx="1" fill="#166534" stroke="#4ade80" stroke-width="0.8"/>
+      <text x="25" y="4"  text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#4ade80" font-weight="600">+63%</text>
+      <text x="25" y="27" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#484f58">Euclidean</text>
+      <!-- Cosine bar — negative -->
+      <rect x="54" y="17" width="14" height="8"  rx="1" fill="#0d2626" stroke="#5eead4" stroke-width="0.8"/>
+      <text x="61" y="30" text-anchor="middle" font-family="IBM Plex Mono" font-size="4" fill="#5eead4" font-weight="600">−26%</text>
+      <text x="61" y="13" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#484f58">Cosine</text>
+      <!-- Sign reversal label -->
+      <text x="44" y="32" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#484f58">same parameters · opposite sign</text>
+      <!-- Agents hint -->
+      <text x="44" y="5" text-anchor="middle" font-family="IBM Plex Mono" font-size="3.8" fill="#484f58">1,024 agents · 30 seeds · EXP 05</text>
+    </svg>
+  </div>
+
+  <div class="card-footer">
+    <span class="card-footer-name">PolicySwarm<br>Opinion Dynamics Simulator</span>
+    <div style="margin-top:5px;font-size:6px;line-height:1.5;color:var(--text-faint)">
+      <strong style="color:var(--text-dim)">Type — Agent-Based Model · Network ABM</strong><br><br>
+      <strong>Simulate.</strong><br>
+      Seed 1,024 agents on a synthetic social network with heterogeneous opinion vectors. Apply enforcement shocks with configurable lag. Measure post-shock opinion convergence across two geometry classes.<br><br>
+      <em>"Same policy. Same network.<br>Opposite predictions.<br>The metric was the variable."</em>
+    </div>
+    <div class="card-footer-chips" style="margin-top:4px">
+      <span class="card-chip">1K+ agents</span>
+      <span class="card-chip">NetworkX</span>
+      <span class="card-chip">Sign reversal</span>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ── Card 3 — Placeholder ──────────────────────────────── -->
+<div class="tcg-card" data-card-id="placeholder-a" style="opacity:0.6">
+
+  <div class="card-header" style="justify-content:center;letter-spacing:.12em">
+    <span style="color:var(--text-faint)">▪</span>
+    Unreleased
+  </div>
+
+  <div class="card-art" style="height:42px;flex:none;justify-content:center;align-items:center;display:flex">
+    <svg viewBox="0 0 60 28" width="54" height="24" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="58" height="26" rx="3" fill="none" stroke="#21262d" stroke-width="0.8" stroke-dasharray="3 3"/>
+      <text x="30" y="16" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#30363d" font-weight="600" letter-spacing="0.1em">// WIP</text>
+    </svg>
+  </div>
+
+  <div class="card-footer">
+    <span class="card-footer-name" style="color:var(--text-faint)">Research Artifact<br>[ Unreleased ]</span>
+    <div style="margin-top:5px;font-size:6px;line-height:1.5;color:var(--text-faint)">
+      <strong>Type — Unknown</strong><br><br>
+      <strong>[ Redacted ]</strong><br>
+      Details withheld pending publication or release.<br>
+      Check back.<br><br>
+      <em>"Good research takes the time it takes."</em>
+    </div>
+    <div class="card-footer-chips" style="margin-top:4px">
+      <span class="card-chip" style="opacity:.5">???</span>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ── Card 4 — Placeholder ──────────────────────────────── -->
+<div class="tcg-card" data-card-id="placeholder-b" style="opacity:0.45">
+
+  <div class="card-header" style="justify-content:center;letter-spacing:.12em">
+    <span style="color:var(--text-faint)">▪</span>
+    Unreleased
+  </div>
+
+  <div class="card-art" style="height:42px;flex:none;justify-content:center;align-items:center;display:flex">
+    <svg viewBox="0 0 60 28" width="54" height="24" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="58" height="26" rx="3" fill="none" stroke="#21262d" stroke-width="0.8" stroke-dasharray="3 3"/>
+      <text x="30" y="16" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#21262d" font-weight="600" letter-spacing="0.1em">// WIP</text>
+    </svg>
+  </div>
+
+  <div class="card-footer">
+    <span class="card-footer-name" style="color:var(--text-faint)">Research Artifact<br>[ Unreleased ]</span>
+    <div style="margin-top:5px;font-size:6px;line-height:1.5;color:var(--text-faint)">
+      <strong>Type — Unknown</strong><br><br>
+      <strong>[ Redacted ]</strong><br>
+      Details withheld pending publication or release.<br>
+      Check back.<br><br>
+      <em>"Good research takes the time it takes."</em>
+    </div>
+    <div class="card-footer-chips" style="margin-top:4px">
+      <span class="card-chip" style="opacity:.4">???</span>
+    </div>
+  </div>
+
+</div>
     </div><!-- /tcg-stage -->
 
     <div class="tcg-controls">

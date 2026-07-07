@@ -51,39 +51,26 @@
     border-color 0.25s ease;
 }
 
-/* Stacked offsets — shows deck depth */
-.tcg-card:nth-child(1) { z-index:4; transform: translateX(-50%) rotate(  0deg); }
-.tcg-card:nth-child(2) { z-index:3; transform: translateX(-50%) rotate( 1.3deg) translateY(2px); }
-.tcg-card:nth-child(3) { z-index:2; transform: translateX(-50%) rotate(-1.6deg) translateY(3px); }
-.tcg-card:nth-child(4) { z-index:1; transform: translateX(-50%) rotate( 2.2deg) translateY(5px); }
+/* Stack offsets — 5 cards */
+.tcg-card:nth-child(1) { z-index:5; transform: translateX(-50%) rotate(  0deg); }
+.tcg-card:nth-child(2) { z-index:4; transform: translateX(-50%) rotate( 1.3deg) translateY(2px); }
+.tcg-card:nth-child(3) { z-index:3; transform: translateX(-50%) rotate(-1.6deg) translateY(4px); }
+.tcg-card:nth-child(4) { z-index:2; transform: translateX(-50%) rotate( 2.2deg) translateY(6px); }
+.tcg-card:nth-child(5) { z-index:1; transform: translateX(-50%) rotate(-2.8deg) translateY(8px); }
 
-/* Top card hover in stack mode */
-.tcg-outer:not(.is-open) .tcg-card:nth-child(1):hover {
-  box-shadow: 0 8px 28px #00000070;
-  border-color: var(--green-bright);
-}
+/* Fan positions — 5 cards, evenly spread -24 to +24 */
+.tcg-outer.is-open .tcg-card:nth-child(1) { transform: translateX(-50%) rotate(-24deg); }
+.tcg-outer.is-open .tcg-card:nth-child(2) { transform: translateX(-50%) rotate(-12deg); }
+.tcg-outer.is-open .tcg-card:nth-child(3) { transform: translateX(-50%) rotate(  0deg); }
+.tcg-outer.is-open .tcg-card:nth-child(4) { transform: translateX(-50%) rotate( 12deg); }
+.tcg-outer.is-open .tcg-card:nth-child(5) { transform: translateX(-50%) rotate( 24deg); }
 
-.tcg-outer.is-open .tcg-card:nth-child(1) {
-    transform: translateX(-50%) rotate(-18deg);
-}
-
-.tcg-outer.is-open .tcg-card:nth-child(2) {
-    transform: translateX(-50%) rotate(-9deg);
-}
-
-.tcg-outer.is-open .tcg-card:nth-child(3) {
-    transform: translateX(-50%) rotate(9deg);
-}
-
-.tcg-outer.is-open .tcg-card:nth-child(4) {
-    transform: translateX(-50%) rotate(18deg);
-}
-
-/* Hover lift per card in fan mode — must repeat the fan angle */
-.tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-18deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(2):hover { transform: translateX(-50%) rotate( -9deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(3):hover { transform: translateX(-50%) rotate(  9deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(4):hover { transform: translateX(-50%) rotate( 18deg) translateY(-22px); }
+/* Hover lift in fan mode — repeats the angle + translateY */
+.tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-24deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(2):hover { transform: translateX(-50%) rotate(-12deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(3):hover { transform: translateX(-50%) rotate(  0deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(4):hover { transform: translateX(-50%) rotate( 12deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(5):hover { transform: translateX(-50%) rotate( 24deg) translateY(-22px); }
 
 /* Selected card in fan mode */
 .tcg-outer.is-open .tcg-card.is-active {
@@ -262,6 +249,75 @@
   <div class="tcg-outer" id="tcg-outer">
 
     <div class="tcg-stage" id="tcg-stage">
+      <!-- ── Card 0 — About ────────────────────────────────────── -->
+<div class="tcg-card" data-card-id="about" data-href="#contact">
+
+  <div class="card-header">
+    <span style="color:var(--green-bright)">◈</span>
+    Researcher · Engineer
+  </div>
+
+  <div class="card-art">
+    <svg viewBox="0 0 300 190" width="100%" height="100%"
+         xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+
+      <!-- Terminal frame -->
+      <rect x="10" y="8" width="280" height="170" rx="5"
+            fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+
+      <!-- Window dots -->
+      <circle cx="24" cy="22" r="4" fill="#ff5f57"/>
+      <circle cx="38" cy="22" r="4" fill="#febc2e"/>
+      <circle cx="52" cy="22" r="4" fill="#28c840"/>
+      <line x1="10" y1="32" x2="290" y2="32" stroke="#21262d" stroke-width="0.8"/>
+
+      <!-- Terminal content -->
+      <text x="20" y="50" font-family="IBM Plex Mono" font-size="9" fill="#4ade80">$ whoami</text>
+      <text x="20" y="64" font-family="IBM Plex Mono" font-size="9" fill="#8b949e">krishnasai.addala</text>
+
+      <text x="20" y="82" font-family="IBM Plex Mono" font-size="9" fill="#4ade80">$ cat profile.yaml</text>
+
+      <text x="20" y="97" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">role
+        <tspan fill="#8b949e">  AI Engineer · Researcher</tspan>
+      </text>
+      <text x="20" y="111" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">edu
+        <tspan fill="#8b949e">   CMU MSBA · IIIT Delhi CS</tspan>
+      </text>
+      <text x="20" y="125" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">prev
+        <tspan fill="#8b949e">  Capgemini NYC · GenAI</tspan>
+      </text>
+      <text x="20" y="139" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">focus
+        <tspan fill="#8b949e"> Interp · ABM · LLMOps</tspan>
+      </text>
+      <text x="20" y="153" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">pubs
+        <tspan fill="#8b949e">  3 · arXiv · Springer</tspan>
+      </text>
+      <text x="20" y="167" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">status
+        <tspan fill="#4ade80"> open to work</tspan>
+      </text>
+
+      <!-- Blinking cursor placeholder -->
+      <rect x="20" y="173" width="6" height="9" rx="1" fill="#4ade80" opacity="0.6"/>
+
+    </svg>
+  </div>
+
+  <div class="card-footer">
+    <span class="card-footer-name">Krishnasai Addala<br>Human Researcher</span>
+    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--text-faint)">
+      <strong style="color:var(--green-deep)">Type — Engineer · Modeler · Builder</strong><br><br>
+      <strong>Build.</strong><br>
+      Ships production AI systems. Builds interpretability tooling for small language models. Simulates opinion dynamics. Finds non-obvious results and publishes them.<br><br>
+      <em>"Models describe the world.<br>Engineers change it."</em>
+    </div>
+    <div class="card-footer-chips" style="margin-top:4px">
+      <span class="card-chip">CMU MSBA</span>
+      <span class="card-chip">IIIT Delhi</span>
+      <span class="card-chip">3 pubs</span>
+    </div>
+  </div>
+
+</div>
       <!-- ── Card 1 — TinyNLA ──────────────────────────────────── -->
 <div class="tcg-card" data-card-id="tinynla" data-href="projects/tinynla.html">
 
@@ -480,7 +536,7 @@
         </svg>
       </button>
 
-      <span class="tcg-counter" id="tcg-counter">1 / 4</span>
+      <span class="tcg-counter" id="tcg-counter">1 / 5</span>
     </div>
 
   </div><!-- /tcg-outer -->

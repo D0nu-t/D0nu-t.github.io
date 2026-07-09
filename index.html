@@ -24,7 +24,7 @@
 
 .tcg-stage {
   position: relative;
-  width: 520px;
+  width: 360px;
   height: 480px;
 }
 
@@ -169,15 +169,6 @@
   font-size: 11px;
   line-height: 1.5;
 }
-/* italic quote */
-.card-footer .flavor {
-  color: #4a7255;
-  font-style: italic;
-  font-size: 10px;
-  display: block;
-  margin-top: 5px;
-}
-
 /* ── Toggle row ────────────────────────────────────────────────── */
 .tcg-controls {
   display: flex;
@@ -337,7 +328,7 @@
 
   <div class="card-header">
     <span style="color:var(--green-bright)">●</span>
-    TinyNLA
+    Active · Research
   </div>
 
   <div class="card-art">
@@ -390,21 +381,23 @@
     <text x="150" y="182" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#4ade80" font-weight="600">57× PPL shift · layer 1 · GPT-2</text>
   </svg>
 </div>
-<div class="card-footer">
-    <span class="card-footer-name">Natural Language Autoencoder</span>
-    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep)">
+  <div class="card-footer">
+    <span class="card-footer-name">TinyNLA<br>Natural Language Autoencoder</span>
+    <div style="margin-top:5px;font-size:8px;line-height:1.2;color:var(--green-deep)">
+      <strong style="color:var(--green-deep)">Type — AV / AR Pair · SLMs ≤7B</strong><br><br>
       <strong>Verbalize.</strong><br>
-      Inject a residual-stream activation into a fixed prompt and autoregress a plain-text description.
-      Reconstruct the original vector from that description alone.
-      Measure round-trip direction recovery via normalised MSE.<br><br>
-      <em>"Numbers become words<br>Words become numbers</em>
+      Inject a residual-stream activation into a fixed prompt and autoregress a plain-text description. Reconstruct the original vector from that description alone. Measure round-trip direction recovery via normalised MSE.<br><br>
+      <em>"Numbers become words.<br>Words become numbers.<br>The gap measures understanding."</em>
     </div>
     <div class="card-footer-chips" style="margin-top:4px">
-      <span class="card-chip">SLMs</span>
+      <span class="card-chip">≤7B params</span>
+      <span class="card-chip">Interp.</span>
       <span class="card-chip">distilgpt2</span>
-      <span class="card-chip">Interpretability</span>
     </div>
   </div>
+  </div>
+
+</div>
 
 
 <!-- ── Card 2 — PolicySwarm ──────────────────────────────── -->

@@ -711,7 +711,7 @@ export function initGraph(containerId: string): void {
         .text(d.label)
         .attr('text-anchor', 'middle')
         .attr('dy', yOffset)
-        .attr('fill', d.type === 'project' ? CATEGORY_COLOR[d.category] : '#8b949e')
+        .attr('fill', d.type === 'project' ? CATEGORY_COLOR[d.category] : CATEGORY_COLOR[d.category])
         .attr('font-family', 'IBM Plex Mono, monospace')
         .attr('font-size', d.type === 'project' ? '11px' : '9px')
         .attr('font-weight', d.type === 'project' ? '600' : '400')

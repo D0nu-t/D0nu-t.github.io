@@ -133,7 +133,7 @@ export function initGraphEmbed(containerId: string): void {
         .attr('dy', base + i * 12)
         .attr('fill', d.type === 'project'
           ? CATEGORY_COLOR[d.category]
-          : '#8b949e'
+          : CATEGORY_COLOR[d.category]
         )
         .attr('font-family', 'IBM Plex Mono, monospace')
         .attr('font-size', d.type === 'project' ? '10px' : '8.5px')

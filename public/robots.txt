@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://d0nu-t.github.io/sitemap.xml

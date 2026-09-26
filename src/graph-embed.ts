@@ -118,7 +118,7 @@ export function initGraphEmbed(containerId: string): void {
     if (d.category === 'academic') return 2
     return d.type === 'project' ? 2 : 1.2})
     .attr('stroke-dasharray', d => d.category === 'academic' ? '5 3' : 'none')
-  .attr('filter', d => d.type === 'project' ? 'url(#glow-strong)' : 'url(#eg)')
+  .attr('filter', d => d.type === 'project' ? 'url(#eg-strong)' : 'url(#eg)')
 
   // Labels — project nodes always visible; skill nodes dimmer
   nodeEl.each(function(d) {

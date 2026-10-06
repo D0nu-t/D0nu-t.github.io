@@ -411,7 +411,6 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
     <!-- Round-trip result at bottom -->
     <line x1="20" y1="168" x2="280" y2="168" stroke="#21262d" stroke-width="0.8"/>
-    <!-- <text x="150" y="182" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#4ade80" font-weight="600">57× PPL shift · layer 1 · GPT-2</text> -->
   </svg>
 </div>
   <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
@@ -419,13 +418,13 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
     <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
       <!-- <strong style="color:var(--green-deep)">Type — AV / AR Pair · SLMs ≤7B</strong><br><br> -->
       <strong style="color:#442a66">Verbalize</strong><br>
-      Inject a residual-stream activation into a fixed prompt and autoregress a plain-text description. Reconstruct the original vector from the description.<br><br>
+      Read a model's internal state at one word and describe it in plain English. Rebuild the state from the description alone.<br><br>
       <em>"Tell me Machine, what are you Thinking?"</em>
     </div>
     <div class="card-footer-chips" style="margin-top:4px">
-      <span class="card-chip">≤7B params</span>
+      <span class="card-chip">GPT-2 · layer 8</span>
       <span class="card-chip">Interp.</span>
-      <span class="card-chip">distilgpt2</span>
+      <span class="card-chip">GRPO</span>
     </div>
   </div>
   <!-- </div> -->
@@ -444,37 +443,23 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   <div class="card-art">
   <svg viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     <!-- Title -->
-    <!-- <text x="150" y="18" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#484f58" letter-spacing="0.06em">EXPERIMENT 05 — GEOMETRY × LAG</text> -->
 
-    <!-- Zero axis -->
-    <line x1="30" y1="110" x2="270" y2="110" stroke="#30363d" stroke-width="1" stroke-dasharray="4 5"/>
-    <text x="18" y="114" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#484f58">0</text>
+    <!-- Axis -->
+    <line x1="40" y1="150" x2="270" y2="150" stroke="#30363d" stroke-width="1"/>
+    <text x="150" y="20" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600">OPINION VARIANCE</text>
 
-    <!-- Y axis ticks -->
-    <line x1="30" y1="75"  x2="270" y2="75"  stroke="#21262d" stroke-width="0.6" stroke-dasharray="2 6"/>
-    <line x1="30" y1="140" x2="270" y2="140" stroke="#21262d" stroke-width="0.6" stroke-dasharray="2 6"/>
-    <text x="18" y="78"  text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#30363d">+40%</text>
-    <text x="18" y="144" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#30363d">−20%</text>
+    <!-- No media: 0.016 -->
+    <rect x="70" y="131" width="60" height="19" rx="3" fill="#0d2626" stroke="#5eead4" stroke-width="1.5"/>
+    <text x="100" y="123" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#5eead4" font-weight="600">0.016</text>
+    <text x="100" y="166" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#5eead4" font-weight="600">No media</text>
 
-    <!-- Euclidean bar — positive (+63%) -->
-    <rect x="60" y="50" width="70" height="60" rx="4" fill="#166534" stroke="#4ade80" stroke-width="1.5"/>
-    <text x="95" y="43"  text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#4ade80" font-weight="600">+63%</text>
-    <text x="95" y="126" text-anchor="middle" font-family="IBM Plex Mono" font-size="9"  fill="#4ade80" font-weight="600">Euclidean</text>
-    <text x="95" y="138" text-anchor="middle" font-family="IBM Plex Mono" font-size="8"  fill="#4ade80" font-weight="600">lag helps</text>
+    <!-- With media: 0.086 -->
+    <rect x="170" y="48" width="60" height="102" rx="3" fill="#166534" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="200" y="40" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#4ade80" font-weight="600">0.086</text>
+    <text x="200" y="166" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#4ade80" font-weight="600">With media</text>
 
-    <!-- Cosine bar — negative (−26%) -->
-    <rect x="170" y="110" width="70" height="40" rx="4" fill="#0d2626" stroke="#5eead4" stroke-width="1.5"/>
-    <text x="205" y="168" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#5eead4" font-weight="600">−26%</text>
-    <text x="205" y="85" text-anchor="middle" font-family="IBM Plex Mono" font-size="9"  fill="#5eead4" font-weight="600">Cosine</text>
-    <text x="205" y="98" text-anchor="middle" font-family="IBM Plex Mono" font-size="8"  fill="#5eead4" font-weight="600">lag hurts</text>
 
-    <!-- Sign reversal bracket/annotation -->
-    <line x1="135" y1="80" x2="165" y2="80" stroke="#484f58" stroke-width="0.8" stroke-dasharray="3 3"/>
-    <!-- <text x="150" y="73" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#484f58">sign reversal</text> -->
-
-    <!-- Footer stat -->
     <line x1="20" y1="178" x2="280" y2="178" stroke="#21262d" stroke-width="0.8"/>
-    <!-- <text x="150" y="188" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#484f58">1,024 agents · 30 seeds · same parameters</text> -->
   </svg>
 </div>
 
@@ -484,10 +469,10 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
       <!-- <strong style="color:var(--green-deep)">Type — Agent-Based Model · Network ABM</strong><br><br> -->
       <strong style="color:#442a66">Simulate</strong><br>
       Seed Users on a synthetic social network with different opinions. Perturb the network<br>Then, observe how Opinions change<br><br>
-      <em>"Is Discourse shaped by how we measure it?"</em>
+      <em>"Who hears the shock decides what it does."</em>
     </div>
     <div class="card-footer-chips" style="margin-top:4px">
-      <span class="card-chip">1K+ agents</span>
+      <span class="card-chip">120 agents · 30 seeds</span>
       <span class="card-chip">Discourse Modelling</span>
       <span class="card-chip">Social Computing</span>
     </div>
@@ -496,39 +481,59 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 </div>
 
 
-<!-- ── Card 3 — Placeholder ──────────────────────────────── -->
-<div class="tcg-card" data-card-id="placeholder-a" style="opacity:0.6">
+<!-- ── Card 3 — Thought Reader ───────────────────────────── -->
+<div class="tcg-card" data-card-id="thought-reader" data-href="projects/TinyNLA.html#report">
 
-  <div class="card-header" style="justify-content:center;letter-spacing:.12em">
-    <span style="color:var(--text-faint)">▪</span>
-    Unreleased
+  <div class="card-header" style="color:#230f3d">
+    <span style="color:var(--teal)">◆</span>
+    Thought Reader
   </div>
 
-  <div class="card-art" style="height:42px;flex:none;justify-content:center;align-items:center;display:flex">
-    <svg viewBox="0 0 60 28" width="54" height="24" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="1" width="58" height="26" rx="3" fill="none" stroke="#21262d" stroke-width="0.8" stroke-dasharray="3 3"/>
-      <text x="30" y="16" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#30363d" font-weight="600" letter-spacing="0.1em">// WIP</text>
-    </svg>
-  </div>
+  <div class="card-art">
+  <svg viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <!-- Token strip -->
+    <text x="150" y="20" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600">CLICK A WORD</text>
+    <rect x="14"  y="30" width="46" height="18" rx="3" fill="#4ade8012" stroke="#4ade8055" stroke-width="1"/>
+    <rect x="66"  y="30" width="58" height="18" rx="3" fill="#4ade8025" stroke="#4ade8090" stroke-width="1"/>
+    <rect x="130" y="30" width="40" height="18" rx="3" fill="#166534"   stroke="#4ade80"   stroke-width="1.5"/>
+    <rect x="176" y="30" width="62" height="18" rx="3" fill="#4ade8018" stroke="#4ade8055" stroke-width="1"/>
+    <rect x="244" y="30" width="42" height="18" rx="3" fill="#4ade800a" stroke="#4ade8035" stroke-width="1"/>
+    <line x1="150" y1="50" x2="150" y2="64" stroke="#4ade80" stroke-width="1.5"/>
+    <polygon points="145,64 150,72 155,64" fill="#4ade80"/>
+
+    <!-- Report panel -->
+    <rect x="14" y="76" width="272" height="100" rx="5" fill="#0d1117" stroke="#30363d" stroke-width="1.2"/>
+    <line x1="26" y1="94"  x2="250" y2="94"  stroke="#5eead4" stroke-width="1.2"/>
+    <line x1="26" y1="108" x2="268" y2="108" stroke="#5eead480" stroke-width="1.2"/>
+    <line x1="26" y1="122" x2="214" y2="122" stroke="#5eead450" stroke-width="1.2"/>
+    <!-- Theme chips -->
+    <rect x="26"  y="140" width="64" height="20" rx="10" fill="#166534" stroke="#4ade80" stroke-width="1"/>
+    <text x="58"  y="154" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#4ade80">in text</text>
+    <rect x="98"  y="140" width="84" height="20" rx="10" fill="#0d2626" stroke="#5eead4" stroke-width="1"/>
+    <text x="140" y="154" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#5eead4">beyond text</text>
+    <rect x="190" y="140" width="82" height="20" rx="10" fill="#2a1f0a" stroke="#f59e0b" stroke-width="1"/>
+    <text x="231" y="154" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#f59e0b">association</text>
+  </svg>
+</div>
 
   <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
-    <span class="card-footer-name" style="color:#230f3d">Research Artifact<br>[ Unreleased ]</span>
-    <div style="margin-top:5px;font-size:10px;line-height:1.5;color:var(--text-faint)">
-      <strong>Type — Unknown</strong><br><br>
-      <strong>[ Redacted ]</strong><br>
-      Details withheld pending publication or release.<br>
-      Check back.<br><br>
-      <em>"Good research takes the time it takes."</em>
+    <span class="card-footer-name" style="color:#230f3d">Plain-Language Model Reports</span>
+    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
+      <strong style="color:#442a66">Explain</strong><br>
+      Turn a model's internal state into a short report anyone can read, with a label for how far to trust it.<br><br>
+      <em>"Themes, not claims."</em>
     </div>
     <div class="card-footer-chips" style="margin-top:4px">
-      <span class="card-chip" style="opacity:.5">???</span>
+      <span class="card-chip">TinyNLA</span>
+      <span class="card-chip">FastAPI</span>
+      <span class="card-chip">D3</span>
     </div>
   </div>
 
 </div>
 
 
-<!-- ── Card 4 — Placeholder ──────────────────────────────── -->
+────────────────────────────── -->
 <div class="tcg-card" data-card-id="placeholder-b" style="opacity:0.45">
 
   <div class="card-header" style="justify-content:center;letter-spacing:.12em">
@@ -631,7 +636,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
         <span class="exp-date">Jun 2023 – May 2024</span>
         <div>
           <h3 class="exp-title">MIDAS Lab, IIIT Delhi <span>· Undergraduate Research Engineer · New Delhi, IN</span></h3>
-          <p class="exp-desc">Shipped a knowledge-graph-augmented LLM system for physics question answering - ~200% improvement over baseline — contributing to three published papers. Coordinated three cross-functional ML sub-teams.</p>
+          <p class="exp-desc">Built a knowledge-graph-augmented LLM system for physics question answering, contributing to three published papers. Coordinated three cross-functional ML sub-teams.</p>
         </div>
       </div>
     </div>
@@ -652,12 +657,12 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
           <span class="work-badge active">● Active</span>
         </div>
         <p class="work-card-body">
-          A production evaluation server for open-weight LLMs paired with a mechanistic interpretability layer.
-          Nine behavioral probe suites surface trust-critical failure modes in agentic and tool-calling deployments.
+          An evaluation server for open-weight LLMs that tests behavior under pressure and records how internal activations shift.
+          The sycophancy suite is built; jailbreak, faithfulness and hallucination suites are designed.
         </p>
         <div class="work-stack">
           <span class="chip">FastAPI</span><span class="chip">SSE</span><span class="chip">PyTorch</span>
-          <span class="chip">CUDA</span><span class="chip">HuggingFace</span><span class="chip">Docker</span><span class="chip">MLflow</span>
+          <span class="chip">CUDA</span><span class="chip">HuggingFace</span><span class="chip">MLflow</span>
         </div>
         <div class="work-card-foot">
                     <!-- <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-faint)">Write-up in progress</span> -->
@@ -670,15 +675,15 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
       <div class="work-card">
         <div class="work-card-head">
           <h3 class="work-card-title">AI Governance Policy Simulator</h3>
-          <span class="work-badge prep">○ Paper in prep</span>
+          <span class="work-badge prep">○ In revision</span>
         </div>
         <p class="work-card-body">
-          Agent-based simulation of AI policy discourse across 1,000+ agents and 30 seeds.
-          Opinion Space Geometry is an important consideration for policy discourse simulation, with implications for the design of deliberative discourse platforms.
+          Agent-based simulation of AI policy discourse: 120 agents on a scale-free network, 30 seeds per condition.
+          Tests how shocks, media and the choice of opinion-distance metric change where a population's opinions end up.
         </p>
         <div class="work-stack">
           <span class="chip">Python</span><span class="chip">NumPy</span><span class="chip">SciPy</span>
-          <span class="chip">NetworkX</span><span class="chip">ABM</span>
+          <span class="chip">NetworkX</span><span class="chip">spaCy</span><span class="chip">ABM</span>
         </div>
         <div class="work-card-foot">
           <!-- <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-faint)">Write-up in progress</span> -->
@@ -694,10 +699,10 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
           <span class="work-badge active">● Active</span>
         </div>
         <p class="work-card-body">
-          Building an NLA utility for small language models to explore their thoughts and evaluate their suitability for downstream tasks. 
+          A Natural Language Autoencoder for small models: it describes GPT-2's internal state in plain English, and those descriptions rebuild the state better than summaries of the input text. Includes a Thought Reader tool and plain-language reports.
         </p>
         <div class="work-stack">
-          <span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">GPT-2</span><span class="chip">Qwen2.5</span>
+          <span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">GPT-2</span><span class="chip">GRPO</span><span class="chip">FastAPI</span>
         </div>
         <div class="work-card-foot">
           <!-- <span style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-faint)">Write-up in progress</span> -->

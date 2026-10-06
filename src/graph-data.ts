@@ -104,6 +104,9 @@ export const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
 { id: 'dice',       label: 'DiCE',         type: 'skill', category: 'ml' },
 { id: 'lora',       label: 'LoRA / PEFT',  type: 'skill', category: 'ml' },
 { id: 'rlhf',       label: 'RLHF',         type: 'skill', category: 'ml' },
+{ id: 'rl',         label: 'RL / GRPO',    type: 'skill', category: 'ml' },
+{ id: 'interp',     label: 'Interpretability', type: 'skill', category: 'ml' },
+{ id: 'spacy',      label: 'spaCy',        type: 'skill', category: 'ml' },
 
 // GenAI
 { id: 'google-adk', label: 'Google ADK',   type: 'skill', category: 'genai' },
@@ -123,6 +126,7 @@ export const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
 { id: 'mongodb',    label: 'MongoDB',      type: 'skill', category: 'data' },
 { id: 'neo4j',      label: 'Neo4j',        type: 'skill', category: 'data' },
 { id: 'powerbi',    label: 'Power BI',     type: 'skill', category: 'data' },
+{ id: 'dbt',        label: 'dbt',          type: 'skill', category: 'data' },
 ]
 
 export const RAW_LINKS: { source: string; target: string }[] = [
@@ -136,13 +140,19 @@ export const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'docker',      target: 'llm-platform' },
   { source: 'mlflow',      target: 'llm-platform' },
   { source: 'numpy',       target: 'llm-platform' },
+  { source: 'interp',      target: 'llm-platform' },
+  { source: 'evaluation',  target: 'llm-platform' },
+  { source: 'llms',        target: 'llm-platform' },
 
   // Policy Simulator
   { source: 'python',      target: 'policy-swarm' },
   { source: 'numpy',       target: 'policy-swarm' },
   { source: 'scipy',       target: 'policy-swarm' },
   { source: 'networkx',    target: 'policy-swarm' },
-  {source: 'typescript',      target: 'policy-swarm' },
+  { source: 'pandas',      target: 'policy-swarm' },
+  { source: 'matplotlib',  target: 'policy-swarm' },
+  { source: 'spacy',       target: 'policy-swarm' },
+  { source: 'statistics',  target: 'policy-swarm' },
 
   // TinyNLA
   { source: 'python',      target: 'tinynla' },
@@ -150,7 +160,11 @@ export const RAW_LINKS: { source: string; target: string }[] = [
   { source: 'cuda',        target: 'tinynla' },
   { source: 'huggingface', target: 'tinynla' },
   { source: 'numpy',       target: 'tinynla' },
-  {source: 'typescript',      target: 'tinynla' },
+  { source: 'rl',          target: 'tinynla' },
+  { source: 'interp',      target: 'tinynla' },
+  { source: 'fastapi',     target: 'tinynla' },
+  { source: 'd3',          target: 'tinynla' },
+  { source: 'lora',        target: 'tinynla' },
 
   // Capgemini
   { source: 'python',      target: 'capgemini' },
@@ -521,6 +535,16 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'neo4j',      target: 'networkx' },
 { source: 'neo4j',      target: 'midas' },
 { source: 'neo4j',      target: 'physics-llm' },
+
+// New skills
+{ source: 'rl',         target: 'pytorch' },
+{ source: 'rl',         target: 'rlhf' },
+{ source: 'interp',     target: 'pytorch' },
+{ source: 'interp',     target: 'llms' },
+{ source: 'spacy',      target: 'nlp' },
+{ source: 'spacy',      target: 'python' },
+{ source: 'dbt',        target: 'bigquery' },
+{ source: 'dbt',        target: 'sql' },
 
 // Power BI
 { source: 'powerbi',    target: 'tableau' },

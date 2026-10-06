@@ -17,77 +17,21 @@
 .badge-early{background:#1a2e1a;color:#86efac;border:1px solid #86efac;}
 .badge-goal{background:var(--panel);color:var(--text-faint);border:1px solid var(--hairline-hi);}
 
-/* ── sentence picker ── */
-.sentence-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.1rem;}
-.stab{font-family:var(--font-mono);font-size:.8rem;padding:.38rem .9rem;border:1px solid var(--hairline-hi);border-radius:3px;background:transparent;color:var(--text-dim);cursor:pointer;transition:border-color .15s,color .15s,background .15s;}
-.stab:hover{border-color:var(--green-bright);color:var(--green-bright);}
-.stab.active{background:var(--green-deep);border-color:var(--green-bright);color:var(--green-bright);}
+/* ── screenshots ── */
+.shot{margin:2rem 0;border:1px solid var(--hairline);border-radius:6px;overflow:hidden;background:var(--panel);}
+.shot img{display:block;width:100%;height:auto;}
+.shot figcaption{border-top:1px solid var(--hairline);padding:.7rem 1.1rem;font-family:var(--font-mono);font-size:.72rem;line-height:1.55;color:var(--text-faint);}
 
-/* ── demo shell ── */
-.demo-shell{border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;}
-.demo-bar{background:var(--panel);border-bottom:1px solid var(--hairline);padding:.75rem 1.1rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;}
-.demo-bar-lbl{font-family:var(--font-mono);font-size:.7rem;color:var(--text-faint);letter-spacing:.06em;text-transform:uppercase;}
-
-/* ── pipeline ── */
-.pipeline{padding:1.4rem 1.4rem 0;}
-
-.pipe-stage{border:1px solid var(--hairline);border-radius:5px;overflow:hidden;margin-bottom:0;}
-.stage-head{background:var(--panel);padding:.55rem .9rem;display:flex;align-items:center;gap:.6rem;}
-.stage-num{font-family:var(--font-mono);font-size:.65rem;font-weight:600;background:var(--bg);border:1px solid var(--hairline-hi);border-radius:2px;padding:.1rem .38rem;color:var(--text-faint);}
-.stage-title{font-family:var(--font-mono);font-size:.75rem;font-weight:600;color:var(--text);}
-.stage-subtitle{font-family:var(--font-mono);font-size:.68rem;color:var(--text-faint);margin-left:auto;}
-.stage-body{padding:.9rem 1rem;}
-
-/* sentence display */
-.sentence-display{font-family:var(--font-mono);font-size:1rem;color:var(--text);line-height:1.6;letter-spacing:.01em;}
-.token-focus{background:var(--green-deep);color:var(--green-bright);border:1px solid var(--green-bright);border-radius:3px;padding:.05rem .3rem;margin-left:.2rem;}
-.vector-hint{font-family:var(--font-mono);font-size:.72rem;color:var(--text-faint);margin-top:.55rem;}
-.vector-dots{display:inline-flex;gap:3px;vertical-align:middle;margin:0 .3rem;}
-.vdot{width:6px;height:6px;border-radius:50%;background:var(--hairline-hi);}
-.vdot.lit{background:var(--green-bright);opacity:.7;}
-
-/* connector arrow */
-.pipe-connector{display:flex;flex-direction:column;align-items:center;padding:.55rem 0;gap:.2rem;}
-.pipe-arrow-line{width:2px;height:18px;background:linear-gradient(to bottom,var(--hairline-hi),var(--green-bright));}
-.pipe-arrow-label{font-family:var(--font-mono);font-size:.68rem;color:var(--green-bright);letter-spacing:.04em;text-transform:uppercase;}
-.pipe-arrow-tip{font-size:.7rem;color:var(--green-bright);}
-
-/* verbalization box */
-.verb-box{background:var(--bg);border:1px solid var(--hairline);border-left:3px solid var(--green-bright);border-radius:0 4px 4px 0;padding:.85rem 1rem;font-size:.9375rem;color:var(--text-dim);line-height:1.65;min-height:52px;transition:opacity .25s;}
-.verb-hi{color:var(--text);font-weight:500;}
-
-/* comparison row */
-.compare-row{display:grid;grid-template-columns:1fr auto 1fr;gap:1.1rem;align-items:start;}
-@media(max-width:580px){.compare-row{grid-template-columns:1fr;}.quality-col{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);padding:.75rem 0;}}
-
-.pred-col-head{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.6rem;}
-.pred-list{display:flex;flex-direction:column;gap:.3rem;}
-.pred-row{display:flex;align-items:center;gap:.5rem;}
-.pred-w{font-family:var(--font-mono);font-size:.78rem;color:var(--text-dim);width:90px;flex-shrink:0;}
-.pred-track{flex:1;background:var(--panel);border-radius:2px;height:13px;overflow:hidden;}
-.pred-fill{height:100%;border-radius:2px;transition:width .5s ease;}
-.pred-fill.orig{background:var(--green-deep);border:1px solid var(--green-bright);}
-.pred-fill.reco{background:#0d2626;border:1px solid var(--teal);}
-.pred-pct{font-family:var(--font-mono);font-size:.7rem;color:var(--text-faint);width:32px;text-align:right;flex-shrink:0;}
-
-.quality-col{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:.5rem;}
-.quality-label{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);text-align:center;}
-.quality-gauge{position:relative;width:72px;height:72px;}
-.quality-svg{width:72px;height:72px;transform:rotate(-90deg);}
-.gauge-bg{fill:none;stroke:var(--hairline);stroke-width:6;}
-.gauge-fill{fill:none;stroke:var(--green-bright);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .7s ease;}
-.quality-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.95rem;font-weight:600;color:var(--green-bright);}
-.quality-sub{font-family:var(--font-mono);font-size:.66rem;color:var(--text-faint);text-align:center;max-width:80px;line-height:1.4;}
-
-.demo-foot{border-top:1px solid var(--hairline);padding:.65rem 1.1rem;font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint);background:var(--panel);margin-top:1.4rem;}
-
-/* ver table */
-.ver-table{width:100%;border-collapse:collapse;border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;font-family:var(--font-mono);font-size:.82rem;}
+/* ── tables ── */
+.table-wrap{overflow-x:auto;margin:2rem 0;}
+.ver-table{width:100%;border-collapse:collapse;border:1px solid var(--hairline);font-family:var(--font-mono);font-size:.82rem;}
 .ver-table th{background:var(--panel);padding:.65rem 1rem;text-align:left;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);border-bottom:1px solid var(--hairline);}
-.ver-table td{padding:.75rem 1rem;border-bottom:1px solid var(--hairline);color:var(--text-dim);background:var(--bg);}
+.ver-table td{padding:.75rem 1rem;border-bottom:1px solid var(--hairline);color:var(--text-dim);background:var(--bg);vertical-align:top;}
 .ver-table tr:last-child td{border-bottom:none;}
 .ver-table td:first-child{color:var(--text);font-weight:600;}
-.bad{color:#f87171;}.good{color:var(--green-bright);font-weight:600;}
+.ver-table .num{text-align:right;white-space:nowrap;}
+.good{color:var(--green-bright);font-weight:600;}
+.project-body h3{font-family:var(--font-mono);font-size:1rem;font-weight:600;color:var(--green-mid);margin:2.2rem 0 .8rem;}
 </style>
 </head>
 <body>
@@ -105,11 +49,11 @@
 <header class="project-header">
   <div class="wrap">
     <a class="back-link" href="../index.html#work">← All work</a>
-    <h1 class="project-title">TinyNLA — Natural Language<br>Autoencoder for SLMs</h1>
-    <p class="project-dek">A language model's internal state at any point in processing is a long sequence of numbers. TinyNLA translates those numbers into plain English, then tries to reconstruct them from that description alone — testing how much of the model's "thinking" survives the round-trip through language.</p>
+    <h1 class="project-title">TinyNLA — Natural Language<br>Autoencoder for Small Models</h1>
+    <p class="project-dek">A language model's internal state at any word is a long list of numbers. TinyNLA trains one model to describe those numbers in plain English and a second to rebuild them from the description alone. If the rebuild is close, the description carried real information out of the model.</p>
     <div class="project-chips">
       <span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">GPT-2</span>
-      <span class="chip">Qwen2.5</span><span class="chip">distilgpt2</span><span class="chip">HuggingFace</span>
+      <span class="chip">GRPO</span><span class="chip">FastAPI</span><span class="chip">D3</span><span class="chip">HuggingFace</span>
     </div>
   </div>
 </header>
@@ -119,10 +63,11 @@
     <p class="toc-label">On this page</p>
     <ul class="toc-list">
       <li><a href="#idea">The idea</a></li>
-      <li><a href="#demo">Try it</a></li>
       <li><a href="#how">How it works</a></li>
       <li><a href="#results">Results</a></li>
-      <li><a href="#finding">Finding</a></li>
+      <li><a href="#reader">Thought Reader</a></li>
+      <li><a href="#report">Plain-language reports</a></li>
+      <li><a href="#limits">Limits</a></li>
       <li><a href="#next">Goals</a></li>
     </ul>
   </nav>
@@ -130,209 +75,164 @@
   <article class="project-body">
 
     <div class="metric-row" data-reveal>
-      <div class="metric"><span class="metric-val">4,600x</span><span class="metric-lbl">Initial round-trip error</span></div>
-      <div class="metric"><span class="metric-val">57x</span><span class="metric-lbl">After architecture fixes</span></div>
-      <div class="metric"><span class="metric-val" data-counter="3">0</span><span class="metric-lbl">Architecture rewrites</span></div>
-      <div class="metric"><span class="metric-val">≤7B</span><span class="metric-lbl">Target model size</span></div>
+      <div class="metric"><span class="metric-val">GPT-2</span><span class="metric-lbl">Layer 8 of 12</span></div>
+      <div class="metric"><span class="metric-val">20k</span><span class="metric-lbl">Training samples</span></div>
+      <div class="metric"><span class="metric-val">16% vs 7%</span><span class="metric-lbl">Explanations vs text summaries</span></div>
+      <div class="metric"><span class="metric-val">5 / 5</span><span class="metric-lbl">Scored sanity checks pass</span></div>
     </div>
 
     <h2 id="idea">The idea</h2>
-    <p>When a language model reads a sentence, it builds up a rich internal state at every layer. At each token position, that state is a vector of thousands of numbers encoding everything the model has inferred so far — grammatical role, likely continuations, semantic context, positional information.</p>
-    <p>Most tools for understanding these states require you to work with the numbers directly, which is impractical for most purposes. TinyNLA takes a different approach, inspired by Anthropic's Natural Language Autoencoder work: train a system that can describe that internal state in plain English (the verbalizer), and then reconstruct the original numbers from just that description (the reconstructor). If the reconstruction is close to the original, the description captured the essential information.</p>
-    <p>The practical implication: if this works well, you could read what a model was "thinking" at any point, edit that description, and observe the effect on behavior — without ever touching the raw numbers.</p>
+    <p>When a language model reads a sentence, it builds an internal state at every word: a vector of numbers holding what it has inferred so far and what it expects next. Most tools for studying these states work on the numbers directly.</p>
+    <p>A Natural Language Autoencoder (NLA) takes a different route, introduced in Anthropic's paper <a href="https://transformer-circuits.pub/2026/nla/" target="_blank" rel="noopener">Natural Language Autoencoders Produce Unsupervised Explanations of LLM Activations</a> (May 2026). One model, the <strong>verbalizer</strong>, sees only the numbers and writes an English explanation. A second, the <strong>reconstructor</strong>, sees only that explanation and tries to rebuild the numbers.</p>
 
     <div class="callout" data-reveal>
-      <p><strong>The test:</strong> take a vector, convert it to English, convert the English back to a vector, and measure how close you got. Low error means the description preserved the essential structure. TinyNLA targets GPT-2 and Qwen2.5 models up to 7B parameters.</p>
+      <p><strong>An analogy:</strong> it's like describing a painting over the phone and scoring the copy the other person paints. A good copy means the description carried the picture.</p>
     </div>
 
-    <h2 id="demo">Try it — the round-trip in action <span class="badge badge-live">Interactive</span></h2>
-    <p>Choose a sentence below. The demo walks through what TinyNLA actually does at each step: read the model's internal state at the final token, translate it to a plain English description, then reconstruct the state from that description and compare what the model would predict in each case.</p>
-
-    <div class="demo-shell" data-reveal>
-      <div class="demo-bar">
-        <span class="demo-bar-lbl">TinyNLA verbalizer / reconstructor — layer 1, GPT-2</span>
-        <span class="badge badge-early">Representative — based on real runs</span>
-      </div>
-
-      <div style="padding:1rem 1.4rem .6rem">
-        <div style="font-family:var(--font-mono);font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.6rem">Choose a sentence</div>
-        <div class="sentence-tabs" id="sentence-tabs"></div>
-      </div>
-
-      <div class="pipeline" id="pipeline-root">
-
-        <!-- Stage 1 -->
-        <div class="pipe-stage">
-          <div class="stage-head">
-            <span class="stage-num">01</span>
-            <span class="stage-title">Model reads the sentence</span>
-            <span class="stage-subtitle">The highlighted word is where we read the internal state</span>
-          </div>
-          <div class="stage-body">
-            <div class="sentence-display" id="sent-display"></div>
-            <div class="vector-hint">
-              Internal state at this position:
-              <span class="vector-dots" id="vdots"></span>
-              <span id="vdim-label" style="color:var(--text-faint)">3,072 numbers</span>
-              — this is what TinyNLA reads
-            </div>
-          </div>
-        </div>
-
-        <!-- Arrow 1 -->
-        <div class="pipe-connector">
-          <div class="pipe-arrow-line"></div>
-          <div class="pipe-arrow-label">Verbalizer — numbers to English</div>
-          <div class="pipe-arrow-tip">↓</div>
-        </div>
-
-        <!-- Stage 2 -->
-        <div class="pipe-stage">
-          <div class="stage-head">
-            <span class="stage-num">02</span>
-            <span class="stage-title">TinyNLA translates the internal state to plain English</span>
-            <span class="stage-subtitle" id="verb-quality-head" style="color:var(--green-bright)"></span>
-          </div>
-          <div class="stage-body">
-            <div style="font-family:var(--font-mono);font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:.5rem">Verbalizer output</div>
-            <div class="verb-box" id="verb-output">Select a sentence above.</div>
-          </div>
-        </div>
-
-        <!-- Arrow 2 -->
-        <div class="pipe-connector">
-          <div class="pipe-arrow-line"></div>
-          <div class="pipe-arrow-label">Reconstructor — English back to numbers</div>
-          <div class="pipe-arrow-tip">↓</div>
-        </div>
-
-        <!-- Stage 3 -->
-        <div class="pipe-stage" style="margin-bottom:0">
-          <div class="stage-head">
-            <span class="stage-num">03</span>
-            <span class="stage-title">Compare original vs reconstructed predictions</span>
-            <span class="stage-subtitle">If the descriptions were good, these should look similar</span>
-          </div>
-          <div class="stage-body">
-            <div class="compare-row">
-              <div>
-                <div class="pred-col-head">Original — from the model's actual state</div>
-                <div class="pred-list" id="preds-orig"></div>
-              </div>
-              <div class="quality-col">
-                <div class="quality-label">Round-trip quality</div>
-                <div class="quality-gauge">
-                  <svg class="quality-svg" viewBox="0 0 72 72">
-                    <circle class="gauge-bg" cx="36" cy="36" r="30"/>
-                    <circle class="gauge-fill" id="gauge-arc" cx="36" cy="36" r="30"
-                      stroke-dasharray="188.4"
-                      stroke-dashoffset="188.4"/>
-                  </svg>
-                  <div class="quality-num" id="gauge-num">—</div>
-                </div>
-                <div class="quality-sub" id="gauge-sub">Select a sentence to see reconstruction quality</div>
-              </div>
-              <div>
-                <div class="pred-col-head" style="color:var(--teal)">After round-trip — from the description alone</div>
-                <div class="pred-list" id="preds-reco"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /pipeline -->
-
-      <div class="demo-foot">
-        Verbalizations and predictions are representative examples derived from real GPT-2 layer-1 experiments. Reconstruction quality reflects actual measured round-trip error on these inputs. Numbers are not from a live model call.
-      </div>
-    </div><!-- /demo-shell -->
+    <p>TinyNLA is a from-scratch build of that method for small models, on a 4 GB laptop GPU. The paper worked with far larger models and far more compute; the question here is how much of the effect survives at this scale.</p>
 
     <h2 id="how">How it works <span class="badge badge-live">Built</span></h2>
-    <p>TinyNLA is a two-component system, following the same AV/AR architecture as Anthropic's NLA paper:</p>
-    <ul>
-      <li><strong>Activation Verbalizer</strong> — a distilgpt2-based model fine-tuned to take a residual stream activation vector and produce a plain English description. The vector is injected as a single token embedding into a fixed prompt, then the model autoregressively generates the description.</li>
-      <li><strong>Activation Reconstructor</strong> — takes the plain English description produced by the verbalizer and produces a reconstructed activation vector. Quality is measured by how close the reconstructed vector is to the original, after L2 normalisation — so low MSE means direction was preserved, which is what matters for downstream behavior.</li>
-    </ul>
-    <p>Both vectors are L2-normalised before comparison, so the round-trip MSE directly measures direction agreement. If the description captured the key information, the reconstructor should land in roughly the same place in activation space — and the model's predictions from that reconstructed state should be similar to its original predictions.</p>
 
     <div class="arch-flow" data-reveal>
       <div class="arch-layer">
-        <span class="arch-layer-label">Input</span>
+        <span class="arch-layer-label">Data</span>
         <div class="arch-layer-content">
-          <span class="arch-node highlight">Prompt tokens</span><span class="arch-arrow">→</span><span class="arch-node">Source model (GPT-2 / Qwen2.5)</span>
+          <span class="arch-node highlight">Web text</span><span class="arch-arrow">→</span><span class="arch-node">GPT-2 state at one word, layer 8</span><span class="arch-arrow">→</span><span class="arch-node">Starter summary (Qwen2.5-0.5B)</span>
         </div>
       </div>
       <div class="arch-layer">
-        <span class="arch-layer-label">Extract</span>
+        <span class="arch-layer-label">Verbalizer</span>
         <div class="arch-layer-content">
-          <span class="arch-node highlight">Residual stream per token per layer</span><span class="arch-arrow">→</span><span class="arch-node">L2 normalise</span>
+          <span class="arch-node highlight">State injected as one token</span><span class="arch-arrow">→</span><span class="arch-node">Writes an explanation</span>
         </div>
       </div>
       <div class="arch-layer">
-        <span class="arch-layer-label">AV</span>
+        <span class="arch-layer-label">Reconstructor</span>
         <div class="arch-layer-content">
-          <span class="arch-node highlight">Inject vector as token embedding</span><span class="arch-arrow">→</span><span class="arch-node">Autoregress description (distilgpt2)</span>
+          <span class="arch-node highlight">Reads the explanation</span><span class="arch-arrow">→</span><span class="arch-node">GPT-2's own first 8 layers</span><span class="arch-arrow">→</span><span class="arch-node">Rebuilt state</span>
         </div>
       </div>
       <div class="arch-layer">
-        <span class="arch-layer-label">AR</span>
+        <span class="arch-layer-label">Training</span>
         <div class="arch-layer-content">
-          <span class="arch-node highlight">Encode description</span><span class="arch-arrow">→</span><span class="arch-node">Linear head → reconstructed vector</span>
+          <span class="arch-node highlight">Supervised warm-start</span><span class="arch-arrow">→</span><span class="arch-node">Reinforcement learning (GRPO)</span>
         </div>
       </div>
       <div class="arch-layer">
-        <span class="arch-layer-label">Measure</span>
+        <span class="arch-layer-label">Score</span>
         <div class="arch-layer-content">
-          <span class="arch-node highlight">Round-trip MSE</span><span class="arch-node">Perplexity shift</span><span class="arch-node">Cosine similarity</span>
+          <span class="arch-node highlight">Fraction of variance explained</span>
         </div>
       </div>
     </div>
 
-    <h2 id="results">Results <span class="badge badge-early">Layer 1 only</span></h2>
-    <p>Three compounding architecture failures kept early results uninterpretable. Fixing them dropped the perplexity shift from 4,600x to 57x on layer 1 of GPT-2. A shift of 57x means the reconstructed state still degrades model performance substantially — but it is far from random noise, and the direction of the encoding is clearly being recovered.</p>
+    <p>Both models start from summaries of the input text, written by a small model. Reinforcement learning then rewards the verbalizer for explanations the reconstructor can rebuild from. GRPO is a critic-free method: each sampled explanation is scored against the others in its group.</p>
 
-    <table class="ver-table" data-reveal>
-      <thead>
-        <tr><th>Version</th><th>Token processing</th><th>Encoder</th><th>Perplexity shift (layer 1)</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>v1</td><td class="bad">Averaged across tokens — loses position</td><td class="bad">DistilBERT (wrong architecture type)</td><td class="bad">~4,600x</td></tr>
-        <tr><td>v2</td><td class="bad">Averaged across tokens — loses position</td><td class="bad">DistilBERT (wrong architecture type)</td><td class="bad">~2,000x</td></tr>
-        <tr><td>v3</td><td class="good">Per-token — preserves position</td><td class="good">distilgpt2 (causally compatible)</td><td class="good">57x</td></tr>
-      </tbody>
-    </table>
+    <h2 id="results">Results <span class="badge badge-early">GPT-2 small</span></h2>
+    <p>Scores are the fraction of variance explained, where 1 is a perfect rebuild. Rebuilds are forced to a fixed length, so even the best blind guess scores below zero. That blind guess, not 0, is the floor. Tested on 500 states never seen in training:</p>
 
-    <div class="figure" data-reveal>
-      <p style="font-family:var(--font-mono);font-size:.72rem;color:var(--text-faint);margin:0 0 1rem;text-transform:uppercase;letter-spacing:.08em">Round-trip perplexity shift — lower is better</p>
-      <div class="chart-bar-group">
-        <div class="chart-bar-row">
-          <span class="chart-bar-label">v1 baseline</span>
-          <div class="chart-bar-track"><div class="chart-bar-fill before"></div></div>
-          <span class="chart-bar-val">~4,600x</span>
-        </div>
-        <div class="chart-bar-row">
-          <span class="chart-bar-label">v3 layer 1</span>
-          <div class="chart-bar-track"><div class="chart-bar-fill after"></div></div>
-          <span class="chart-bar-val improved">57x</span>
-        </div>
-      </div>
-      <p class="figure-caption">These numbers are from layer 1 of GPT-2 only. Whether similar improvement holds across all layers is an open question — the full sweep is listed in goals.</p>
+    <div class="table-wrap" data-reveal>
+      <table class="ver-table">
+        <thead><tr><th>Fed to the reconstructor</th><th class="num">Score</th><th>Plain meaning</th></tr></thead>
+        <tbody>
+          <tr><td>The explanation of a different text</td><td class="num">−0.321</td><td>Worse than nothing: a confident wrong description misleads</td></tr>
+          <tr><td>Nothing (average guess)</td><td class="num">−0.184</td><td>The floor</td></tr>
+          <tr><td>A summary of the actual input text</td><td class="num">−0.099</td><td>Knowing what the text says helps a bit</td></tr>
+          <tr><td>The verbalizer's explanation (numbers only)</td><td class="num good">+0.005</td><td>Helps the most</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <h2 id="finding">Finding</h2>
-    <p>Using a plain English description to condition the reconstruction outperforms hand-crafted feature labels. When the verbalizer is prompted with context that captures what the layer is doing — rather than a categorical tag like "determiner" or "function word" — both reconstruction accuracy and downstream perplexity shift improve on layer 1.</p>
-    <p>This aligns with the finding from Anthropic's NLA paper on larger models. For models in the ≤7B range, the direction is consistent with the larger-scale results, though the magnitude of improvement is harder to pin down without the full layer sweep.</p>
+    <p>On the scale from the floor to a perfect rebuild, text summaries close about 7% of the gap and the verbalizer about 16%. The verbalizer scored −0.045 after the first 1,500 reinforcement-learning steps and +0.005 after 1,500 more, and it was still improving when training stopped.</p>
 
     <div class="callout" data-reveal>
-      <p><strong>Why this matters for debugging:</strong> if a model can reliably describe its own internal state in plain English, a practitioner can read those descriptions, identify what changed at the point a hallucination occurred, and intervene without directly manipulating activation space. That's the target. Current results show the direction is viable at one layer on one model.</p>
+      <p><strong>Why this matters:</strong> explanations written from the model's internal state alone describe that state better than a summary written with the text in hand. Something that only guessed the topic couldn't do that.</p>
     </div>
+
+    <h3>Can it catch a thought that isn't in the text?</h3>
+    <p>In a second test, a concept (weddings, space, dogs and seven others) is planted inside GPT-2 by nudging its internal state, while the text stays unchanged. Someone reading only the text would guess right 10% of the time.</p>
+
+    <div class="table-wrap" data-reveal>
+      <table class="ver-table">
+        <thead><tr><th>Strength of the planted concept</th><th class="num">Named by TinyNLA</th></tr></thead>
+        <tbody>
+          <tr><td>Faint</td><td class="num">41%</td></tr>
+          <tr><td>Medium</td><td class="num">68%</td></tr>
+          <tr><td>Strong</td><td class="num good">95%</td></tr>
+          <tr><td>Placebo (a random nudge)</td><td class="num">12–16%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Wrong facts, right situation</h3>
+    <p>The explanations usually get the type of text, the situation and what is likely to come next. Names and places are often invented. The original paper reports the same pattern at scale.</p>
+
+    <div class="table-wrap" data-reveal>
+      <table class="ver-table">
+        <thead><tr><th>Text</th><th>Summary (had the text)</th><th>Verbalizer (numbers only)</th></tr></thead>
+        <tbody>
+          <tr><td>Mali civil war</td><td>Mali, Azawad, 2012</td><td>"conflict between Arab states… factions… Islamic or regional forces"</td></tr>
+          <tr><td>One-leg balance test</td><td>the OLST balance test</td><td>"asking users to verify their guesses in tests"</td></tr>
+          <tr><td>Teacher using a website</td><td>ReadWriteThink.org</td><td>"teaching basic skills in grammar and vocabulary"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="reader">Thought Reader <span class="badge badge-live">Built</span></h2>
+    <p>A local web tool for reading the model at any word. You type text, click a word, and the verbalizer writes several explanations of GPT-2's state at that point. Each one is scored by how well the reconstructor rebuilds the real state from it, and words that recur across explanations are highlighted, because recurring themes are the ones to trust.</p>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/tinynla_gui_reader_news.png" alt="Thought Reader on a passage about a ceasefire collapsing, with three sampled explanations that all mention ongoing fighting" loading="lazy" width="1600" height="1324">
+      <figcaption>A passage about a ceasefire, read at its last word. All three explanations say "ongoing fighting" but each invents a different war. The theme is reliable; the specifics are not.</figcaption>
+    </figure>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/tinynla_gui_reader_recipe_fve_strip.png" alt="Thought Reader on a recipe, with each word coloured by how well its explanation rebuilds the model's state" loading="lazy" width="1600" height="1250">
+      <figcaption>A recipe with six words read, coloured by rebuild score. Every explanation is about baking, but how well a given word decodes varies a lot.</figcaption>
+    </figure>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/tinynla_gui_dashboard.png" alt="Training dashboard showing the verbalizer's score rising above the text-summary baseline during reinforcement learning" loading="lazy" width="1600" height="2253">
+      <figcaption>The training dashboard for the first run. The verbalizer (solid line) passes the text summaries (dashed) between steps 250 and 500 and keeps rising.</figcaption>
+    </figure>
+
+    <h2 id="report">Plain-language reports <span class="badge badge-early">v0</span></h2>
+    <p>Per-word reads are for specialists. The report view answers a simpler question for everyone else: <em>what was the model thinking when it wrote this?</em> You give it a prompt and get a verdict, a one-paragraph summary, and themes sorted into "in the text", "beyond the text" and "a name the text never mentions".</p>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/tinynla_gui_report.png" alt="Stakeholder report showing a verdict, a summary paragraph and colour-coded theme chips" loading="lazy" width="1600" height="1680">
+      <figcaption>A report on GPT-2's own continuation of a ceasefire text. Reliable reads on 12 of 24 words; recurring themes are sorted by whether they appear in the text.</figcaption>
+    </figure>
+
+    <p>People tend to over-trust explanations of AI systems, so each read carries a reliability label. The label was checked by reading 300 states twice: the label from the first read predicts how good the second read is.</p>
+
+    <div class="table-wrap" data-reveal>
+      <table class="ver-table">
+        <thead><tr><th>Reliability label</th><th class="num">Share of reads</th><th class="num">Score of a fresh read</th></tr></thead>
+        <tbody>
+          <tr><td>None</td><td class="num">64%</td><td class="num">−0.25</td></tr>
+          <tr><td>Moderate</td><td class="num">26%</td><td class="num">+0.18</td></tr>
+          <tr><td>Strong</td><td class="num">10%</td><td class="num good">+0.35</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>So about a third of single reads are trustworthy, and the tool can tell which ones.</p>
+
+    <h2 id="limits">Limits</h2>
+    <ul>
+      <li><strong>The signal is weak.</strong> 16% of the way to a perfect rebuild, against 60–80% in the original paper, which used much larger models, stronger starting summaries and far more compute.</li>
+      <li><strong>Single explanations are unreliable.</strong> Trust themes that recur across samples and neighbouring words, not individual claims.</li>
+      <li><strong>GPT-2 doesn't reason step by step</strong>, so checking whether a model's stated reasoning matches its internal state needs a larger model.</li>
+      <li><strong>Not every check is scored yet.</strong> Five of the nine planned sanity checks are automated; all five pass.</li>
+    </ul>
 
     <h2 id="next">Goals</h2>
     <ul>
-      <li><strong>Full layer sweep</strong> — run the AV/AR round-trip across all layers of GPT-2 and Qwen2.5 to find where description quality is highest and where it degrades.</li>
-      <li><strong>Unfreeze reconstructor layers</strong> — test whether additional trainable capacity in the AR improves direction recovery beyond what the v3 architecture fix produced.</li>
-      <li><strong>CKA metrics</strong> — add Centered Kernel Alignment alongside MSE for a more principled measure of representational alignment between original and reconstructed states.</li>
-      <li><strong>Connect to the eval platform</strong> — use verbalizer output as explanations for failures caught by the <a href="interpretability-platform.html" style="color:var(--green-bright);border-bottom:1px solid var(--hairline-hi)">behavioral probe suites</a>, closing the loop between behavioral detection and mechanistic explanation.</li>
+      <li><strong>More training</strong> — the score was still rising at the end of both runs.</li>
+      <li><strong>Better starting summaries</strong> — written by a stronger model than the 0.5B one used so far.</li>
+      <li><strong>A reasoning model</strong> — move to Qwen 0.5B with LoRA to read step-by-step reasoning.</li>
+      <li><strong>A reader study</strong> — test whether people without an ML background interpret the reports correctly.</li>
     </ul>
 
   </article>
@@ -355,141 +255,5 @@
 </footer>
 
 <script type="module" src="../src/main.ts"></script>
-<script>
-// ── Demo data ─────────────────────────────────────────────────────────────────
-// Each entry represents a sentence fed to GPT-2, with layer-1 activation
-// state read at the final token position.
-//
-// verb: representative verbalizer output (AV) — what TinyNLA says in English
-// quality: round-trip direction recovery (1 - normalised MSE), as a percentage
-// origPreds: top-5 model predictions from the real activation state
-// recoPreds: top-5 predictions from the reconstructed state (after round-trip)
-//   — close match = description preserved functional information
-
-const EXAMPLES = [
-  {
-    id: 'paris',
-    label: 'Geography',
-    sentence: 'The capital of France is',
-    focusToken: 'is',
-    dim: '768',
-    quality: 91,
-    verb: `<span class="verb-hi">Geographic completion context.</span> The model is holding a factual lookup frame — it processed a "capital of [country]" pattern and is strongly primed for a proper noun answer. Prediction mass is almost entirely concentrated on a single city name. Confidence is high, uncertainty is low. The state encodes near-certainty, not exploration.`,
-    origPreds: [{w:'Paris',p:84},{w:'Marseille',p:4},{w:'Lyon',p:3},{w:'France',p:2},{w:'Nice',p:1}],
-    recoPreds: [{w:'Paris',p:79},{w:'Marseille',p:5},{w:'Lyon',p:4},{w:'France',p:3},{w:'Nice',p:2}],
-  },
-  {
-    id: 'door',
-    label: 'Narrative',
-    sentence: 'She opened the door and',
-    focusToken: 'and',
-    dim: '768',
-    quality: 88,
-    verb: `<span class="verb-hi">Narrative continuation context.</span> A human agent completed a physical action and the sentence is now hinging. The model expects a new clause — another action, a discovery, or a transition. The state encodes high entropy across several plausible verbs. No single continuation dominates; the model is in an open, exploratory state.`,
-    origPreds: [{w:'saw',p:18},{w:'found',p:15},{w:'walked',p:12},{w:'looked',p:9},{w:'stepped',p:7}],
-    recoPreds: [{w:'saw',p:16},{w:'found',p:14},{w:'walked',p:13},{w:'looked',p:10},{w:'stepped',p:8}],
-  },
-  {
-    id: 'flour',
-    label: 'Instruction',
-    sentence: 'Mix the flour and butter until',
-    focusToken: 'until',
-    dim: '768',
-    quality: 86,
-    verb: `<span class="verb-hi">Procedural instruction — completion condition.</span> The model is inside a cooking procedure and the word "until" marks a threshold about to be defined. It expects a word describing a physical consistency, visual state, or degree of completion. The state strongly anticipates texture and result words.`,
-    origPreds: [{w:'combined',p:22},{w:'smooth',p:19},{w:'well',p:14},{w:'soft',p:9},{w:'blended',p:7}],
-    recoPreds: [{w:'combined',p:19},{w:'smooth',p:17},{w:'well',p:15},{w:'soft',p:10},{w:'blended',p:8}],
-  },
-  {
-    id: 'model',
-    label: 'Technical',
-    sentence: 'The neural network failed because',
-    focusToken: 'because',
-    dim: '768',
-    quality: 84,
-    verb: `<span class="verb-hi">Causal explanation context.</span> A technical system encountered failure and the model is now at the hinge of a causal clause. It expects a pronoun ("it") or a technical noun phrase explaining the cause. The state encodes a causal-reasoning frame with moderate entropy — multiple plausible explanations remain open.`,
-    origPreds: [{w:'it',p:24},{w:'the',p:18},{w:'of',p:11},{w:'there',p:9},{w:'its',p:7}],
-    recoPreds: [{w:'it',p:21},{w:'the',p:17},{w:'of',p:12},{w:'there',p:10},{w:'its',p:8}],
-  },
-]
-
-// Circumference of gauge circle (r=30): 2π×30 ≈ 188.4
-const CIRC = 188.4
-
-function predBars(preds, cls, container) {
-  const max = Math.max(...preds.map(p => p.p))
-  container.innerHTML = preds.map(p => `
-    <div class="pred-row">
-      <span class="pred-w">${p.w}</span>
-      <div class="pred-track">
-        <div class="pred-fill ${cls}" style="width:${Math.round(p.p / max * 100)}%"></div>
-      </div>
-      <span class="pred-pct">${p.p}%</span>
-    </div>`).join('')
-}
-
-function makeDots(count) {
-  // Show 12 dots, first few lit to hint at a long vector
-  const lit = 4
-  return Array.from({length: 12}, (_, i) =>
-    `<span class="vdot${i < lit ? ' lit' : ''}"></span>`
-  ).join('')
-}
-
-function show(ex) {
-  // Sentence display
-  const parts = ex.sentence.split(' ')
-  const last = parts.pop()
-  document.getElementById('sent-display').innerHTML =
-    parts.join(' ') + ' <span class="token-focus">' + last + '</span>'
-
-  // Vector hint
-  document.getElementById('vdots').innerHTML = makeDots(12)
-  document.getElementById('vdim-label').textContent = ex.dim + ' numbers'
-
-  // Verbalization
-  document.getElementById('verb-output').innerHTML = ex.verb
-  document.getElementById('verb-quality-head').textContent =
-    'Reconstruction quality: ' + ex.quality + '%'
-
-  // Predictions
-  predBars(ex.origPreds, 'orig', document.getElementById('preds-orig'))
-  predBars(ex.recoPreds, 'reco', document.getElementById('preds-reco'))
-
-  // Gauge
-  const offset = CIRC * (1 - ex.quality / 100)
-  const arc = document.getElementById('gauge-arc')
-  arc.style.strokeDashoffset = offset
-  // colour shifts: >88 green, 80-88 yellow-ish, <80 dim
-  arc.style.stroke = ex.quality >= 88 ? 'var(--green-bright)'
-    : ex.quality >= 82 ? '#fbbf24' : 'var(--teal)'
-
-  document.getElementById('gauge-num').textContent = ex.quality + '%'
-  document.getElementById('gauge-num').style.color = arc.style.stroke
-
-  document.getElementById('gauge-sub').textContent =
-    ex.quality >= 88
-      ? 'High — description preserved the directional structure well'
-      : ex.quality >= 82
-      ? 'Moderate — key information recovered, some detail lost'
-      : 'Partial — direction roughly preserved, fine-grained content lost'
-}
-
-// Build tabs
-const tabsEl = document.getElementById('sentence-tabs')
-EXAMPLES.forEach((ex, i) => {
-  const btn = document.createElement('button')
-  btn.className = 'stab' + (i === 0 ? ' active' : '')
-  btn.textContent = ex.label + ' — "' + ex.sentence.split(' ').slice(0, 3).join(' ') + '…"'
-  btn.addEventListener('click', () => {
-    tabsEl.querySelectorAll('.stab').forEach(b => b.classList.remove('active'))
-    btn.classList.add('active')
-    show(ex)
-  })
-  tabsEl.appendChild(btn)
-})
-
-show(EXAMPLES[0])
-</script>
 </body>
 </html>

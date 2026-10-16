@@ -24,7 +24,7 @@
 <style>
 /* ── badges ── */
 .badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-mono);font-size:.67rem;padding:.18rem .5rem;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;}
-.badge-live{background:var(--green-deep);color:var(--green-bright);border:1px solid var(--green-bright);}
+.badge-live{background:var(--green-deep);color:var(--green-mid);border:1px solid var(--green-bright);}
 .badge-early{background:#1a2e1a;color:#86efac;border:1px solid #86efac;}
 .badge-goal{background:var(--panel);color:var(--text-faint);border:1px solid var(--hairline-hi);}
 
@@ -65,7 +65,7 @@
     <h1 class="project-title">TinyNLA — Natural Language<br>Autoencoder for Small Models</h1>
     <p class="project-dek">A language model's internal state at any word is a long list of numbers. TinyNLA trains one model to describe those numbers in plain English and a second to rebuild them from the description alone. If the rebuild is close, the description carried real information out of the model.</p>
     <div class="project-chips">
-      <span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">GPT-2</span>
+      <span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">GPT-2</span><span class="chip">Qwen2.5-0.5B</span>
       <span class="chip">GRPO</span><span class="chip">FastAPI</span><span class="chip">D3</span><span class="chip">HuggingFace</span>
     </div>
   </div>
@@ -78,6 +78,7 @@
       <li><a href="#idea">The idea</a></li>
       <li><a href="#how">How it works</a></li>
       <li><a href="#results">Results</a></li>
+      <li><a href="#qwen">Qwen2.5-0.5B</a></li>
       <li><a href="#reader">Thought Reader</a></li>
       <li><a href="#report">Plain-language reports</a></li>
       <li><a href="#limits">Limits</a></li>
@@ -90,7 +91,7 @@
     <div class="metric-row" data-reveal>
       <div class="metric"><span class="metric-val">GPT-2</span><span class="metric-lbl">Layer 8 of 12</span></div>
       <div class="metric"><span class="metric-val">20k</span><span class="metric-lbl">Training samples</span></div>
-      <div class="metric"><span class="metric-val">16% vs 7%</span><span class="metric-lbl">Explanations vs text summaries</span></div>
+      <div class="metric"><span class="metric-val">16%</span><span class="metric-lbl">Of the gap closed (text summaries: 7%)</span></div>
       <div class="metric"><span class="metric-val">5 / 5</span><span class="metric-lbl">Scored sanity checks pass</span></div>
     </div>
 
@@ -191,6 +192,34 @@
       </table>
     </div>
 
+    <h2 id="qwen">Moving to Qwen2.5-0.5B <span class="badge badge-early">Oct 2026</span></h2>
+    <p>The same method, run on a stronger small model: Qwen2.5-0.5B, read at layer 16 of 24. On the same scale as above (blind guess 0%, perfect rebuild 100%):</p>
+
+    <div class="table-wrap" data-reveal>
+      <table class="ver-table">
+        <thead><tr><th>Fed to the reconstructor</th><th class="num">Qwen 0.5B</th><th class="num">GPT-2</th></tr></thead>
+        <tbody>
+          <tr><td>A summary of the actual text</td><td class="num">8–13%</td><td class="num">7%</td></tr>
+          <tr><td>The verbalizer's description</td><td class="num good">43%</td><td class="num">16%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout" data-reveal>
+      <p><strong>Most of that jump is a shortcut.</strong> The verbalizer learned to end almost every description by quoting the word the model was on, and that word alone rebuilds a large part of the state. A plain summary plus one sentence naming the current word, without reading the model at all, reaches 36–38%. So the verbalizer's real edge is about 5 points, until the reward is changed to give that word away for free.</p>
+    </div>
+
+    <ul>
+      <li><strong>The themes still beat a summary:</strong> with the last-word sentences removed, descriptions rebuild 26% of the state against 8% for summaries.</li>
+      <li><strong>Planted concepts are where it clearly works.</strong> A concept planted inside the model is named 36% of the time when faint, 81% at medium strength and about 98% when strong, against 7–12% for a random nudge. A simpler tool, the lens, stays at chance on Qwen.</li>
+      <li><strong>A hint written in the prompt was not detected,</strong> but the model itself mostly ignored the hint, so that test didn't create anything to detect.</li>
+    </ul>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/tinynla_qwen_reader.png" alt="Thought Reader running on Qwen2.5-0.5B: three explanations of a ceasefire passage, each describing an ongoing conflict" loading="lazy" width="1600" height="1370">
+      <figcaption>The ceasefire passage read on Qwen. All three explanations describe the conflict, and one says "the breakdown of a ceasefire agreement". Each also quotes the last words ("in the"), the shortcut described above, and one leaks non-English fragments.</figcaption>
+    </figure>
+
     <h2 id="reader">Thought Reader <span class="badge badge-live">Built</span></h2>
     <p>A local web tool for reading the model at any word. You type text, click a word, and the verbalizer writes several explanations of GPT-2's state at that point. Each one is scored by how well the reconstructor rebuilds the real state from it, and words that recur across explanations are highlighted, because recurring themes are the ones to trust.</p>
 
@@ -237,14 +266,16 @@
       <li><strong>The signal is weak.</strong> 16% of the way to a perfect rebuild, against 60–80% in the original paper, which used much larger models, stronger starting summaries and far more compute.</li>
       <li><strong>Single explanations are unreliable.</strong> Trust themes that recur across samples and neighbouring words, not individual claims.</li>
       <li><strong>GPT-2 doesn't reason step by step</strong>, so checking whether a model's stated reasoning matches its internal state needs a larger model.</li>
+      <li><strong>On Qwen, the headline score is inflated</strong> by naming the current word; the honest gain over a text summary is small until that shortcut is removed.</li>
       <li><strong>Not every check is scored yet.</strong> Five of the nine planned sanity checks are automated; all five pass.</li>
     </ul>
 
     <h2 id="next">Goals</h2>
     <ul>
-      <li><strong>More training</strong> — the score was still rising at the end of both runs.</li>
+      <li><strong>Remove the last-word shortcut</strong> — give the reconstructor the current word for free, so the verbalizer only earns credit for what it adds.</li>
+      <li><strong>More training</strong> — the score was still rising at the end of both GPT-2 runs.</li>
       <li><strong>Better starting summaries</strong> — written by a stronger model than the 0.5B one used so far.</li>
-      <li><strong>A reasoning model</strong> — move to Qwen 0.5B with LoRA to read step-by-step reasoning.</li>
+      <li><strong>Reading reasoning</strong> — fine-tune Qwen 0.5B with LoRA to read step-by-step reasoning.</li>
       <li><strong>A reader study</strong> — test whether people without an ML background interpret the reports correctly.</li>
     </ul>
 

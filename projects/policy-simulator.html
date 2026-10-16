@@ -23,7 +23,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
 <style>
   .badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-mono);font-size:.67rem;padding:.18rem .5rem;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;}
-  .badge-live{background:var(--green-deep);color:var(--green-bright);border:1px solid var(--green-bright);}
+  .badge-live{background:var(--green-deep);color:var(--green-mid);border:1px solid var(--green-bright);}
   .badge-goal{background:var(--panel);color:var(--text-faint);border:1px solid var(--hairline-hi);}
   .exp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;}
   @media(max-width:540px){.exp-grid{grid-template-columns:1fr;}}
@@ -57,6 +57,10 @@
   .demo-controls{border-top:1px solid var(--hairline);padding:.75rem 1.1rem;background:var(--panel);display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
   .demo-phase{font-family:var(--font-mono);font-size:.73rem;color:var(--text-faint);}
   .demo-foot{border-top:1px solid var(--hairline);padding:.6rem 1.1rem;font-family:var(--font-mono);font-size:.67rem;color:var(--text-faint);background:var(--bg);}
+  /* Screenshots */
+  .shot{margin:2rem 0;border:1px solid var(--hairline);border-radius:6px;overflow:hidden;background:var(--panel);}
+  .shot img{display:block;width:100%;height:auto;}
+  .shot figcaption{border-top:1px solid var(--hairline);padding:.7rem 1.1rem;font-family:var(--font-mono);font-size:.72rem;line-height:1.55;color:var(--text-faint);}
   /* Two-up result card */
   .reversal{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:6px;overflow:hidden;margin:2rem 0;}
   .rev-half{background:var(--panel);padding:1.4rem 1.25rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;}
@@ -105,6 +109,7 @@
       <li><a href="#experiments">Experiments</a></li>
       <li><a href="#demo">Live demo</a></li>
       <li><a href="#results">Results</a></li>
+      <li><a href="#tools">Dashboard</a></li>
       <li><a href="#next">Goals</a></li>
     </ul>
   </nav>
@@ -272,6 +277,24 @@
     <div class="callout" data-reveal>
       <p><strong>A practical lesson:</strong> a distance metric is a modelling commitment. Comparing metrics is only fair once their thresholds are matched; otherwise one metric can end up with almost no threshold at all.</p>
     </div>
+
+    <h2 id="tools">Dashboard <span class="badge badge-live">Built</span></h2>
+    <p>A local web dashboard runs the experiments without the command line. You pick seeds and experiments from a form, set each experiment's parameters, and watch progress and results (tables, figures, CSV files) arrive live. Every run is saved with its settings so it can be repeated exactly from the command line.</p>
+    <ul>
+      <li><strong>Custom opinion space:</strong> replace the built-in four AI-governance dimensions with 2 to 12 of your own, set where the policy sits on each, and choose who counts as a violator. Presets cover AI governance and healthcare.</li>
+      <li><strong>Watch one simulation:</strong> replay a run tick by tick, with every conversation drawn as heard or ignored, in a 2-D slice, a rotating 3-D view or a distance map.</li>
+      <li><strong>Compare geometries side by side:</strong> the same scenario from the same seed under two or three distance metrics, with thresholds matched by default.</li>
+    </ul>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/policyswarm_viewer_3d.png" alt="Simulation viewer showing the same run under Euclidean and cosine distance side by side in 3-D, with conversations drawn as arrows between agents" loading="lazy" width="1280" height="900">
+      <figcaption>One run under Euclidean (left) and cosine distance (right). Green arrows are conversations that were heard; red dashed lines were too far apart to count. The cosine view shows directions only.</figcaption>
+    </figure>
+
+    <figure class="shot" data-reveal>
+      <img src="../img/policyswarm_dashboard_opinion_space.jpg" alt="Opinion space editor with four healthcare dimensions, their policy positions and a violator rule" loading="lazy" width="799" height="609">
+      <figcaption>The opinion space editor with the healthcare preset: four dimensions, each with its own policy position, on a scale from −1 to 1.</figcaption>
+    </figure>
 
     <h2 id="next">Goals</h2>
     <ul>

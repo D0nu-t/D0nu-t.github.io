@@ -127,6 +127,9 @@ export const RAW_NODES: Omit<GraphNode, 'degree'>[] = [
 { id: 'neo4j',      label: 'Neo4j',        type: 'skill', category: 'data' },
 { id: 'powerbi',    label: 'Power BI',     type: 'skill', category: 'data' },
 { id: 'dbt',        label: 'dbt',          type: 'skill', category: 'data' },
+{ id: 'pulp',       label: 'PuLP',         type: 'skill', category: 'data' },
+{ id: 'gurobi',     label: 'Gurobi',       type: 'skill', category: 'data' },
+{ id: 'matterjs',   label: 'Matter.js',    type: 'skill', category: 'infra' },
 ]
 
 export const RAW_LINKS: { source: string; target: string }[] = [
@@ -545,6 +548,12 @@ export const RAW_LINKS: { source: string; target: string }[] = [
 { source: 'spacy',      target: 'python' },
 { source: 'dbt',        target: 'bigquery' },
 { source: 'dbt',        target: 'sql' },
+{ source: 'pulp',       target: 'python' },
+{ source: 'pulp',       target: 'gurobi' },
+{ source: 'gurobi',     target: 'python' },
+{ source: 'gurobi',     target: 'cmu' },
+{ source: 'matterjs',   target: 'javascript' },
+{ source: 'matterjs',   target: 'typescript' },
 
 // Power BI
 { source: 'powerbi',    target: 'tableau' },

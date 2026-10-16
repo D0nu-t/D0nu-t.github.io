@@ -89,6 +89,9 @@ img, svg { display: block; }
 }
 .skip-link:focus { top: 0.75rem; }
 
+/* Grid children may shrink below their content width */
+.project-body { min-width: 0; }
+
 /* Headings that reuse label styles keep the label look */
 h1.panel-label, h2.section-label { font-weight: 400; line-height: inherit; }
 
@@ -175,7 +178,7 @@ h1.panel-label, h2.section-label { font-weight: 400; line-height: inherit; }
 .nav-links a.is-active::after { width: 100%; }
 
 /* 24 px minimum pointer targets (WCAG 2.2 AA 2.5.8) */
-.nav-mark, .nav-links a, .card-link, .footer-meta a {
+.nav-mark, .nav-links a, .card-link, .footer-meta a, .back-link {
   display: inline-flex;
   align-items: center;
   min-height: 24px;
@@ -712,7 +715,7 @@ section + section { border-top: 1px solid var(--hairline); }
 }
 
 .project-body p {
-  color: var(--text-dim);
+  color: var(--text-on-bg);
   font-size: 0.9875rem;
   max-width: 66ch;
   margin: 0 0 1rem;
@@ -723,7 +726,7 @@ section + section { border-top: 1px solid var(--hairline); }
 .project-body ul {
   margin: 0 0 1rem;
   padding-left: 1.2rem;
-  color: var(--text-dim);
+  color: var(--text-on-bg);
   font-size: 0.9875rem;
 }
 

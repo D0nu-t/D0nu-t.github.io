@@ -1,5 +1,7 @@
 import type { NavSection, CounterOptions, RevealOptions } from './types'
 import { initGraphEmbed } from './graph-embed'
+import { initTCG } from './tcg'
+import { prefersReducedMotion } from './motion'
 
 const NAV_SECTIONS: NavSection[] = [
   { id: 'work',         label: 'Work' },
@@ -29,6 +31,7 @@ function initReveal(opts: RevealOptions = {}): void {
   const { threshold = 0.12, rootMargin = '0px' } = opts
   const els = document.querySelectorAll<HTMLElement>('[data-reveal]')
   if (!els.length) return
+  if (prefersReducedMotion()) { els.forEach(el => el.classList.add('is-revealed')); return }
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -42,7 +45,7 @@ function initReveal(opts: RevealOptions = {}): void {
 
 function initCounters(): void {
   const els = document.querySelectorAll<HTMLElement>('[data-counter]')
-  if (!els.length) return
+  if (!els.length || prefersReducedMotion()) return
   const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
   const obs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -51,6 +54,7 @@ function initCounters(): void {
       const target = parseInt(el.dataset.counter ?? '0', 10)
       const suffix = el.dataset.counterSuffix ?? ''
       const duration = 1400
+      el.textContent = '0' + suffix
       const start = performance.now()
       const tick = (opts: CounterOptions) => {
         const frame = (now: number) => {
@@ -94,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters()
   initNavShadow()
   initCopyEmail()
+  initTCG()
   const embed = document.getElementById('graph-embed')
   if (embed) initGraphEmbed('graph-embed')
 })

@@ -11,254 +11,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="src/styles/main.css">
+<link rel="stylesheet" href="src/styles/tcg.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
-<style>
-/* ── TCG Card Deck ─────────────────────────────────────────────── */
-.tcg-outer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.9rem;
-  user-select: none;
-}
-
-.tcg-stage {
-  position: relative;
-  width: 520px;
-  height: 480px;
-}
-
-/* Base card */
-.tcg-card {
-  position: absolute;
-  width: 330px;
-  height: 440px;
-  bottom: 0;
-  left: 50%;
-  border-radius: 18px;
-  border: 5px solid #03371f;
-  background: #1f5335;
-  transform-origin: bottom center;
-  transform: translateX(-50%);
-  overflow: hidden;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  transition:
-    transform  0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity    0.35s ease,
-    box-shadow 0.3s ease,
-    border-color 0.25s ease;
-}
-.tcg-card:hover {
-  border-color: #442a66;
-  transform: translateY(-22px);
-}
-.tcg-card:nth-child(1):hover {
-  border-color: #442a66;
-transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
-.tcg-card:nth-child(2):hover {
-  border-color: #442a66;
-  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
-}
-.tcg-card:nth-child(3):hover {
-  border-color: #442a66;
-  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
-}
-.tcg-card:nth-child(4):hover {
-  border-color: #442a66;
-  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
-}
-.tcg-card:nth-child(5):hover {
-  border-color: #442a66;
-  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
-}
-
-/* Stack offsets — 5 cards */
-.tcg-card:nth-child(1) { z-index:5; transform: translateX(-50%) rotate(  0deg); }
-.tcg-card:nth-child(2) { z-index:4; transform: translateX(-50%) rotate( 1.3deg) translateY(2px); }
-.tcg-card:nth-child(3) { z-index:3; transform: translateX(-50%) rotate(-1.6deg) translateY(4px); }
-.tcg-card:nth-child(4) { z-index:2; transform: translateX(-50%) rotate( 2.2deg) translateY(6px); }
-.tcg-card:nth-child(5) { z-index:1; transform: translateX(-50%) rotate(-2.8deg) translateY(8px); }
-
-/* Fan positions — 5 cards, evenly spread -24 to +24 */
-.tcg-outer.is-open .tcg-card:nth-child(1) { transform: translateX(-50%) rotate(-24deg); }
-.tcg-outer.is-open .tcg-card:nth-child(2) { transform: translateX(-50%) rotate(-12deg); }
-.tcg-outer.is-open .tcg-card:nth-child(3) { transform: translateX(-50%) rotate(  0deg); }
-.tcg-outer.is-open .tcg-card:nth-child(4) { transform: translateX(-50%) rotate( 12deg); }
-.tcg-outer.is-open .tcg-card:nth-child(5) { transform: translateX(-50%) rotate( 24deg); }
-
-/* Hover lift in fan mode — repeats the angle + translateY */
-.tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-24deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(2):hover { transform: translateX(-50%) rotate(-12deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(3):hover { transform: translateX(-50%) rotate(  0deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(4):hover { transform: translateX(-50%) rotate( 12deg) translateY(-22px); }
-.tcg-outer.is-open .tcg-card:nth-child(5):hover { transform: translateX(-50%) rotate( 24deg) translateY(-22px); }
-
-/* Selected card in fan mode */
-.tcg-outer.is-open .tcg-card.is-active {
-  border-color: var(--green-bright);
-  box-shadow: 0 0 0 1px var(--green-bright), 0 14px 44px #00000080;
-  z-index: 10;
-}
-
-/* Fly-out animation (JS adds this during cycling) */
-.tcg-card.is-flying {
-  transform: translateX(calc(-50% + 155px)) rotate(22deg) translateY(-20px) !important;
-  opacity: 0 !important;
-  z-index: 10 !important;
-  pointer-events: none !important;
-  transition:
-    transform 0.3s cubic-bezier(0.55, 0, 0.85, 0.6),
-    opacity   0.2s ease !important;
-}
-
-/* Suppress transition when snapping back (JS adds/removes this) */
-.tcg-card.no-transition {
-  transition: none !important;
-}
-
-/* ── Card anatomy ──────────────────────────────────────────────── */
-.card-header {
-  height: 42px;
-  background: #719f88;
-  border-bottom: 4px solid #000000;
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
-  gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--text-faint);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
-.card-art {
-  flex: 1;
-  background: #43653d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  min-height: 160px;
-}
-
-.card-footer {
-  min-height: 70px;
-  background: #719f88;
-  border-top: 4px solid #000000;
-  padding: 12px 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-faint);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.card-footer-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #d4e8d8;
-  line-height: 1.4;
-}
-
-.card-footer-chips {
-  display: flex;
-  gap: 3px;
-  flex-wrap: wrap;
-}
-
-.card-chip {
-  background: var(--hairline);
-  border-radius: 2px;
-  padding: 3px 8px;
-  font-size: 11px;
-  color: var(--text-faint);
-}
-/* type line — the <strong> at top of each footer div */
-.card-footer .type-line {
-  color: #86efac;
-  display: block;
-  margin-bottom: 6px;
-}
-/* effect / description text */
-.card-footer .effect-text {
-  color: #5a8a65;
-  font-size: 11px;
-  line-height: 1.5;
-}
-/* italic quote */
-.card-footer .flavor {
-  color: #4a7255;
-  font-style: italic;
-  font-size: 10px;
-  display: block;
-  margin-top: 5px;
-}
-/* ── Toggle row ────────────────────────────────────────────────── */
-.tcg-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  position: relative;
-  z-index: 20;
-}
-
-.tcg-counter {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-faint);
-  min-width: 30px;
-  text-align: center;
-  transition: opacity 0.25s;
-}
-
-.tcg-outer.is-open .tcg-counter {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.tcg-toggle {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--hairline-hi);
-  background: var(--panel);
-  color: var(--text-dim);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    transform    0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-color 0.2s,
-    color        0.2s;
-}
-
-.tcg-toggle:hover {
-  border-color: var(--green-bright);
-  color: var(--green-bright);
-}
-
-.tcg-outer.is-open .tcg-toggle {
-  transform: rotate(45deg);
-  border-color: var(--green-bright);
-  color: var(--green-bright);
-}
-</style>
 </head>
 
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
   
 <!-- ─── Nav ──────────────────────────────────────────────── -->
 <nav class="site-nav">
   <div class="wrap">
-    <a href="#top" class="nav-mark"><strong>KA</strong> · Krishnasai Addala</a>
+    <a href="#top" class="nav-mark"><strong>KA</strong><span class="nav-mark-name"> · Krishnasai Addala</span></a>
     <div class="nav-links">
       <a href="#experience">Experience</a>
       <a href="#work">Work</a>
@@ -270,6 +33,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 </nav>
 
 <!-- ─── Hero ─────────────────────────────────────────────── -->
+<main id="main">
 <header class="hero" id="top">
   <div class="wrap hero-inner" style="align-items: center;">
     <div>
@@ -294,7 +58,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
     <div class="tcg-stage" id="tcg-stage">
       <!-- ── Card 0 — About ────────────────────────────────────── -->
-<div class="tcg-card" data-card-id="about" data-href="#contact">
+<div class="tcg-card" data-card-id="about" data-href="#contact" tabindex="0" role="link" aria-label="About me: go to contact">
 
   <div class="card-header" style="color:#230f3d">
     <span style="color:var(--green-bright)">◈</span>
@@ -302,7 +66,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   </div>
 
   <div class="card-art">
-    <svg viewBox="0 0 300 190" width="100%" height="100%"
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 300 190" width="100%" height="100%"
          xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 
       <!-- Terminal frame -->
@@ -333,9 +97,6 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
       <text x="20" y="139" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">focus
         <tspan fill="#8b949e"> Model Interp. · ABM · Computational SSH</tspan>
       </text>
-      <text x="20" y="153" font-family="IBM Plex Mono" font-size="9" fill="#5eead4">status
-        <tspan fill="#4ade80"> open to work</tspan>
-      </text>
 
 
     </svg>
@@ -343,8 +104,8 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
   <div class="card-footer">
     <span class="card-footer-name" style="color:#230f3d">Human Researcher</span>
-    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
-      <strong style="color:#442a66">Analyze</strong><br>
+    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
+      <strong style="color:#2a1544">Analyze</strong><br>
       Examine the material conditions that influence Society computationally<br> Then, Improve them<br><br>
       <em>"Models describe the world.<br>Only We can change it."</em>
     </div>
@@ -357,7 +118,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
 </div>
       <!-- ── Card 1 — TinyNLA ──────────────────────────────────── -->
-<div class="tcg-card" data-card-id="tinynla" data-href="projects/TinyNLA.html">
+<div class="tcg-card" data-card-id="tinynla" data-href="projects/TinyNLA.html" tabindex="0" role="link" aria-label="TinyNLA project">
 
   <div class="card-header" style="color:#230f3d">
     <span style="color:var(--green-bright)">●</span>
@@ -365,9 +126,9 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   </div>
 
   <div class="card-art">
-  <svg viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     <!-- Input vector bars — left cluster -->
-    <text x="38" y="22" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600" style="color:#442a66">INPUT VECTOR</text>
+    <text x="38" y="22" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600" style="color:#2a1544">INPUT VECTOR</text>
     <rect x="8"  y="30" width="60" height="12" rx="3" fill="#4ade8025" stroke="#4ade80" stroke-width="1"/>
     <rect x="8"  y="48" width="60" height="12" rx="3" fill="#4ade8025" stroke="#4ade80" stroke-width="1"/>
     <rect x="8"  y="66" width="60" height="12" rx="3" fill="#4ade8025" stroke="#4ade80" stroke-width="1"/>
@@ -384,23 +145,23 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
     <!-- Text / description box — center -->
     <rect x="116" y="30" width="68" height="110" rx="5" fill="#0d1117" stroke="#30363d" stroke-width="1.2"/>
-    <text x="150" y="20" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600" style="color:#442a66">DESCRIPTION</text>
+    <text x="150" y="20" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600" style="color:#2a1544">DESCRIPTION</text>
     <line x1="124" y1="50"  x2="176" y2="50"  stroke="#5eead4" stroke-width="1.2"/>
     <line x1="124" y1="64"  x2="172" y2="64"  stroke="#5eead4" stroke-width="1.2"/>
     <line x1="124" y1="78"  x2="176" y2="78"  stroke="#5eead4" stroke-width="1.2"/>
     <line x1="124" y1="92"  x2="166" y2="92"  stroke="#5eead480" stroke-width="1.2"/>
     <line x1="124" y1="106" x2="172" y2="106" stroke="#5eead440" stroke-width="1.2"/>
     <line x1="124" y1="120" x2="160" y2="120" stroke="#5eead430" stroke-width="1.2"/>
-    <text x="150" y="155" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#5eead470" style="color:#442a66">plain text</text>
+    <text x="150" y="155" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#5eead470" style="color:#2a1544">plain text</text>
 
     <!-- AR arrow -->
     <line x1="188" y1="80" x2="220" y2="80" stroke="#5eead470" stroke-width="1.5"/>
     <polygon points="220,75 228,80 220,85" fill="#5eead4"/>
-    <text x="208" y="68" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#5eead4" font-weight="600" style="color:#442a66">AR</text>
+    <text x="208" y="68" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#5eead4" font-weight="600" style="color:#2a1544">AR</text>
     <!-- <text x="208" y="100" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#484f58">reconstructor</text> -->
 
     <!-- Reconstructed bars — right cluster, slightly lossy -->
-    <text x="262" y="22" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600" style="color:#442a66">RECON.</text>
+    <text x="262" y="22" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600" style="color:#2a1544">RECON.</text>
     <rect x="232" y="30"  width="60" height="12" rx="3" fill="#5eead420" stroke="#5eead4" stroke-width="1"/>
     <rect x="232" y="48"  width="60" height="12" rx="3" fill="#5eead420" stroke="#5eead4" stroke-width="1"/>
     <rect x="232" y="66"  width="50" height="12" rx="3" fill="#5eead418" stroke="#5eead490" stroke-width="1"/>
@@ -413,11 +174,11 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
     <line x1="20" y1="168" x2="280" y2="168" stroke="#21262d" stroke-width="0.8"/>
   </svg>
 </div>
-  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
+  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
     <span class="card-footer-name" style="color:#230f3d">Natural Language Autoencoder</span>
-    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
-      <!-- <strong style="color:var(--green-deep)">Type — AV / AR Pair · SLMs ≤7B</strong><br><br> -->
-      <strong style="color:#442a66">Verbalize</strong><br>
+    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
+      <!-- <strong style="color:#0f2c19">Type — AV / AR Pair · SLMs ≤7B</strong><br><br> -->
+      <strong style="color:#2a1544">Verbalize</strong><br>
       Read a model's internal state at one word and describe it in plain English. Rebuild the state from the description alone.<br><br>
       <em>"Tell me Machine, what are you Thinking?"</em>
     </div>
@@ -433,7 +194,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
 
 <!-- ── Card 2 — PolicySwarm ──────────────────────────────── -->
-<div class="tcg-card" data-card-id="policy-swarm" data-href="projects/policy-simulator.html">
+<div class="tcg-card" data-card-id="policy-swarm" data-href="projects/policy-simulator.html" tabindex="0" role="link" aria-label="PolicySwarm project">
 
   <div class="card-header" style="color:#230f3d">
     <span style="color:#f59e0b">○</span>
@@ -441,7 +202,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   </div>
 
   <div class="card-art">
-  <svg viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     <!-- Title -->
 
     <!-- Axis -->
@@ -463,11 +224,11 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   </svg>
 </div>
 
-  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
+  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
     <span class="card-footer-name" style="color:#230f3d">Opinion Dynamics Simulator</span>
-    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
-      <!-- <strong style="color:var(--green-deep)">Type — Agent-Based Model · Network ABM</strong><br><br> -->
-      <strong style="color:#442a66">Simulate</strong><br>
+    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
+      <!-- <strong style="color:#0f2c19">Type — Agent-Based Model · Network ABM</strong><br><br> -->
+      <strong style="color:#2a1544">Simulate</strong><br>
       Seed Users on a synthetic social network with different opinions. Perturb the network<br>Then, observe how Opinions change<br><br>
       <em>"Who hears the shock decides what it does."</em>
     </div>
@@ -482,7 +243,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
 
 <!-- ── Card 3 — Thought Reader ───────────────────────────── -->
-<div class="tcg-card" data-card-id="thought-reader" data-href="projects/TinyNLA.html#report">
+<div class="tcg-card" data-card-id="thought-reader" data-href="projects/TinyNLA.html#report" tabindex="0" role="link" aria-label="TinyNLA plain-language reports">
 
   <div class="card-header" style="color:#230f3d">
     <span style="color:var(--teal)">◆</span>
@@ -490,7 +251,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   </div>
 
   <div class="card-art">
-  <svg viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 300 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     <!-- Token strip -->
     <text x="150" y="20" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#442a66" letter-spacing="0.06em" font-weight="600">CLICK A WORD</text>
     <rect x="14"  y="30" width="46" height="18" rx="3" fill="#4ade8012" stroke="#4ade8055" stroke-width="1"/>
@@ -516,10 +277,10 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
   </svg>
 </div>
 
-  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
+  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
     <span class="card-footer-name" style="color:#230f3d">Plain-Language Model Reports</span>
-    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
-      <strong style="color:#442a66">Explain</strong><br>
+    <div style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
+      <strong style="color:#2a1544">Explain</strong><br>
       Turn a model's internal state into a short report anyone can read, with a label for how far to trust it.<br><br>
       <em>"Themes, not claims."</em>
     </div>
@@ -534,7 +295,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 
 
 ────────────────────────────── -->
-<div class="tcg-card" data-card-id="placeholder-b" style="opacity:0.45">
+<div class="tcg-card" data-card-id="placeholder-b" style="opacity:0.45" aria-hidden="true">
 
   <div class="card-header" style="justify-content:center;letter-spacing:.12em">
     <span style="color:var(--text-faint)">▪</span>
@@ -548,9 +309,9 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
     </svg>
   </div>
 
-  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:var(--green-deep);font-weight:500">
+  <div class="card-footer" style="margin-top:5px;font-size:11px;line-height:1.5;color:#0f2c19;font-weight:500">
     <span class="card-footer-name" style="color:#230f3d">Research Artifact<br>[ Unreleased ]</span>
-    <div style="margin-top:5px;font-size:10px;line-height:1.5;color:var(--green-deep)">
+    <div style="margin-top:5px;font-size:10px;line-height:1.5;color:#0f2c19">
       <strong>Type — Unknown</strong><br><br>
       <strong>[ Redacted ]</strong><br>
       Details withheld pending publication or release.<br>
@@ -569,9 +330,9 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
       <!-- spacer to balance the counter on the other side -->
       <span class="tcg-counter" style="opacity:0;pointer-events:none">0/0</span>
 
-      <button class="tcg-toggle" id="tcg-toggle" aria-label="Fan / collapse deck">
+      <button class="tcg-toggle" id="tcg-toggle" aria-label="Fan out the cards" aria-pressed="false">
         <!-- Three overlapping card shapes — rotates 90° on open -->
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="0.5" y="4.5" width="7" height="10" rx="1.2" stroke="currentColor" stroke-width="1.2"
             transform="rotate(-14 4 15)"/>
           <rect x="4"   y="3"   width="7" height="10" rx="1.2" stroke="currentColor" stroke-width="1.2"/>
@@ -592,15 +353,6 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 <div class="status-bar">
   <div class="wrap status-row">
     <span class="status-item">
-      <span class="status-pip"></span>
-      <span class="status-key">STATUS</span>
-      <span class="status-val">Open to Work </span>
-    </span>
-    <!-- <span class="status-item">
-      <span class="status-key">LOCATION</span>
-      <span class="status-val">Hyderabad, IN → relocating Pittsburgh, PA</span>
-    </span> -->
-    <span class="status-item">
       <!-- <span class="status-key">VISA</span> -->
       <span class="status-key">CMU MSBA . IIIT Delhi BTech CSSS . Ex-Capgemini NYC</span>
     </span>
@@ -615,7 +367,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 <!-- ─── Experience ────────────────────────────────────────── -->
 <section id="experience">
   <div class="wrap">
-    <p class="section-label">Experience</p>
+    <h2 class="section-label">Experience</h2>
 
     <div class="exp-log" data-reveal>
       <div class="exp-row">
@@ -646,7 +398,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 <!-- ─── Work ──────────────────────────────────────────────── -->
 <section id="work">
   <div class="wrap">
-    <p class="section-label">Current Work</p>
+    <h2 class="section-label">Current Work</h2>
 
     <div class="work-grid" data-reveal>
 
@@ -736,7 +488,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 <!-- ─── Skills graph (embedded widget) ───────────────────── -->
 <section id="skills">
   <div class="wrap">
-    <p class="section-label">Skills &amp; Projects</p>
+    <h2 class="section-label">Skills &amp; Projects</h2>
 
     <!-- Filter pills -->
     <div class="embed-controls" data-reveal>
@@ -793,7 +545,7 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 <!-- ─── Publications ──────────────────────────────────────── -->
 <section id="publications">
   <div class="wrap">
-    <p class="section-label">Publications</p>
+    <h2 class="section-label">Publications</h2>
 
     <ul class="pub-list" data-reveal>
       <li class="pub-item">
@@ -819,6 +571,8 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 </section>
 
 <!-- ─── Contact / Footer ──────────────────────────────────── -->
+</main>
+
 <footer class="footer" id="contact">
   <div class="wrap">
     <h2 class="footer-head">Humans Have Modelled the World, What's Left is to Change it</h2>
@@ -838,86 +592,5 @@ transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
 </footer>
 
 <script type="module" src="src/main.ts"></script>
-<script>
-;(function initTCG() {
-  const outer   = document.getElementById('tcg-outer')
-  const stage   = document.getElementById('tcg-stage')
-  const toggle  = document.getElementById('tcg-toggle')
-  const counter = document.getElementById('tcg-counter')
-  if (!outer || !stage || !toggle) return
-
-  let isOpen = false
-  let busy   = false
-  let dispNum = 1   // 1-based display index for the current top card
-
-  function totalCards() { return stage.querySelectorAll('.tcg-card').length }
-
-  function updateCounter() {
-    if (counter) counter.textContent = dispNum + ' / ' + totalCards()
-  }
-
-  // ── Toggle fan / stack ─────────────────────────────────
-  toggle.addEventListener('click', () => {
-    isOpen = !isOpen
-    outer.classList.toggle('is-open', isOpen)
-    // Clear any active selection on collapse
-    if (!isOpen) {
-      stage.querySelectorAll('.tcg-card').forEach(c => c.classList.remove('is-active'))
-    }
-  })
-
-  // ── Card click handler ─────────────────────────────────
-  stage.addEventListener('click', (e) => {
-    const card = e.target.closest('.tcg-card')
-    if (!card) return
-
-    // Fan mode: select card, navigate on second click of same card
-    if (isOpen) {
-      if (card.classList.contains('is-active')) {
-        const href = card.dataset.href
-        if (href) window.location.href = href
-      } else {
-        stage.querySelectorAll('.tcg-card').forEach(c => c.classList.remove('is-active'))
-        card.classList.add('is-active')
-      }
-      return
-    }
-
-    // Stack mode: only the top card (first child) cycles
-    if (card !== stage.firstElementChild || busy) return
-    busy = true
-
-    // 1. Fly card off to the right
-    card.classList.add('is-flying')
-
-    // 2. After the fly transition, reorder and reset
-    card.addEventListener('transitionend', function handler(ev) {
-      if (ev.propertyName !== 'transform') return
-      card.removeEventListener('transitionend', handler)
-
-      // Suppress transitions during DOM reorder
-      card.classList.add('no-transition')
-      card.classList.remove('is-flying')
-
-      // Move to end — nth-child CSS automatically repositions it
-      stage.appendChild(card)
-
-      // Advance counter, wrapping at totalCards
-      dispNum = dispNum >= totalCards() ? 1 : dispNum + 1
-      updateCounter()
-
-      // Re-enable transitions on the next frame
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          card.classList.remove('no-transition')
-          busy = false
-        })
-      })
-    })
-  })
-
-  updateCounter()
-})()
-</script>
 </body>
 </html>

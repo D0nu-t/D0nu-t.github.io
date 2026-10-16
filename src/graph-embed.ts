@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import type { GraphNode, GraphLink, NodeCategory } from './types'
+import { prefersReducedMotion } from './motion'
 import {
   buildNodes, buildLinks, nodeRadius,
   CATEGORY_COLOR, CATEGORY_LABEL,
@@ -25,6 +26,8 @@ export function initGraphEmbed(containerId: string): void {
     .attr('height', '100%')
     .attr('viewBox', `0 0 ${W} ${H}`)
     .style('display', 'block')
+    .attr('role', 'img')
+    .attr('aria-label', 'Force-directed graph of skills and the projects, jobs and schools they connect to')
     .style('background', 'transparent')
 
   // Glow filters
@@ -246,14 +249,18 @@ export function initGraphEmbed(containerId: string): void {
     })
 
   // ── Tick ─────────────────────────────────────────────────────────────────────
-  sim.on('tick', () => {
+  const render = (): void => {
     linkEl
       .attr('x1', d => (d.source as GraphNode).x ?? 0)
       .attr('y1', d => (d.source as GraphNode).y ?? 0)
       .attr('x2', d => (d.target as GraphNode).x ?? 0)
       .attr('y2', d => (d.target as GraphNode).y ?? 0)
     nodeEl.attr('transform', d => `translate(${d.x ?? 0},${d.y ?? 0})`)
-  })
+  }
+  sim.on('tick', render)
+
+  const still = prefersReducedMotion()
+  if (still) { sim.stop(); sim.tick(300); render() }
 
   // ── Category filter pills ─────────────────────────────────────────────────────
   let activeCat: NodeCategory | null = null
@@ -305,6 +312,7 @@ export function initGraphEmbed(containerId: string): void {
   const sectionEl = container.closest('section')
   if (sectionEl) {
     new IntersectionObserver(([entry]) => {
+      if (still) return
       if (entry.isIntersecting) {
         sim.alphaTarget(0).restart()
       } else {
@@ -319,6 +327,6 @@ export function initGraphEmbed(containerId: string): void {
     H = container.clientHeight
     svg.attr('viewBox', `0 0 ${W} ${H}`)
     sim.force('center', d3.forceCenter(W / 2, H / 2).strength(0.09))
-    sim.alpha(0.15).restart()
+    if (still) { sim.alpha(0.15).tick(60); render() } else sim.alpha(0.15).restart()
   }).observe(container)
 }

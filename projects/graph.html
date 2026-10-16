@@ -13,11 +13,12 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
 </head>
 <body class="graph-page">
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ─── Nav ──────────────────────────────────────────────── -->
 <nav class="site-nav">
   <div class="wrap">
-    <a href="../index.html" class="nav-mark"><strong>KA</strong> · Krishnasai Addala</a>
+    <a href="../index.html" class="nav-mark"><strong>KA</strong><span class="nav-mark-name"> · Krishnasai Addala</span></a>
     <div class="nav-links">
       <a href="../index.html#work">Work</a>
       <a href="../index.html#experience">Experience</a>
@@ -27,14 +28,14 @@
 </nav>
 
 <!-- ─── Page layout ──────────────────────────────────────── -->
-<div class="graph-layout">
+<main id="main" class="graph-layout">
 
   <!-- Left panel — controls -->
   <aside class="graph-panel">
     <div class="graph-panel-inner">
 
       <div class="panel-section">
-        <p class="panel-label">Skills Graph</p>
+        <h1 class="panel-label">Skills Graph</h1>
         <p class="panel-desc">
           Force-directed map of skills and the projects they appear in.
           Hover over a node to see its connections. Drag to rearrange. Scroll to zoom.
@@ -119,7 +120,7 @@
   <!-- Graph canvas -->
   <div class="graph-canvas" id="graph-container"></div>
 
-</div>
+</main>
 
 <script type="module" src="../src/graph-entry.ts"></script>
 </body>

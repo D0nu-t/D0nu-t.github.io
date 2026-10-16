@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 import type { GraphNode, GraphLink, NodeCategory } from './types'
+import { prefersReducedMotion } from './motion'
 import {
   buildNodes, buildLinks, nodeRadius,
   CATEGORY_COLOR, CATEGORY_LABEL,
@@ -24,6 +25,8 @@ export function initGraph(containerId: string): void {
     .attr('height', '100%')
     .attr('viewBox', `0 0 ${W} ${H}`)
     .style('background', '#0d1117')
+    .attr('role', 'img')
+    .attr('aria-label', 'Force-directed graph of skills and the projects, jobs and schools they connect to')
 
   // Glow filter
   const defs = svg.append('defs')
@@ -277,7 +280,7 @@ export function initGraph(containerId: string): void {
     })
 
   // ── Tick ──────────────────────────────────────────────────────────────────
-  simulation.on('tick', () => {
+  const render = (): void => {
     linkEl
       .attr('x1', d => (d.source as GraphNode).x ?? 0)
       .attr('y1', d => (d.source as GraphNode).y ?? 0)
@@ -285,7 +288,11 @@ export function initGraph(containerId: string): void {
       .attr('y2', d => (d.target as GraphNode).y ?? 0)
 
     nodeEl.attr('transform', d => `translate(${d.x ?? 0},${d.y ?? 0})`)
-  })
+  }
+  simulation.on('tick', render)
+
+  const still = prefersReducedMotion()
+  if (still) { simulation.stop(); simulation.tick(300); render() }
 
   // ── Zoom controls ─────────────────────────────────────────────────────────
   document.getElementById('zoom-in')?.addEventListener('click', () => {
@@ -347,7 +354,7 @@ export function initGraph(containerId: string): void {
     const nh = container.clientHeight
     svg.attr('viewBox', `0 0 ${nw} ${nh}`)
     simulation.force('center', d3.forceCenter(nw / 2, nh / 2).strength(0.08))
-    simulation.alpha(0.15).restart()
+    if (still) { simulation.alpha(0.15).tick(60); render() } else simulation.alpha(0.15).restart()
   })
 
   resizeObserver.observe(container)

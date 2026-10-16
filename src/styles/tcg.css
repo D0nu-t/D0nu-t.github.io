@@ -1,0 +1,237 @@
+/* ── TCG card deck (home page hero) ─────────────────────── */
+.tcg-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  user-select: none;
+}
+
+.tcg-stage {
+  position: relative;
+  width: 520px;
+  height: 480px;
+}
+
+/* Base card */
+.tcg-card {
+  position: absolute;
+  width: 330px;
+  height: 440px;
+  bottom: 0;
+  left: 50%;
+  border-radius: 18px;
+  border: 5px solid #03371f;
+  background: #1f5335;
+  transform-origin: bottom center;
+  transform: translateX(-50%);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform  0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity    0.35s ease,
+    box-shadow 0.3s ease,
+    border-color 0.25s ease;
+}
+.tcg-card:hover {
+  border-color: #442a66;
+  transform: translateY(-22px);
+}
+.tcg-card:nth-child(1):hover {
+  border-color: #442a66;
+transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);}
+.tcg-card:nth-child(2):hover {
+  border-color: #442a66;
+  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
+}
+.tcg-card:nth-child(3):hover {
+  border-color: #442a66;
+  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
+}
+.tcg-card:nth-child(4):hover {
+  border-color: #442a66;
+  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
+}
+.tcg-card:nth-child(5):hover {
+  border-color: #442a66;
+  transform: translateX(-50%) rotate(-1.5deg) translateY(-22px);
+}
+
+/* Stack offsets — 5 cards */
+.tcg-card:nth-child(1) { z-index:5; transform: translateX(-50%) rotate(  0deg); }
+.tcg-card:nth-child(2) { z-index:4; transform: translateX(-50%) rotate( 1.3deg) translateY(2px); }
+.tcg-card:nth-child(3) { z-index:3; transform: translateX(-50%) rotate(-1.6deg) translateY(4px); }
+.tcg-card:nth-child(4) { z-index:2; transform: translateX(-50%) rotate( 2.2deg) translateY(6px); }
+.tcg-card:nth-child(5) { z-index:1; transform: translateX(-50%) rotate(-2.8deg) translateY(8px); }
+
+/* Fan positions — 5 cards, evenly spread -24 to +24 */
+.tcg-outer.is-open .tcg-card:nth-child(1) { transform: translateX(-50%) rotate(-24deg); }
+.tcg-outer.is-open .tcg-card:nth-child(2) { transform: translateX(-50%) rotate(-12deg); }
+.tcg-outer.is-open .tcg-card:nth-child(3) { transform: translateX(-50%) rotate(  0deg); }
+.tcg-outer.is-open .tcg-card:nth-child(4) { transform: translateX(-50%) rotate( 12deg); }
+.tcg-outer.is-open .tcg-card:nth-child(5) { transform: translateX(-50%) rotate( 24deg); }
+
+/* Hover lift in fan mode — repeats the angle + translateY */
+.tcg-outer.is-open .tcg-card:nth-child(1):hover { transform: translateX(-50%) rotate(-24deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(2):hover { transform: translateX(-50%) rotate(-12deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(3):hover { transform: translateX(-50%) rotate(  0deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(4):hover { transform: translateX(-50%) rotate( 12deg) translateY(-22px); }
+.tcg-outer.is-open .tcg-card:nth-child(5):hover { transform: translateX(-50%) rotate( 24deg) translateY(-22px); }
+
+/* Selected card in fan mode */
+.tcg-outer.is-open .tcg-card.is-active {
+  border-color: var(--green-bright);
+  box-shadow: 0 0 0 1px var(--green-bright), 0 14px 44px #00000080;
+  z-index: 10;
+}
+
+/* Fly-out animation (JS adds this during cycling) */
+.tcg-card.is-flying {
+  transform: translateX(calc(-50% + 155px)) rotate(22deg) translateY(-20px) !important;
+  opacity: 0 !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+  transition:
+    transform 0.3s cubic-bezier(0.55, 0, 0.85, 0.6),
+    opacity   0.2s ease !important;
+}
+
+/* Suppress transition when snapping back (JS adds/removes this) */
+.tcg-card.no-transition {
+  transition: none !important;
+}
+
+/* ── Card anatomy ──────────────────────────────────────────────── */
+.card-header {
+  height: 42px;
+  background: #719f88;
+  border-bottom: 4px solid #000000;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.card-art {
+  flex: 1;
+  background: #43653d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  min-height: 160px;
+}
+
+.card-footer {
+  min-height: 70px;
+  background: #719f88;
+  border-top: 4px solid #000000;
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.card-footer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d4e8d8;
+  line-height: 1.4;
+}
+
+.card-footer-chips {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.card-chip {
+  background: var(--hairline);
+  border-radius: 2px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+/* type line — the <strong> at top of each footer div */
+.card-footer .type-line {
+  color: #86efac;
+  display: block;
+  margin-bottom: 6px;
+}
+/* effect / description text */
+.card-footer .effect-text {
+  color: #5a8a65;
+  font-size: 11px;
+  line-height: 1.5;
+}
+/* italic quote */
+.card-footer .flavor {
+  color: #4a7255;
+  font-style: italic;
+  font-size: 10px;
+  display: block;
+  margin-top: 5px;
+}
+/* ── Toggle row ────────────────────────────────────────────────── */
+.tcg-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  position: relative;
+  z-index: 20;
+}
+
+.tcg-counter {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  min-width: 30px;
+  text-align: center;
+  transition: opacity 0.25s;
+}
+
+.tcg-outer.is-open .tcg-counter {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tcg-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline-hi);
+  background: var(--panel);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform    0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.2s,
+    color        0.2s;
+}
+
+.tcg-toggle:hover {
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+}
+
+.tcg-outer.is-open .tcg-toggle {
+  transform: rotate(45deg);
+  border-color: var(--green-bright);
+  color: var(--green-bright);
+}

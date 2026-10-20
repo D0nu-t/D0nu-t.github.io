@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Choices: thresholds, origins and tests in bounded-confidence models · Krishnasai Addala</title>
+<meta name="description" content="Working paper: five modelling choices that can create or hide an effect when bounded-confidence models compare distance measures, with interactive demos.">
+<link rel="canonical" href="https://krishnasai.is-a.dev/projects/hidden-choices.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Krishnasai Addala">
+<meta property="og:title" content="Hidden Choices: How Thresholds, Origins and Tests Manufacture and Hide Effects in Bounded-Confidence Models">
+<meta property="og:description" content="Working paper: five modelling choices that can create or hide an effect when bounded-confidence models compare distance measures, with interactive demos.">
+<meta property="og:url" content="https://krishnasai.is-a.dev/projects/hidden-choices.html">
+<meta property="og:image" content="https://krishnasai.is-a.dev/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Krishnasai Addala: Describing the World, One Model at a Time">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/styles/main.css">
+<link rel="stylesheet" href="../src/styles/paper.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
+<style>
+  .badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-mono);font-size:.67rem;padding:.18rem .5rem;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;}
+  .badge-live{background:var(--green-deep);color:var(--green-mid);border:1px solid var(--green-bright);}
+  .project-body h4{font-family:var(--font-mono);font-size:.88rem;font-weight:600;color:var(--text);margin:1.6rem 0 .5rem;}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="nav-mark"><strong>KA</strong><span class="nav-mark-name"> · Krishnasai Addala</span></a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#publications">Publications</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+<header class="paper-hero">
+  <canvas id="hero-field" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <a class="back-link" href="../index.html#publications">← Publications</a>
+    <p class="paper-status">Working paper, short draft, October 2026. Not peer reviewed.</p>
+    <h1 class="paper-title">Hidden Choices: How Thresholds, Origins and Tests <span class="accent">Manufacture and Hide Effects</span> in Bounded-Confidence Models</h1>
+    <p class="paper-author">Krishnasai Addala, independent researcher</p>
+
+    <ol class="choice-grid" aria-label="The five choices">
+      <li><a href="#demo-interaction">Which test is read</a></li>
+      <li><a href="#demo-origin">Where the origin sits</a></li>
+      <li><a href="#demo-coverage">The threshold value given to each distance measure</a></li>
+      <li><a href="#demo-matching">When coverage is matched</a></li>
+      <li><a href="#demo-ruler">How outcomes are counted</a></li>
+    </ol>
+  </div>
+</header>
+
+<div class="wrap project-layout">
+  <nav class="project-toc" aria-label="On this page">
+    <p class="toc-label">On this page</p>
+    <ul class="toc-list">
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#intro">1 Introduction</a></li>
+      <li><a href="#background">2 Background</a></li>
+      <li><a href="#case">3 The test and the origin</a></li>
+      <li><a href="#minimal">4 The other three choices</a></li>
+      <li><a href="#consequences">5 Consequences</a></li>
+      <li><a href="#audit">6 An audit list</a></li>
+      <li><a href="#limitations">7 Limitations</a></li>
+      <li><a href="#references">References</a></li>
+      <li><a href="#appendix">Appendices</a></li>
+    </ul>
+  </nav>
+
+  <article class="project-body">
+
+    <section class="abstract" id="abstract" aria-label="Abstract">
+      <p class="label">Abstract</p>
+      <p>Comparing distance measures in multidimensional bounded-confidence models involves choices that are easy to leave unstated. We follow five of them, each met while auditing our own model. In an agent-based model of AI governance, a draft finding that geometry reverses the effect of enforcement lag came from reading each geometry against a benchmark; the test that compares the geometries keeps its sign from the draft's model to the audited one (interaction +0.034 and +0.034). The point toward which low trust pulls the perceived policy, which nobody had measured, moved the cosine result across that benchmark and, for one of four defensible targets, removed the difference between geometries. In a minimal Deffuant model, one shared threshold admits very different shares of opinion pairs under Euclidean, cosine and angular distance; matching the threshold at the start leaves interaction rates apart, and matching it over the run equalises them but not the number of opinion groups, so each matched point answers a different question. Counting groups with each geometry's own radius made two identical gates look different. We close with a six-item audit list.</p>
+    </section>
+
+    <h2 id="intro">1 Introduction</h2>
+    <p>Bounded-confidence (BC) models let two agents influence each other only when their opinions are close enough <a class="cite" href="#ref-deffuant2000">(Deffuant et al., 2000</a>; <a class="cite" href="#ref-hegselmann2002">Hegselmann &amp; Krause, 2002)</a>. With several opinion dimensions, "close enough" needs a distance, and comparing distances has become a modelling question of its own. Such a comparison involves five choices that can each create an effect or hide one:</p>
+    <ol>
+      <li>which test is read: each condition against a benchmark, or the comparison itself;</li>
+      <li>where the origin sits, for angular gates and for any step that shrinks a quantity toward a point;</li>
+      <li>the threshold value given to each distance measure;</li>
+      <li>when coverage is matched: at the start of a run or over the run;</li>
+      <li>how outcomes are counted: the radius used to group final opinions, and when the run is stopped.</li>
+    </ol>
+    <p>We met every one of them while auditing our own model. In an unpublished draft we reported that, in an agent-based model of AI governance, geometry <em>reverses</em> the effect of enforcement lag on shocks. The first two choices produced that reading (<a href="#case">Section 3</a>). <a href="#minimal">Section 4</a> then takes the other three in a minimal Deffuant model, and <a href="#audit">Section 6</a> collects the lessons into an audit list. The note is pre-emptive: we do not estimate how often published studies make these choices. A longer version with every per-cell result, the gate × update-step crossing and a fuller literature review also exists.</p>
+
+    <h3>Related work</h3>
+    <p><a class="cite" href="#ref-lorenz2008">Lorenz (2008)</a> compared the <span class="math">L</span><sub>1</sub> and <span class="math">L</span><sub>∞</sub> norms after rescaling the threshold so that their confidence regions had equal volume, and <a class="cite" href="#ref-li2026">Li et al. (2026)</a> note that lowering a topic weight at a fixed bound enlarges the region of agreement as well as changing its shape. We extend volume matching to <em>coverage</em>, the share of actual opinion pairs a gate admits, which also works for angular gates whose regions have no finite volume, and then to matching over the run. <a class="cite" href="#ref-flache2017">Flache et al. (2017)</a> call for systematic comparisons of social-influence models; model docking <a class="cite" href="#ref-axtell1996">(Axtell et al., 1996</a>; <a class="cite" href="#ref-wilensky2007">Wilensky &amp; Rand, 2007)</a> showed that settings that look like implementation details carry substantive assumptions, and <a class="cite" href="#ref-gilbert2018">Gilbert et al. (2018)</a> argue that a policy model's assumptions must be visible to be useful. The origin audit, coverage and pass-rate matching, and the common ruler are, as far as we know, new; testing the interaction <a class="cite" href="#ref-gelman2006">(Gelman &amp; Stern, 2006)</a> and using equivalence tests <a class="cite" href="#ref-lakens2017">(Lakens, 2017)</a> restate standard advice in this setting.</p>
+
+    <h2 id="background">2 Background</h2>
+    <p>A <em>geometry</em> is a distance measure, used by the gate, together with its update step. For opinion vectors <span class="math">x<sub>i</sub></span>, <span class="math">x<sub>j</sub></span> we use Euclidean distance <span class="math">‖x<sub>i</sub> − x<sub>j</sub>‖</span>, cosine distance <span class="math">1 − cos θ<sub>ij</sub></span> and the angle <span class="math">θ<sub>ij</sub></span> between them. The gate lets two agents converse when their distance is at most the threshold <span class="math">ε</span>; the listener then moves a fraction <span class="math">r</span> of the way toward the speaker, along a straight line for Euclidean distance and by rotating its opinion, keeping its length, for the two angular geometries. Because cosine distance is a strictly increasing function of the angle, a cosine gate at <span class="math">ε</span> and an angular gate at <span class="math">arccos(1 − ε)</span> admit exactly the same pairs: once matched, the two can differ only through their update steps and how outcomes are measured.</p>
+    <p>A gate's <em>coverage</em> is the share of opinion pairs within its threshold at one moment, and its <em>pass rate</em> the share of attempted conversations that pass it during a run. A comparison can give every geometry Euclidean's threshold number (<em>shared</em>), the threshold that gives the same coverage at the start (<em>start-matched</em>), or the threshold that gives the same pass rate over the run (<em>run-matched</em>).</p>
+    <p>Euclidean distance and the Euclidean step are unchanged by shifting and rescaling the opinion space; angular gates and steps are not, since they measure direction from the origin. The same holds for multiplicative shrinkage of a signal (such as a policy scaled by trust), decay toward zero, clipping after a non-equivariant step, zero initial values and ratio outcomes. If opinions are coded in <span class="math">[0,1]<sup>d</sup></span>, all of these refer to the corner where every dimension is at its minimum.</p>
+
+    <section class="demo" id="demo-origin" data-demo="origin" aria-labelledby="demo-origin-title">
+      <div class="demo-head">
+        <div><span class="demo-kicker">Demo 1</span><h3 class="demo-title" id="demo-origin-title">Moving the origin</h3></div>
+        <div class="demo-controls"><button class="demo-btn" data-action="play" aria-pressed="true">Pause</button></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-row">
+          <figure>
+            <canvas class="demo-canvas" data-panel="gate" style="aspect-ratio:1" aria-label="Two opinions A and B with rays from a movable origin"></canvas>
+            <figcaption>Drag the orange origin, or use the sliders.</figcaption>
+          </figure>
+          <figure>
+            <canvas class="demo-canvas" data-panel="trust" style="aspect-ratio:1" aria-label="Five agents' perceived policies, pulled toward a trust target"></canvas>
+            <figcaption>Perceived policy for trust 0.15 to 0.95 (darker means lower trust).</figcaption>
+          </figure>
+        </div>
+        <div class="demo-controls">
+          <label>origin x <input type="range" name="ox" min="0" max="1" step="0.01" value="0"></label>
+          <label>origin y <input type="range" name="oy" min="0" max="1" step="0.01" value="0"></label>
+          <span class="seg"><button class="demo-btn" data-origin="corner">Origin at the corner</button><button class="demo-btn" data-origin="centre">Origin at the centre</button></span>
+          <span class="seg"><button class="demo-btn" data-target="corner" aria-pressed="true">Trust toward the corner</button><button class="demo-btn" data-target="centre" aria-pressed="false">Trust toward the centre</button></span>
+        </div>
+        <div class="demo-readout" aria-live="polite">
+          <span>Euclidean distance A–B: <strong data-out="euc">0</strong> (fixed)</span>
+          <span>Angle A–B seen from the origin: <strong data-out="angle">0</strong>, cosine distance <strong data-out="cos">0</strong>; at a cosine threshold of 0.12, <strong data-out="verdict">…</strong></span>
+          <span>Gap between the least and the most trusting agent's perceived policy: <strong data-out="spread">0</strong></span>
+        </div>
+      </div>
+      <p class="demo-note">The distance between A and B never changes, but the angle between them depends on where the origin is. Trust that shrinks toward the corner moves a distrustful agent's perceived policy much further than a trusting agent's; toward the centre the gap is small. In the paper, that difference is what moved the cosine result.</p>
+    </section>
+
+    <h2 id="case">3 The test and the origin, in a governance model</h2>
+
+    <h3>Model and claim</h3>
+    <p>PolicySwarm <a class="cite" href="#ref-policyswarm">(Addala, 2026)</a> models how a population's views on AI regulation respond to a policy, to media and to shocks (<a href="#app-policyswarm">Appendix B</a>). Agents hold four-dimensional opinions on a Barabási–Albert network and converse under a bounded-confidence gate. After an enforcement lag, each agent is pulled toward the policy as it perceives it: <span class="math">a<sub>i</sub> + τ<sub>i</sub>(p + b<sub>i</sub> − a<sub>i</sub>) + η</span>, where <span class="math">p</span> is the policy, <span class="math">τ<sub>i</sub> ∈ [0,1]</span> the agent's trust, <span class="math">b<sub>i</sub></span> its ideological bias, <span class="math">η</span> noise and <span class="math">a<sub>i</sub></span> the <em>trust target</em>, the point a low-trust agent's perceived policy is pulled toward.</p>
+    <p>The experiment compares paired runs with and without a schedule of shocks, which pull their targets toward the neutral centre and so lower the final variance of opinions. The <em>relative shock effect</em> is that change in variance divided by the variance of the run without shocks, and it is negative. Runs are made at enforcement lags of 0, 20 and 40 ticks. For each geometry the <em>lag index</em> is the mean relative shock effect at lag 40 as a percentage of its mean at lag 0, by size. The <em>interaction</em> is cosine's change from lag 0 to lag 40 minus Euclidean's, paired by seed; with negative effects, a positive interaction means lag enlarges the effect less under cosine, so that cosine <em>attenuates</em> the lag effect. The index is a proportional change within one geometry, and the interaction compares the two on one scale; since cosine's lag-0 effect is about half Euclidean's, the two can disagree, and we rest claims about geometry on the interaction.</p>
+    <p>The draft reported, on the absolute shock effect, an index of about 130 under Euclidean distance and about 75 under cosine distance, and called it a reversal. Read as policy advice, whether delays in enforcement make a population more or less fragile after shocks would have hinged on an untested modelling choice. An internal audit found the problem before any external use.</p>
+
+    <h3>Design</h3>
+    <p>We ran the audited engine with the draft's choices restored as switches: the gate measured from the cube's corner or its centre, the threshold shared or matched, the policy pull applied only after a conversation that passes the gate (as in the draft) or every tick, and four trust targets (the corner, the centre, the population's mean starting opinion, and the agent's own opinion). We also ran the draft's own engine with the audit's other fixes undone in turn, and a <em>level-shift</em> control that moves every agent's perceived policy by the corner's average shift, <span class="math">−(1 − τ̄)</span>, separating a shift in the mean from one that differs between trusting and distrustful agents. The <em>recommended</em> design uses a centred gate, a run-matched threshold and a pull applied every tick, which removes both of the draft's couplings. Every cell crosses Euclidean and cosine with the three lags over 100 paired seeds. We report each lag index with a paired bootstrap 95% interval and the interaction with a 95% <span class="math">t</span> interval, and call an interaction equivalent to zero when its 90% interval lies within ±0.01; we set this margin after an earlier version had reported the result it is used on, so that test confirms a result already known.</p>
+
+    <h3 id="case-results">Results</h3>
+
+    <section class="demo" id="demo-interaction" data-demo="interaction" aria-labelledby="demo-interaction-title"
+      data-euc-idx="132" data-cos-idx="78" data-inter="+0.034"
+      data-ci-lo="+0.025" data-ci-hi="+0.044" data-margin="0.01"
+      data-positive="25" data-negative="3" data-null="2">
+      <div class="demo-head">
+        <div><span class="demo-kicker">Demo 2</span><h3 class="demo-title" id="demo-interaction-title">Lag index and interaction</h3></div>
+        <div class="demo-controls">
+          <span class="seg"><button class="demo-btn" data-view="0">Each geometry against 100</button><button class="demo-btn" data-view="1">The interaction</button></span>
+          <button class="demo-btn" data-action="play" aria-pressed="true">Pause</button>
+        </div>
+      </div>
+      <div class="demo-body"><div data-chart></div></div>
+      <p class="demo-note" data-out="caption" aria-live="polite"></p>
+    </section>
+
+    <h4>The test</h4>
+    <p>Across all 30 configurations the interaction is positive in 25, negative in 3 and not significantly different from zero in 2 (<a href="#fig-interaction">Figure 1</a>). In the draft's own engine and settings it is +0.034 [+0.025, +0.044], the same direction as in the audited model. What looked like a reversal was cosine's index falling below 100 (78 on the absolute effect the draft used, against 132 for Euclidean) while the comparison between geometries kept its sign. Reading each geometry against 100 asks whether each effect grows with lag; the claim was about the difference between geometries, and only the interaction tests that <a class="cite" href="#ref-gelman2006">(Gelman &amp; Stern, 2006)</a>. Two of the negative cells come from an uncentred gate with a matched threshold and the gated pull, where the matched cosine thresholds are tiny because all opinions point into one orthant; the third is a trust target (below).</p>
+
+    <figure class="shot" id="fig-interaction">
+      <img src="../img/methods_note/fig4_interaction_all_cells.png" alt="Dot plot of the lag by geometry interaction with 95% intervals in 30 configurations; 25 lie to the right of zero" loading="lazy" width="1400" height="1520">
+      <figcaption>Figure 1. The lag × geometry interaction in every configuration (cosine's lag contrast minus Euclidean's; positive: cosine attenuates the lag effect), with 95% <span class="math">t</span> intervals over 100 paired seeds; dotted lines mark the equivalence margin. Orange: the draft's engine, alone or with the audit's changes named in the label. Blue: the audited engine, by gate space, threshold rule, policy pull and trust target.</figcaption>
+    </figure>
+
+    <h4>Which comparison isolates the threshold</h4>
+    <p>The centred cells hold the gate fixed and vary only the threshold rule. With the pull applied every tick, the interaction barely moves across the shared, start-matched and run-matched rules (+0.035, +0.032, +0.034). In the unit cube the same change of threshold moves it from +0.038 to +0.020, and with the gated pull from +0.018 to −0.057: the threshold matters here mainly through the uncentred gate.</p>
+
+    <h4>The origin</h4>
+    <p>With trust shrinking toward the corner and angles measured from the corner, as in the draft, the audited engine gives Euclidean 116 and cosine 85, matching the draft's engine (118 [110, 127] and 85 [81, 88]). Shrinking toward the centre lifts cosine to 117; measuring the gate from the centre lifts it to 106. In this setting Euclidean's index barely moves with the trust target, and the level shift takes cosine only to 103: most of the corner's effect comes from shifting distrustful agents further than trusting ones, which an angle measured from the corner registers (<a href="#demo-origin">Demo 1</a>). The interaction stays positive throughout (+0.026, +0.018, +0.018): the origin moved cosine's index across 100 but left the sign of the comparison unchanged.</p>
+
+    <div class="table-wrap">
+      <table class="ver-table" id="tab-anchors">
+        <caption>Table 1. Trust targets in the recommended design: lag index per geometry (95% CI), relative shock effect at lags 0 and 40 for Euclidean (E) and cosine (C), and the paired interaction; = marks equivalence to zero.</caption>
+        <thead><tr><th>trust target</th><th class="num">Euclidean index</th><th class="num">cosine index</th><th class="num">effect lag 0 / 40, E</th><th class="num">effect lag 0 / 40, C</th><th class="num">interaction [95% CI]</th></tr></thead>
+        <tbody>
+          <tr><td>centre</td><td class="num">146 [138, 154]</td><td class="num">134 [129, 139]</td><td class="num">−0.119 / −0.174</td><td class="num">−0.060 / −0.080</td><td class="num">+0.034 [+0.027, +0.042]</td></tr>
+          <tr><td>corner</td><td class="num">121 [116, 125]</td><td class="num">106 [103, 109]</td><td class="num">−0.121 / −0.146</td><td class="num">−0.071 / −0.075</td><td class="num">+0.021 [+0.016, +0.025]</td></tr>
+          <tr><td>own</td><td class="num">113 [109, 116]</td><td class="num">128 [125, 132]</td><td class="num">−0.182 / −0.205</td><td class="num">−0.077 / −0.099</td><td class="num">+0.001 [−0.004, +0.007]<sup>=</sup></td></tr>
+          <tr><td>status quo</td><td class="num">147 [138, 156]</td><td class="num">134 [129, 140]</td><td class="num">−0.119 / −0.174</td><td class="num">−0.059 / −0.080</td><td class="num">+0.035 [+0.027, +0.042]</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>The trust target is an assumption</h4>
+    <p>Trust has to shrink the perceived policy toward something, and the four targets give different answers (<a href="#tab-anchors">Table 1</a>). The status quo behaves like the centre, as it must when starting opinions are uniform. Shrinking toward the corner leaves lag little effect under cosine (106). Shrinking toward the agent's own opinion makes the interaction equivalent to zero (+0.001, 90% interval [−0.003, +0.006]), and in the draft's setting the same target makes it negative (−0.019). Across the four targets, Euclidean's lag index alone runs from 113 to 147. The right target depends on how distrust distorts a policy signal, which the model cannot decide, so a study using such a model should state the target and vary it.</p>
+
+    <h4>The remaining effect</h4>
+    <p>In the recommended design with trust shrinking toward the centre, lag enlarges the shock effect under both geometries and less under cosine (indices 146 [138, 154] and 134 [129, 139]; interaction +0.034 [+0.027, +0.042]). We would report this result, with the condition the target sweep attaches to it.</p>
+
+    <h2 id="minimal">4 The other three choices, in a minimal model</h2>
+
+    <h3>Design</h3>
+    <p>A minimal Deffuant model (<a href="#app-odd">Appendix A</a>) has 500 agents on an Erdős–Rényi graph, random matchings each round and <span class="math">μ</span> = 0.3. The factorial crosses the opinion space (unit or centred cube), the dimension (<span class="math">d</span> ∈ {2, 4, 8}) and a reference coverage (5%, 15%, 30%): 18 cells, 100 paired seeds each. Euclidean distance runs at the threshold giving the reference coverage at the start; cosine and angular distance run under the shared, start-matched and run-matched rules, and under an <em>early-matched</em> rule that matches the pass rate over the first 100 rounds only. Matched thresholds were found by bisection on 50 separate pilot seeds and checked on the evaluation seeds. The primary outcome is the number of opinion groups holding at least 1% of agents after 2,000 rounds, counted with one ruler for every geometry. We call a gap equivalent to zero when its 90% interval lies within ±0.02 for the pass rate or ±0.25 on the log<sub>2</sub> scale <a class="cite" href="#ref-lakens2017">(Lakens, 2017)</a>. Cosine and angular are reported separately, but they agree closely, so the text gives cosine and <a href="#tab-headline">Table 3</a> both.</p>
+
+    <h3>Results</h3>
+
+    <h4>The threshold value</h4>
+    <p>One shared number admits very different shares of pairs: in the unit cube at <span class="math">ε</span> = 0.5, a cosine gate admits 94% of pairs in four dimensions against 14% for Euclidean distance (<a href="#tab-coverage">Table 2</a>). As the dimension grows, distances concentrate <a class="cite" href="#ref-aggarwal2001">(Aggarwal et al., 2001)</a>:</p>
+
+    <div class="proposition">
+      <p><strong>Proposition 1 (coverage at a fixed threshold).</strong> For independent uniform opinions, as <span class="math">d → ∞</span>, <span class="math">‖x<sub>i</sub> − x<sub>j</sub>‖ / √d</span> converges to <span class="math">1/√6</span> in <span class="math">[0,1]<sup>d</sup></span> and to <span class="math">√(2/3)</span> in <span class="math">[−1,1]<sup>d</sup></span>; <span class="math">cos θ<sub>ij</sub></span> converges to <span class="math">3/4</span> in <span class="math">[0,1]<sup>d</sup></span> and to <span class="math">0</span> in <span class="math">[−1,1]<sup>d</sup></span>. Hence at a fixed threshold, cosine and angular coverage tend to 0 or 1 according to which side of these limits the threshold falls, and Euclidean coverage tends to 0 unless the threshold grows like <span class="math">√d</span>.</p>
+    </div>
+    <p>Each limit follows from the law of large numbers applied to the coordinate-wise sums; a threshold exactly at an angular limit, such as cosine at <span class="math">ε</span> = 1 in the centred cube, admits half of all pairs in every dimension. In the minimal model a shared threshold leaves the pass rate apart by a median of 0.258 (cosine), equivalent to Euclidean's in no cell.</p>
+
+    <section class="demo" id="demo-coverage" data-demo="coverage" aria-labelledby="demo-coverage-title">
+      <div class="demo-head">
+        <div><span class="demo-kicker">Demo 3</span><h3 class="demo-title" id="demo-coverage-title">Coverage at a shared threshold</h3></div>
+        <div class="demo-controls"><button class="demo-btn" data-action="play" aria-pressed="true">Pause</button><button class="demo-btn" data-action="reset">Reset</button></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-row">
+          <figure><canvas class="demo-canvas" data-gate="euc" style="aspect-ratio:1" aria-label="Random opinion pairs, lit where the Euclidean gate admits them"></canvas><figcaption><span class="key euc"></span>Euclidean</figcaption></figure>
+          <figure><canvas class="demo-canvas" data-gate="cos" style="aspect-ratio:1" aria-label="The same pairs, lit where the cosine gate admits them"></canvas><figcaption><span class="key cos"></span>cosine</figcaption></figure>
+          <figure><canvas class="demo-canvas" data-gate="ang" style="aspect-ratio:1" aria-label="The same pairs, lit where the angular gate admits them"></canvas><figcaption><span class="key ang"></span>angular</figcaption></figure>
+        </div>
+        <div class="demo-controls">
+          <label>ε <input type="range" name="eps" min="0.05" max="2" step="0.05" value="0.5"> <output data-out="eps">0.50</output></label>
+          <span class="seg" role="group" aria-label="Dimensions"><button class="demo-btn" data-d="2" aria-pressed="false">d = 2</button><button class="demo-btn" data-d="4" aria-pressed="true">d = 4</button><button class="demo-btn" data-d="8" aria-pressed="false">d = 8</button><button class="demo-btn" data-d="16" aria-pressed="false">d = 16</button></span>
+          <span class="seg" role="group" aria-label="Opinion space"><button class="demo-btn" data-space="unit" aria-pressed="true">unit cube [0,1]</button><button class="demo-btn" data-space="centred" aria-pressed="false">centred cube [−1,1]</button></span>
+        </div>
+        <div class="bars" aria-live="polite">
+          <div class="bar"><span>Euclidean</span><span class="bar-track"><span class="bar-fill euc" data-bar="euc"></span></span><output data-val="euc">0%</output></div>
+          <div class="bar"><span>cosine</span><span class="bar-track"><span class="bar-fill cos" data-bar="cos"></span></span><output data-val="cos">0%</output></div>
+          <div class="bar"><span>angular</span><span class="bar-track"><span class="bar-fill ang" data-bar="ang"></span></span><output data-val="ang">0%</output></div>
+        </div>
+      </div>
+      <p class="demo-note">The bars give each gate's share of 6,000 uniformly drawn pairs at the same ε. The panels draw 70 of those pairs on the first two of the <span class="math">d</span> dimensions and light the ones each gate admits. At the defaults (unit cube, ε = 0.5, <span class="math">d</span> = 4) the shares match Table 2 within sampling error.</p>
+    </section>
+
+    <div class="table-wrap">
+      <table class="ver-table" id="tab-coverage">
+        <caption>Table 2. Share of uniformly drawn pairs admitted at one shared ε, by opinion space and dimension.</caption>
+        <thead><tr><th>space</th><th class="num">ε</th><th class="num">d</th><th class="num">Euclidean</th><th class="num">cosine</th><th class="num">angular</th></tr></thead>
+        <tbody>
+          <tr><td>unit</td><td class="num">0.5</td><td class="num">2</td><td class="num">48%</td><td class="num">92%</td><td class="num">58%</td></tr>
+          <tr><td>unit</td><td class="num">0.5</td><td class="num">4</td><td class="num">14%</td><td class="num">94%</td><td class="num">32%</td></tr>
+          <tr><td>unit</td><td class="num">0.5</td><td class="num">8</td><td class="num">1%</td><td class="num">98%</td><td class="num">15%</td></tr>
+          <tr><td>unit</td><td class="num">0.5</td><td class="num">16</td><td class="num">0%</td><td class="num">100%</td><td class="num">4%</td></tr>
+          <tr><td>centred</td><td class="num">1</td><td class="num">2</td><td class="num">48%</td><td class="num">50%</td><td class="num">32%</td></tr>
+          <tr><td>centred</td><td class="num">1</td><td class="num">4</td><td class="num">14%</td><td class="num">50%</td><td class="num">17%</td></tr>
+          <tr><td>centred</td><td class="num">1</td><td class="num">8</td><td class="num">1%</td><td class="num">50%</td><td class="num">7%</td></tr>
+          <tr><td>centred</td><td class="num">1</td><td class="num">16</td><td class="num">0%</td><td class="num">50%</td><td class="num">1%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="shot" id="fig-curves">
+      <img src="../img/methods_note/fig2_response_curves.png" alt="Six panels of opinion-group counts against pass rate for Euclidean, cosine and angular gates; the angular curves lie on each other and apart from Euclidean" loading="lazy" width="1400" height="920">
+      <figcaption>Figure 2. Number of opinion groups (at least 1% of agents, common ruler) against the pass rate as the threshold varies over ten values giving starting coverage from 2% to 60%; each point is the mean of 50 seeds with a band of ±1.96 standard errors. Markers: the factorial's runs at 15% starting coverage under each rule. Log scale on the vertical axis.</figcaption>
+    </figure>
+
+    <div class="table-wrap">
+      <table class="ver-table" id="tab-headline">
+        <caption>Table 3. Headline results of the minimal model after 2,000 rounds: median absolute gap to Euclidean and the number of the 18 cells equivalent to zero, for cosine and angular. Pass-rate gaps are differences; group gaps are log<sub>2</sub> ratios.</caption>
+        <thead><tr><th>rule</th><th>outcome</th><th class="num">cosine gap</th><th class="num">cosine equiv.</th><th class="num">angular gap</th><th class="num">angular equiv.</th></tr></thead>
+        <tbody>
+          <tr class="group-start"><td>shared</td><td>pass rate</td><td class="num">0.258</td><td class="num">0</td><td class="num">0.177</td><td class="num">0</td></tr>
+          <tr><td></td><td>groups</td><td class="num">0.35</td><td class="num">7</td><td class="num">0.40</td><td class="num">7</td></tr>
+          <tr class="group-start"><td>start-matched</td><td>pass rate</td><td class="num">0.162</td><td class="num">3</td><td class="num">0.163</td><td class="num">3</td></tr>
+          <tr><td></td><td>groups</td><td class="num">0.87</td><td class="num">3</td><td class="num">0.85</td><td class="num">3</td></tr>
+          <tr class="group-start"><td>run-matched</td><td>pass rate</td><td class="num">0.004</td><td class="num">16</td><td class="num">0.004</td><td class="num">16</td></tr>
+          <tr><td></td><td>groups</td><td class="num">0.70</td><td class="num">5</td><td class="num">0.69</td><td class="num">6</td></tr>
+          <tr class="group-start"><td>early-matched</td><td>pass rate</td><td class="num">0.047</td><td class="num">4</td><td class="num">0.048</td><td class="num">4</td></tr>
+          <tr><td></td><td>groups</td><td class="num">0.61</td><td class="num">5</td><td class="num">0.58</td><td class="num">5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>When coverage is matched</h4>
+    <p>Start-matching leaves the pass rate apart by a median of 0.162: coverage drifts as opinions converge, faster under Euclidean distance than under the angular geometries, whose steps rotate an opinion without shortening it. Run-matching equalises the pass rate (equivalent in 16 of 18 cells) but not the number of groups (5 of 18; median gap 0.70 on the log<sub>2</sub> scale); early-matching brings the pass rates much closer than start-matching but leaves the group counts as far apart as run-matching does (<a href="#tab-headline">Table 3</a>). At equal pass rates the geometries' response curves do not coincide (<a href="#fig-curves">Figure 2</a>), so the gap depends on where on the curves one compares them. Matching is therefore a choice of estimand: a start- or early-matched comparison includes a geometry's effect on how often agents interact, and a run-matched one excludes it. Our first draft reported that run-matching removed the gap because it counted the effective number of groups, an outcome that, once groups have formed, the pass rate nearly fixes.</p>
+
+    <section class="demo" id="demo-matching" data-demo="matching" aria-labelledby="demo-matching-title">
+      <div class="demo-head">
+        <div><span class="demo-kicker">Demo 4</span><h3 class="demo-title" id="demo-matching-title">Pass rates after start-matching</h3></div>
+        <div class="demo-controls">
+          <span class="seg" role="group" aria-label="Threshold rule"><button class="demo-btn" data-mode="matched" aria-pressed="true">start-matched</button><button class="demo-btn" data-mode="shared" aria-pressed="false">shared number</button></span>
+          <button class="demo-btn" data-action="play" aria-pressed="true">Pause</button><button class="demo-btn" data-action="reset">New start</button>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-row">
+          <figure><canvas class="demo-canvas" data-run="euc" style="aspect-ratio:1" aria-label="Opinions in the Euclidean run"></canvas><figcaption><span class="key euc"></span>Euclidean, ε = <span data-out="epsE">0</span></figcaption></figure>
+          <figure><canvas class="demo-canvas" data-run="cos" style="aspect-ratio:1" aria-label="Opinions in the cosine run"></canvas><figcaption><span class="key cos"></span>cosine, ε = <span data-out="epsC">0</span></figcaption></figure>
+        </div>
+        <canvas class="demo-canvas" data-chart style="aspect-ratio:3/1" aria-label="Pass rate per round in both runs"></canvas>
+        <div class="demo-readout" aria-live="polite"><span>Round <strong data-out="round">0</strong>: pass rate Euclidean <strong data-out="passE">15%</strong>, cosine <strong data-out="passC">15%</strong></span></div>
+      </div>
+      <p class="demo-note">An illustration, smaller than the paper's runs: 150 agents in the centred square, 2 dimensions, random pairs and μ = 0.3. Both runs start from the same opinions, and start-matched thresholds let each gate admit 15% of pairs at round 0. As opinions move, the share of conversations that pass drifts apart.</p>
+    </section>
+
+    <h4>Gate and update step</h4>
+    <p>Run-matched, the angular geometries still leave final opinions more spread out than Euclidean distance does (median variance gap 0.57 on the log<sub>2</sub> scale, positive in every cell). Crossing the gate with the update step shows where that comes from. With start-matched gates, a Euclidean gate with the cosine step raises the variance by +1.09 [+1.04, +1.14], most of the +1.44 [+1.38, +1.50] of the pure cosine pairing, while a cosine gate with the Euclidean step raises it by only +0.43 [+0.39, +0.46]; with run-matched cosine gates the cosine gate with the Euclidean step even lowers it (−1.04 [−1.14, −0.95]). The spread of opinion directions follows the gate rather than the step when gates are start-matched (+0.23 [+0.21, +0.24] against +0.08 [+0.07, +0.09]), and the gate and step together when they are run-matched. So the overall spread is mostly the update step's doing, and a comparison that changes the gate and the step at once cannot tell the two apart.</p>
+
+    <h4>The ruler and the stopping time</h4>
+    <p>Our first draft also grouped final opinions within a fraction of each run's own <span class="math">ε</span>. Start-matched cosine and angular gates admit exactly the same pairs, yet under that rule their group counts are equivalent in only 10 of 18 cells; with one common ruler they are equivalent in all 18, so the apparent difference came from the ruler. After 500 rounds 44% of Euclidean runs are still changing, and after 4,000 13%, but the group gaps barely move over that range (start-matched: 0.93 to 0.87), so the remaining difference is not a transient; only reporting the stopping time and checking a longer run shows that.</p>
+
+    <section class="demo" id="demo-ruler" data-demo="ruler" aria-labelledby="demo-ruler-title">
+      <div class="demo-head">
+        <div><span class="demo-kicker">Demo 5</span><h3 class="demo-title" id="demo-ruler-title">Counting groups with two rulers</h3></div>
+        <div class="demo-controls">
+          <span class="seg" role="group" aria-label="Ruler"><button class="demo-btn" data-ruler="own" aria-pressed="true">each run's own radius</button><button class="demo-btn" data-ruler="common" aria-pressed="false">one common radius</button></span>
+          <button class="demo-btn" data-action="play" aria-pressed="true">Pause</button><button class="demo-btn" data-action="reset">Replay</button>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-row">
+          <figure><canvas class="demo-canvas" data-run="cos" style="aspect-ratio:1" aria-label="Final opinion directions of the cosine run, coloured by group"></canvas><figcaption><span class="key cos"></span>cosine gate: <strong data-out="cos">…</strong> groups</figcaption></figure>
+          <figure><canvas class="demo-canvas" data-run="ang" style="aspect-ratio:1" aria-label="Final opinion directions of the angular run, coloured by group"></canvas><figcaption><span class="key ang"></span>angular gate: <strong data-out="ang">…</strong> groups</figcaption></figure>
+        </div>
+        <div class="demo-readout"><span>Own radius, as an angle: half the cosine ε is <strong data-out="own-cos">0</strong>, half the angular ε is <strong data-out="own-ang">0</strong>; the common radius is <strong data-out="common">0</strong> for both.</span></div>
+      </div>
+      <p class="demo-note">An illustration: 120 agents on a circle of directions. The cosine gate at ε = 0.06 and the angular gate at arccos(1 − 0.06) admit the same pairs and use the same step, so the two runs end with identical opinions. Counting within half of each run's own ε gives two different radii, and the counts can differ. One common radius gives the same count for both. We chose a starting draw where the own-radius counts differ.</p>
+    </section>
+
+    <h2 id="consequences">5 Consequences for model comparisons</h2>
+    <p>For anyone comparing distance measures, each of the five choices can produce or remove a difference on its own. In our two models a shared threshold changed the pass rate by a median of 0.177 to 0.258 of attempted conversations, a geometry-specific ruler left two identical gates in agreement in only 10 of 18 cells, and a test read against a benchmark turned an attenuation into a reported reversal. All three arose without a coding error, and a results table shows none of them unless the choice is reported.</p>
+    <p>For models used to inform policy, the case study shows a policy-relevant conclusion resting on choices its readers could not see. Whether enforcement delays make a population more or less fragile after shocks depended on the test read, on where the opinion space put its origin, and on a trust target that no one had measured. <a class="cite" href="#ref-gilbert2018">Gilbert et al. (2018)</a> argue that a policy model is useful only when its assumptions are visible, and any trust or credibility parameter that shrinks or scales a signal carries an origin with it.</p>
+    <p>The choices are not specific to distance measures. Any comparison of model variants that share a free parameter on different scales, shrink a quantity toward a point, or count outcomes with a variant-specific rule meets the same problems, which is the docking problem <a class="cite" href="#ref-axtell1996">(Axtell et al., 1996</a>; <a class="cite" href="#ref-wilensky2007">Wilensky &amp; Rand, 2007)</a> in a narrower form. We have not measured how often published comparisons make these choices; the audit list below gives a way to check.</p>
+
+    <h2 id="audit">6 An audit list</h2>
+    <div class="audit">
+      <h3>Before reporting that a distance measure changes a result</h3>
+      <ol>
+        <li>Test the comparison. A claim that a geometry changes an effect is an interaction; test it directly <a class="cite" href="#ref-gelman2006">(Gelman &amp; Stern, 2006)</a>, and support "no difference" with an equivalence test <a class="cite" href="#ref-lakens2017">(Lakens, 2017)</a>.</li>
+        <li>Audit the origin. Recode the opinion space by a shift and rescale and rerun a few seeds; any outcome that changes depends on the origin. Centre the space at a meaningful neutral point or say why not, and treat every shrinkage or decay target as an explicit, varied assumption.</li>
+        <li>Do not rely on a shared threshold value. If one is used, show that the pass rates match.</li>
+        <li>Report the response to <span class="math">ε</span>, not one matched point. Start-, early- and run-matched points answer different questions; name the one you report, and check calibrated thresholds on separate seeds.</li>
+        <li>Check for monotone equivalence. Distance measures related by a strictly increasing function are one gate once matched.</li>
+        <li>Report the ruler and the stopping time. Count groups with one rule for every geometry, report how many runs have not settled, and check a longer run.</li>
+      </ol>
+    </div>
+    <p>Applying the list costs a fraction of the comparison itself: a few reruns or a recount of saved states, about ten thresholds per geometry for the response curves, and one bisection per cell for run-matching.</p>
+
+    <h2 id="limitations">7 Limitations</h2>
+    <p>Opinions start uniform and independent, and we study pairwise Deffuant updates only, without varying <span class="math">μ</span>, the population size or the network. Runs stop at 4,000 rounds, when 14% of runs have not settled. The case study rests on one model whose trust mechanism is specific to it, while the general point (multiplicative steps inherit the meaning of the origin) is not. The five choices are not the only hidden ones: the network, the update order and the population size are choices of the same kind.</p>
+    <p>Every figure, table and number in the paper is rebuilt by one script from the saved results; none is typed by hand.</p>
+
+    <h2 id="references">References</h2>
+    <ol class="refs">
+      <li id="ref-policyswarm">Addala, K. (2026). <a href="policy-simulator.html"><em>PolicySwarm: an agent-based model of opinion dynamics under AI governance</em></a> (Version 1.2.0) [Software].</li>
+      <li id="ref-aggarwal2001">Aggarwal, C. C., Hinneburg, A., &amp; Keim, D. A. (2001). On the surprising behavior of distance metrics in high dimensional space. <em>Database Theory – ICDT 2001</em>. <a href="https://doi.org/10.1007/3-540-44503-X_27" target="_blank" rel="noopener">https://doi.org/10.1007/3-540-44503-X_27</a></li>
+      <li id="ref-axtell1996">Axtell, R., Axelrod, R., Epstein, J. M., &amp; Cohen, M. D. (1996). Aligning simulation models: a case study and results. <em>Computational and Mathematical Organization Theory</em>, <em>1</em>(2), 123–141. <a href="https://doi.org/10.1007/BF01299065" target="_blank" rel="noopener">https://doi.org/10.1007/BF01299065</a></li>
+      <li id="ref-deffuant2000">Deffuant, G., Neau, D., Amblard, F., &amp; Weisbuch, G. (2000). Mixing beliefs among interacting agents. <em>Advances in Complex Systems</em>, <em>3</em>(01n04), 87–98.</li>
+      <li id="ref-flache2017">Flache, A., Mäs, M., Feliciani, T., Chattoe-Brown, E., Deffuant, G., Huet, S., &amp; Lorenz, J. (2017). Models of social influence: towards the next frontiers. <em>Journal of Artificial Societies and Social Simulation</em>, <em>20</em>(4), 2. <a href="https://doi.org/10.18564/jasss.3521" target="_blank" rel="noopener">https://doi.org/10.18564/jasss.3521</a></li>
+      <li id="ref-gelman2006">Gelman, A., &amp; Stern, H. (2006). The difference between "significant" and "not significant" is not itself statistically significant. <em>The American Statistician</em>, <em>60</em>(4), 328–331.</li>
+      <li id="ref-gilbert2018">Gilbert, N., Ahrweiler, P., Barbrook-Johnson, P., Narasimhan, K. P., &amp; Wilkinson, H. (2018). Computational modelling of public policy: reflections on practice. <em>Journal of Artificial Societies and Social Simulation</em>, <em>21</em>(1), 14. <a href="https://doi.org/10.18564/jasss.3669" target="_blank" rel="noopener">https://doi.org/10.18564/jasss.3669</a></li>
+      <li id="ref-hegselmann2002">Hegselmann, R., &amp; Krause, U. (2002). Opinion dynamics and bounded confidence: models, analysis and simulation. <em>Journal of Artificial Societies and Social Simulation</em>, <em>5</em>(3), 2. <a href="https://www.jasss.org/5/3/2.html" target="_blank" rel="noopener">https://www.jasss.org/5/3/2.html</a></li>
+      <li id="ref-lakens2017">Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. <em>Social Psychological and Personality Science</em>, <em>8</em>(4), 355–362. <a href="https://doi.org/10.1177/1948550617697177" target="_blank" rel="noopener">https://doi.org/10.1177/1948550617697177</a></li>
+      <li id="ref-li2026">Li, G. J., Luo, J., &amp; Chu, W. (2026). Bounded-confidence models of multidimensional opinions with topic-weighted discordance. <em>SIAM Journal on Applied Dynamical Systems</em>. <a href="https://doi.org/10.1137/25M1730818" target="_blank" rel="noopener">https://doi.org/10.1137/25M1730818</a></li>
+      <li id="ref-lorenz2008">Lorenz, J. (2008). Fostering consensus in multidimensional continuous opinion dynamics under bounded confidence. In D. Helbing (Ed.), <em>Managing Complexity: Insights, Concepts, Applications</em> (pp. 321–334). Springer.</li>
+      <li id="ref-wilensky2007">Wilensky, U., &amp; Rand, W. (2007). Making models match: replicating an agent-based model. <em>Journal of Artificial Societies and Social Simulation</em>, <em>10</em>(4), 2. <a href="https://www.jasss.org/10/4/2.html" target="_blank" rel="noopener">https://www.jasss.org/10/4/2.html</a></li>
+    </ol>
+
+    <h2 id="appendix">Appendices</h2>
+    <h3 id="app-odd">A. The minimal model</h3>
+    <p>Agents hold opinions in <span class="math">[0,1]<sup>d</sup></span> or <span class="math">[−1,1]<sup>d</sup></span> on a fixed Erdős–Rényi graph with 500 nodes and mean degree 10. Each round draws a random matching of edges, evaluates the gate for every matched pair, and moves both agents of every pair that passes by <span class="math">μ</span> = 0.3 toward each other, then clips to the cube. Initial opinions are independent and uniform; the graph and initial opinions come from one random stream and the matchings from another, so runs that share a seed differ only in the gate, the update step and <span class="math">ε</span>. Outcomes are recorded after 500, 1,000, 2,000 and 4,000 rounds.</p>
+    <h3 id="app-policyswarm">B. PolicySwarm as used in Section 3</h3>
+    <p>120 agents on a Barabási–Albert network (<span class="math">m</span> = 3) hold opinions in <span class="math">[−1,1]<sup>4</sup></span>, an ideology in [−1, 1], a fixed trust drawn from Beta(2, 2) and an influence weight proportional to their degree. Each of 60 ticks applies, in order: a policy tightening at tick 30; scheduled shocks, which move a hub group or ten random agents toward the neutral centre; a media pull scaled by ideology and trust; 150 conversation attempts under the gate, with half blocked by the deployment cap and violators' influence halved after the enforcement lag; the policy pull; and, after the lag, the pull toward the perceived policy defined in <a href="#case">Section 3</a>, with noise of standard deviation 0.06. The Euclidean threshold is <span class="math">ε</span> = 1.0 in centred coordinates. Paired runs with and without shocks share every other random stream. The longer version lists every parameter and threshold.</p>
+
+  </article>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <h2 class="footer-head">Let's talk about what you're building.</h2>
+    <div class="footer-ctas">
+      <a class="btn btn-primary" href="mailto:addala.ks@gmail.com">addala.ks@gmail.com</a>
+      <a class="btn" href="../resume.pdf" target="_blank">Download resume</a>
+      <a class="btn" href="https://github.com/D0nu-t" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://linkedin.com/in/krishnasai-addala" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-meta">
+      <a href="../index.html#publications">← Publications</a>
+      <span>© 2026 Krishnasai Addala</span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../src/main.ts"></script>
+<script type="module" src="../src/papers/hidden-choices/index.ts"></script>
+</body>
+</html>

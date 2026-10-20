@@ -12,6 +12,7 @@ export default defineConfig({
         tinynla:           resolve(__dirname, 'projects/TinyNLA.html'),
         policySimulator:   resolve(__dirname, 'projects/policy-simulator.html'),
         graph:             resolve(__dirname, 'projects/graph.html'),
+        hiddenChoices:     resolve(__dirname, 'projects/hidden-choices.html'),
       },
     },
   },

@@ -48,7 +48,7 @@
     <a class="back-link" href="../index.html#publications">← Publications</a>
     <p class="paper-status">Working paper · October 2026 · Not peer reviewed · About 15 min read</p>
     <h1 class="paper-title">Hidden Choices: How Thresholds, Origins and Tests <span class="accent">Manufacture and Hide Effects</span> in Bounded-Confidence Models</h1>
-    <p class="dek">In an early draft I reported that the way agents measure disagreement reverses the effect of enforcement delays in a model of AI regulation. It did not. This is how five quiet modelling choices produced that result, and how to check for them.</p>
+    <p class="dek">In an early draft I reported that the way agents measure disagreement reverses the effect of enforcement delays in a model of AI regulation. Five unreported modelling choices produced that result, and each can be checked for.</p>
     <p class="paper-author">Krishnasai Addala, independent researcher</p>
 
     <ol class="choice-grid" aria-label="The five choices">
@@ -67,14 +67,14 @@
     <ul class="toc-list">
       <li><a href="#lede">A result that fell apart</a></li>
       <li><a href="#distance">Why a distance at all</a></li>
-      <li><a href="#test">The reversal that wasn't</a></li>
-      <li><a href="#origin">Where is zero?</a></li>
-      <li><a href="#threshold">One number, three rules</a></li>
-      <li><a href="#matching">Matching at the start isn't matching</a></li>
-      <li><a href="#ruler">Counting with one ruler</a></li>
+      <li><a href="#test">Reading the right test</a></li>
+      <li><a href="#origin">Where the origin sits</a></li>
+      <li><a href="#threshold">One threshold for every geometry</a></li>
+      <li><a href="#matching">When to match</a></li>
+      <li><a href="#ruler">How groups are counted</a></li>
       <li><a href="#matters">Why it matters</a></li>
       <li><a href="#audit">A checklist</a></li>
-      <li><a href="#limitations">What this doesn't show</a></li>
+      <li><a href="#limitations">Limitations</a></li>
       <li><a href="#references">References</a></li>
       <li><a href="#methods">Models and methods</a></li>
     </ul>
@@ -83,16 +83,16 @@
   <article class="project-body">
 
     <h2 id="lede">A result that fell apart</h2>
-    <p>PolicySwarm, my agent-based model of how a population's views on AI regulation move, had a striking finding in an early draft. Under ordinary Euclidean distance, a longer delay before a policy is enforced made the population react more strongly to shocks: an index of about 130 against a baseline of 100. Under cosine distance the same delay made it react less, at about 75. Geometry seemed to reverse the effect of enforcement lag, and read as policy advice, that would mean whether delays make a population more fragile hinges on how the model measures disagreement.</p>
-    <p>An internal audit found the problem before the draft went anywhere. The reversal was not a coding error. It came from two choices that are easy to make without noticing, and three more turned up while I checked how general the problem was. Each of the five can create an effect or hide one, and none of them shows up in a results table unless it is reported. This piece walks through them, with demos you can run in the browser.</p>
+    <p>PolicySwarm, my agent-based model of how a population's views on AI regulation move, produced this finding in an early draft. Under ordinary Euclidean distance, a longer delay before a policy is enforced made the population react more strongly to shocks: an index of about 130 against a baseline of 100. Under cosine distance the same delay made it react less, at about 75. Geometry seemed to reverse the effect of enforcement lag, and read as policy advice, that would mean whether delays make a population more fragile hinges on how the model measures disagreement.</p>
+    <p>An internal audit caught it before the draft went anywhere. The code was correct. Two choices that are easy to make without noticing produced the reversal, and three more turned up while I checked how general the problem was. Each of the five can create an effect or hide one, and a results table shows none of them unless the choice is reported. The demos below run in the browser.</p>
 
     <h2 id="distance">Why a distance at all</h2>
     <p>In a bounded-confidence model, two agents influence each other only when their opinions are close enough (<a class="cite" href="#ref-deffuant2000">Deffuant et al.</a>, <a class="cite" href="#ref-hegselmann2002">Hegselmann and Krause</a>). With one opinion that is simple. With several opinion dimensions, "close enough" needs a distance, and the choice of distance has become a modelling question of its own.</p>
     <p>I call a distance measure together with its update step a <em>geometry</em>. The <em>gate</em> lets two agents talk when their distance is at most a threshold <span class="math">ε</span>. Under Euclidean distance the listener then moves part of the way toward the speaker in a straight line. Under cosine distance, or the plain angle between two opinions, it rotates its opinion and keeps its length. Two measures of how permissive a gate is come up throughout: its <em>coverage</em>, the share of opinion pairs within the threshold at one moment, and its <em>pass rate</em>, the share of attempted conversations that get through during a run.</p>
 
-    <h2 id="test">The reversal that wasn't</h2>
+    <h2 id="test">Reading the right test</h2>
     <p>The draft read each geometry on its own. For each one it computed a <em>lag index</em>: the shock effect at a lag of 40 ticks as a percentage of the effect at no lag. Euclidean landed above 100 and cosine below it, so the draft called it a reversal.</p>
-    <p>That reading tests the wrong thing. A claim that geometry changes an effect is a claim about the difference between geometries, and only a test of that difference, the <em>interaction</em>, checks it (<a class="cite" href="#ref-gelman2006">Gelman and Stern</a>). The interaction here is how much lag changes the shock effect under cosine, minus how much it changes it under Euclidean, with runs paired by seed. A positive value means lag enlarges the effect less under cosine, so that cosine <em>attenuates</em> the lag effect rather than reversing it.</p>
+    <p>A claim that geometry changes an effect is a claim about the difference between geometries, and only a test of that difference, the <em>interaction</em>, checks it (<a class="cite" href="#ref-gelman2006">Gelman and Stern</a>). The interaction here is how much lag changes the shock effect under cosine, minus how much it changes it under Euclidean, with runs paired by seed. A positive value means lag enlarges the effect less under cosine, so that cosine <em>attenuates</em> the lag effect rather than reversing it.</p>
 
     <section class="demo" id="demo-interaction" data-demo="interaction" aria-labelledby="demo-interaction-title"
       data-euc-idx="132" data-cos-idx="78" data-inter="+0.034"
@@ -116,7 +116,7 @@
       <figcaption>The lag × geometry interaction in every configuration, with 95% intervals over 100 paired seeds. Right of zero: cosine attenuates the lag effect. Dotted lines mark the equivalence margin. Orange: the draft's engine, alone or with the audit's changes named in the label. Blue: the audited engine, by gate space, threshold rule, policy pull and trust target.</figcaption>
     </figure>
 
-    <h2 id="origin">Where is zero?</h2>
+    <h2 id="origin">Where the origin sits</h2>
     <p>Euclidean distance does not care where the origin of the opinion space is. Angles do, because they measure direction from the origin. So does anything that shrinks a quantity toward a point. The draft coded opinions in the unit cube, which puts the origin in the corner where every dimension is at its minimum, the "regulate nothing" corner.</p>
 
     <section class="demo" id="demo-origin" data-demo="origin" aria-labelledby="demo-origin-title">
@@ -170,11 +170,11 @@
     </div>
 
     <p>The status quo behaves like the centre, as it must when starting opinions are uniform. Shrinking toward the corner leaves lag little effect under cosine (106). Shrinking toward the agent's own opinion makes the interaction equivalent to zero (+0.001), and in the draft's setting the same target makes it negative (−0.019). Euclidean's lag index alone runs from 113 to 147 across the four. The right target depends on how distrust distorts a policy signal, which the model cannot decide, so a study that uses such a model should state the target and vary it.</p>
-    <p>What survives? In the recommended design, with trust shrinking toward the centre, lag enlarges the shock effect under both geometries and less under cosine (indices 146 and 134, interaction +0.034 [+0.027, +0.042]). I would report that result, with the condition the target sweep attaches to it.</p>
+    <p>In the recommended design, with trust shrinking toward the centre, lag enlarges the shock effect under both geometries and less under cosine (indices 146 and 134, interaction +0.034 [+0.027, +0.042]). I would report that result, with the condition the target sweep attaches to it.</p>
 
-    <h2 id="threshold">One number, three rules</h2>
+    <h2 id="threshold">One threshold for every geometry</h2>
     <p>The other three choices are easier to see in a stripped-down model: a minimal Deffuant model with 500 agents, run for 2,000 rounds, under Euclidean, cosine and angular gates (details in <a href="#methods">Models and methods</a>).</p>
-    <p>The first is the most common shortcut: give every geometry the same threshold number. One shared number admits very different shares of pairs. In the unit cube at <span class="math">ε</span> = 0.5, a cosine gate admits 94% of pairs in four dimensions, and a Euclidean gate 14%. A comparison run that way mostly measures how often agents talk.</p>
+    <p>The simplest approach gives every geometry the same threshold number. One shared number admits very different shares of pairs. In the unit cube at <span class="math">ε</span> = 0.5, a cosine gate admits 94% of pairs in four dimensions, and a Euclidean gate 14%. A comparison run that way mostly measures how often agents talk.</p>
 
     <section class="demo" id="demo-coverage" data-demo="coverage" aria-labelledby="demo-coverage-title">
       <div class="demo-head">
@@ -201,7 +201,7 @@
       <p class="demo-note">The bars give each gate's share of 6,000 uniformly drawn pairs at the same ε. The panels draw 70 of those pairs on the first two of the <span class="math">d</span> dimensions and light the ones each gate admits. At the defaults (unit cube, ε = 0.5, <span class="math">d</span> = 4) the shares match Table 2 within sampling error.</p>
     </section>
 
-    <p>The gap does not shrink with more dimensions. It grows, because distances concentrate as the dimension rises (<a class="cite" href="#ref-aggarwal2001">Aggarwal et al.</a>):</p>
+    <p>With more dimensions the gap widens, because distances concentrate as the dimension rises (<a class="cite" href="#ref-aggarwal2001">Aggarwal et al.</a>):</p>
 
     <div class="proposition">
       <p><strong>Proposition 1 (coverage at a fixed threshold).</strong> For independent uniform opinions, as <span class="math">d → ∞</span>, <span class="math">‖x<sub>i</sub> − x<sub>j</sub>‖ / √d</span> converges to <span class="math">1/√6</span> in <span class="math">[0,1]<sup>d</sup></span> and to <span class="math">√(2/3)</span> in <span class="math">[−1,1]<sup>d</sup></span>; <span class="math">cos θ<sub>ij</sub></span> converges to <span class="math">3/4</span> in <span class="math">[0,1]<sup>d</sup></span> and to <span class="math">0</span> in <span class="math">[−1,1]<sup>d</sup></span>. Hence at a fixed threshold, cosine and angular coverage tend to 0 or 1 according to which side of these limits the threshold falls, and Euclidean coverage tends to 0 unless the threshold grows like <span class="math">√d</span>.</p>
@@ -209,8 +209,8 @@
 
     <p>Each limit follows from the law of large numbers. In the minimal model, a shared threshold leaves the pass rate apart by a median of 0.258 of attempted conversations under cosine, and it is equivalent to Euclidean's in no cell.</p>
 
-    <h2 id="matching">Matching at the start isn't matching</h2>
-    <p>The obvious fix is to give each geometry the threshold that admits the same share of pairs at the start of the run. That does not hold. Coverage drifts as opinions converge, and faster under Euclidean distance than under the angular geometries, whose steps rotate an opinion without shortening it. Start-matched gates end with pass rates apart by a median of 0.162.</p>
+    <h2 id="matching">When to match</h2>
+    <p>The obvious fix gives each geometry the threshold that admits the same share of pairs at the start of the run. Coverage then drifts as opinions converge, and faster under Euclidean distance than under the angular geometries, whose steps rotate an opinion without shortening it. Start-matched gates end with pass rates apart by a median of 0.162.</p>
 
     <section class="demo" id="demo-matching" data-demo="matching" aria-labelledby="demo-matching-title">
       <div class="demo-head">
@@ -238,11 +238,11 @@
       <figcaption>Number of opinion groups (at least 1% of agents, common ruler) against the pass rate as the threshold varies, each point the mean of 50 seeds with a band of ±1.96 standard errors. Markers: the main runs under each threshold rule. Log scale on the vertical axis.</figcaption>
     </figure>
 
-    <p>So matching is not a fix. It is a choice of question. A start-matched comparison includes a geometry's effect on how often agents interact, and a run-matched one removes it. Both are legitimate, and a study should say which one it answers. My own first draft claimed run-matching removed the gap, because it counted an outcome that the pass rate nearly fixes once groups have formed.</p>
+    <p>Matching therefore chooses the question. A start-matched comparison includes a geometry's effect on how often agents interact, and a run-matched one removes it. A study should say which one it answers. My own first draft claimed run-matching removed the gap, because it counted an outcome that the pass rate nearly fixes once groups have formed.</p>
     <p>One gap does survive run-matching: the angular geometries leave final opinions more spread out. Crossing the gate with the update step shows where that comes from. A Euclidean gate with the cosine step produces most of the spread (+1.09, against +1.44 for the pure cosine pairing), while a cosine gate with the Euclidean step produces much less (+0.43). The spread is mostly the update step's doing, and a comparison that swaps the gate and the step together cannot tell the two apart.</p>
 
-    <h2 id="ruler">Counting with one ruler</h2>
-    <p>The last choice sits at the very end of the pipeline. My first draft counted opinion groups within a fraction of each run's own <span class="math">ε</span>. Start-matched cosine and angular gates admit exactly the same pairs, since one distance is a strictly increasing function of the other. Yet under that rule their group counts agreed in only 10 of 18 cells. With one common ruler they agree in all 18. The difference came from the ruler.</p>
+    <h2 id="ruler">How groups are counted</h2>
+    <p>My first draft counted opinion groups within a fraction of each run's own <span class="math">ε</span>. Start-matched cosine and angular gates admit exactly the same pairs, since one distance is a strictly increasing function of the other. Yet under that rule their group counts agreed in only 10 of 18 cells, and with one common ruler they agree in all 18.</p>
 
     <section class="demo" id="demo-ruler" data-demo="ruler" aria-labelledby="demo-ruler-title">
       <div class="demo-head">
@@ -262,28 +262,28 @@
       <p class="demo-note">An illustration: 120 agents on a circle of directions. The cosine gate at ε = 0.06 and the angular gate at arccos(1 − 0.06) admit the same pairs and use the same step, so the two runs end with identical opinions. Counting within half of each run's own ε gives two different radii, and the counts can differ. One common radius gives the same count for both. We chose a starting draw where the own-radius counts differ.</p>
     </section>
 
-    <p>The stopping time belongs with the ruler. After 500 rounds, 44% of Euclidean runs are still changing, and after 4,000, 13% are. The group gaps barely move over that range (0.93 to 0.87 for start-matched gates), so the remaining difference is not a transient. Only reporting the stopping time and checking a longer run shows that.</p>
+    <p>The stopping time needs reporting too. After 500 rounds, 44% of Euclidean runs are still changing, and after 4,000, 13% are. The group gaps barely move over that range (0.93 to 0.87 for start-matched gates), so the remaining difference is not a transient. Only reporting the stopping time and checking a longer run shows that.</p>
 
     <h2 id="matters">Why it matters</h2>
-    <p>For anyone comparing distance measures, each of the five choices can produce or remove a difference on its own. In my two models a shared threshold moved the pass rate by a median of 0.177 to 0.258 of attempted conversations, a geometry-specific ruler left two identical gates agreeing in only 10 of 18 cells, and a test read against a benchmark turned an attenuation into a reported reversal. None of these is a bug, and none is visible in a results table.</p>
-    <p>For models used to inform policy, the stakes are plainer. Whether enforcement delays make a population more or less fragile after shocks depended on the test read, on where the opinion space put its origin, and on a trust target that nobody had measured. A policy model is useful only when its assumptions are visible (<a class="cite" href="#ref-gilbert2018">Gilbert et al.</a>), and any trust or credibility parameter that shrinks or scales a signal carries an origin with it. The same problems apply to any comparison of model variants that share a free parameter on different scales, which is the old docking problem (<a class="cite" href="#ref-axtell1996">Axtell et al.</a>, <a class="cite" href="#ref-wilensky2007">Wilensky and Rand</a>) in a narrower form.</p>
+    <p>For anyone comparing distance measures, each of the five choices can produce or remove a difference on its own. In my two models a shared threshold moved the pass rate by a median of 0.177 to 0.258 of attempted conversations, a geometry-specific ruler left two identical gates agreeing in only 10 of 18 cells, and a test read against a benchmark turned an attenuation into a reported reversal. </p>
+    <p>For models used to inform policy, the problem is more direct. Whether enforcement delays make a population more or less fragile after shocks depended on the test read, on where the opinion space put its origin, and on a trust target that nobody had measured. A policy model is useful only when its assumptions are visible (<a class="cite" href="#ref-gilbert2018">Gilbert et al.</a>), and any trust or credibility parameter that shrinks or scales a signal carries an origin with it. The same problems apply to any comparison of model variants that share a free parameter on different scales, which is the old docking problem (<a class="cite" href="#ref-axtell1996">Axtell et al.</a>, <a class="cite" href="#ref-wilensky2007">Wilensky and Rand</a>) in a narrower form.</p>
 
     <h2 id="audit">A checklist</h2>
     <div class="audit">
       <h3>Before reporting that a distance measure changes a result</h3>
       <ol>
-        <li><strong>Test the comparison.</strong> A claim that a geometry changes an effect is an interaction, so test it directly, and support "no difference" with an equivalence test (<a class="cite" href="#ref-lakens2017">Lakens</a>).</li>
-        <li><strong>Audit the origin.</strong> Shift and rescale the opinion space and rerun a few seeds. Anything that changes depends on the origin. Treat every shrinkage or decay target as an explicit, varied assumption.</li>
-        <li><strong>Do not rely on a shared threshold value.</strong> If you use one, show that the pass rates match.</li>
-        <li><strong>Report the response to <span class="math">ε</span>, not one matched point.</strong> Start-, early- and run-matched points answer different questions, so name the one you report.</li>
-        <li><strong>Check for monotone equivalence.</strong> Distance measures related by a strictly increasing function are one gate once matched.</li>
-        <li><strong>Report the ruler and the stopping time.</strong> Count groups with one rule for every geometry, and say how many runs have not settled.</li>
+        <li>Test the comparison. A claim that a geometry changes an effect is an interaction, so test it directly, and support "no difference" with an equivalence test (<a class="cite" href="#ref-lakens2017">Lakens</a>).</li>
+        <li>Audit the origin. Shift and rescale the opinion space and rerun a few seeds. Anything that changes depends on the origin. Treat every shrinkage or decay target as an explicit, varied assumption.</li>
+        <li>Do not rely on a shared threshold value. If you use one, show that the pass rates match.</li>
+        <li>Report the response to <span class="math">ε</span>, not one matched point. Start-, early- and run-matched points answer different questions, so name the one you report.</li>
+        <li>Check for monotone equivalence. Distance measures related by a strictly increasing function are one gate once matched.</li>
+        <li>Report the ruler and the stopping time. Count groups with one rule for every geometry, and say how many runs have not settled.</li>
       </ol>
     </div>
     <p>Applying the list costs a fraction of the comparison itself: a few reruns or a recount of saved states, about ten thresholds per geometry for the response curves, and one bisection per cell for run-matching.</p>
 
-    <h2 id="limitations">What this doesn't show</h2>
-    <p>I have not measured how often published comparisons make these choices, so this is a warning, not a survey. Opinions start uniform and independent, the minimal model uses pairwise Deffuant updates only, and I did not vary <span class="math">μ</span>, the population size or the network. Runs stop at 4,000 rounds, when 14% have not settled. The case study rests on one model with its own trust mechanism, though the general point, that multiplicative steps inherit the meaning of the origin, does not. Every number on this page is rebuilt by one script from the saved results.</p>
+    <h2 id="limitations">Limitations</h2>
+    <p>I have not measured how often published comparisons make these choices, so these results show that the problem can occur, not how often it does. Opinions start uniform and independent, the minimal model uses pairwise Deffuant updates only, and I did not vary <span class="math">μ</span>, the population size or the network. Runs stop at 4,000 rounds, when 14% have not settled. The case study rests on one model with its own trust mechanism, though the general point, that multiplicative steps inherit the meaning of the origin, does not. Every number on this page is rebuilt by one script from the saved results.</p>
 
     <h2 id="references">References</h2>
     <ol class="refs">

@@ -217,3 +217,13 @@
 .refs li { margin-bottom: 0.55rem; padding-left: 1.4rem; text-indent: -1.4rem; }
 .refs li:target { background: var(--panel); outline: 1px solid var(--green-deep); }
 .refs a { color: var(--green-mid); word-break: break-word; }
+
+/* article: dek under the title, methods box at the end */
+.dek { font-family: var(--font-sans); font-size: clamp(1rem, 2vw, 1.15rem); line-height: 1.55; color: var(--text); max-width: 60ch; margin: 1rem 0 0; }
+.methods { background: var(--panel); border: 1px solid var(--hairline); border-radius: 6px; margin: 2.5rem 0 1rem; }
+.methods > summary { cursor: pointer; padding: 0.85rem 1.2rem; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--green-mid); letter-spacing: 0.04em; min-height: 44px; display: flex; align-items: center; }
+.methods > summary:hover { color: var(--green-bright); }
+.methods > summary:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 2px; }
+.methods[open] > summary { border-bottom: 1px solid var(--hairline); }
+.methods > :not(summary) { padding-left: 1.2rem; padding-right: 1.2rem; }
+.methods > p:last-child { padding-bottom: 1rem; }

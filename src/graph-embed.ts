@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import type { GraphNode, GraphLink, NodeCategory } from './types'
 import { prefersReducedMotion } from './motion'
+import { wireSelection } from './graph-select'
 import {
   buildNodes, buildLinks, nodeRadius,
   CATEGORY_COLOR, CATEGORY_LABEL,
@@ -189,8 +190,7 @@ export function initGraphEmbed(containerId: string): void {
   // ── Hover highlighting ────────────────────────────────────────────────────────
   const linkedIds = new Set<string>()
 
-  nodeEl
-    .on('mouseenter', (_e, d) => {
+  const highlight = (d: GraphNode): void => {
       linkedIds.clear()
       linkedIds.add(d.id)
       links.forEach(l => {
@@ -234,8 +234,8 @@ export function initGraphEmbed(containerId: string): void {
         })
 
       showTooltip(d)
-    })
-    .on('mouseleave', () => {
+  }
+  const clearHighlight = (): void => {
       linkedIds.clear()
       nodeEl.select('circle')
         .attr('fill-opacity', (n: GraphNode) => n.type === 'project' ? 0.18 : 0.12)
@@ -246,7 +246,14 @@ export function initGraphEmbed(containerId: string): void {
         .attr('stroke-opacity', 0.5)
         .attr('stroke-width', 1)
       hideTooltip()
-    })
+  }
+
+  // Hover previews; click or search pins and fills the details panel
+  wireSelection({
+    nodes, nodeEl, highlight, clear: clearHighlight,
+    search: document.querySelector<HTMLInputElement>('#embed-search'),
+    details: document.getElementById('embed-details'),
+  })
 
   // ── Tick ─────────────────────────────────────────────────────────────────────
   const render = (): void => {

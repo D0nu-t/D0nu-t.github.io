@@ -49,8 +49,14 @@
         <h1 class="panel-label">Skills Graph</h1>
         <p class="panel-desc">
           Force-directed map of skills and the projects they appear in.
-          Hover over a node to see its connections. Drag to rearrange. Scroll to zoom.
+          Hover over a node to see its connections, or click to keep it selected. Drag to rearrange. Scroll to zoom.
         </p>
+      </div>
+
+      <div class="panel-section">
+        <label class="panel-label" for="graph-search">Find</label>
+        <input class="panel-search" type="search" id="graph-search" placeholder="a skill or project" autocomplete="off">
+        <div class="sel-details" id="graph-details" aria-live="polite" hidden></div>
       </div>
 
       <div class="panel-section">
@@ -114,6 +120,11 @@
           <button class="zoom-btn" id="zoom-out" aria-label="Zoom out">−</button>
           <button class="zoom-btn" id="zoom-reset" aria-label="Reset view">↺</button>
         </div>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-label">Export</p>
+        <button class="filter-btn" type="button" data-copy="graph" title="Copy the graph as Markdown, ready to paste into an AI assistant">Copy graph as Markdown</button>
       </div>
 
       <!-- Tooltip -->

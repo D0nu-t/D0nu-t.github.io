@@ -61,6 +61,7 @@
         <a class="btn btn-primary" href="#contact">Get in touch</a>
         <a class="btn" href="resume.pdf" target="_blank">Download resume</a>
         <a class="btn" href="https://github.com/D0nu-t" target="_blank" rel="noopener">GitHub</a>
+        <button class="btn" type="button" data-copy="profile" title="Copy this page as Markdown, ready to paste into an AI assistant">Copy page as Markdown</button>
       </div>
     </div>
 <div class="hero-vis" style="background:transparent;border:none;padding:0;overflow:visible;align-self:center;">
@@ -511,6 +512,13 @@
       </div>
     </div>
 
+    <!-- Find, list view, copy -->
+    <div class="embed-tools" data-reveal>
+      <label class="embed-find">Find <input type="search" id="embed-search" placeholder="a skill or project" autocomplete="off"></label>
+      <button class="btn" type="button" id="embed-list-toggle" aria-pressed="false">List view</button>
+      <button class="btn" type="button" data-copy="graph" title="Copy the graph as Markdown, ready to paste into an AI assistant">Copy graph as Markdown</button>
+    </div>
+
     <!-- Graph canvas -->
     <div class="embed-wrap" data-reveal>
       <div class="graph-embed-canvas" id="graph-embed"></div>
@@ -522,9 +530,15 @@
       </div>
       <!-- Hint overlay (fades on first interaction) -->
       <div class="embed-hint" id="embed-hint" >
-        <span>Hover over a node · Drag to rearrange · Scroll to zoom</span>
+        <span>Hover or click a node · Drag to rearrange · Scroll to zoom</span>
       </div>
     </div>
+
+    <!-- What the selected node connects to -->
+    <div class="sel-details" id="embed-details" aria-live="polite" hidden></div>
+
+    <!-- The same data as a list -->
+    <div class="graph-list" id="graph-list" hidden></div>
 
   </div>
 </section>
@@ -572,6 +586,7 @@
     <div class="footer-ctas">
       <a class="btn btn-primary" href="mailto:addala.ks@gmail.com">addala.ks@gmail.com</a>
       <button class="btn" data-copy-email="addala.ks@gmail.com">Copy email</button>
+      <button class="btn" type="button" data-copy="profile" title="Copy this page as Markdown, ready to paste into an AI assistant">Copy page as Markdown</button>
       <a class="btn" href="resume.pdf" target="_blank">Download resume</a>
       <a class="btn" href="https://github.com/D0nu-t" target="_blank" rel="noopener">GitHub</a>
       <a class="btn" href="https://linkedin.com/in/krishnasaiaddala" target="_blank" rel="noopener">LinkedIn</a>

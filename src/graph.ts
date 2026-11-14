@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import type { GraphNode, GraphLink, NodeCategory } from './types'
 import { prefersReducedMotion } from './motion'
+import { wireSelection } from './graph-select'
 import {
   buildNodes, buildLinks, nodeRadius,
   CATEGORY_COLOR, CATEGORY_LABEL,
@@ -199,8 +200,7 @@ export function initGraph(containerId: string): void {
     })
   }
 
-  nodeEl
-    .on('mouseenter', function(_event, d) {
+  const highlight = (d: GraphNode): void => {
       buildLinkedSet(d.id)
 
       nodeEl.select('circle')
@@ -260,8 +260,8 @@ export function initGraph(containerId: string): void {
         `
         tooltipEl.style.opacity = '1'
       }
-    })
-    .on('mouseleave', function() {
+  }
+  const clearHighlight = (): void => {
       linkedSet.clear()
 
       nodeEl.select('circle')
@@ -277,7 +277,14 @@ export function initGraph(containerId: string): void {
 
       const tooltipEl = document.getElementById('graph-tooltip')
       if (tooltipEl) tooltipEl.style.opacity = '0'
-    })
+  }
+
+  // Hover previews; click or search pins and fills the details panel
+  wireSelection({
+    nodes, nodeEl, highlight, clear: clearHighlight,
+    search: document.querySelector<HTMLInputElement>('#graph-search'),
+    details: document.getElementById('graph-details'),
+  })
 
   // ── Tick ──────────────────────────────────────────────────────────────────
   const render = (): void => {

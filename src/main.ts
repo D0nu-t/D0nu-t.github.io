@@ -1,6 +1,7 @@
 import type { NavSection, CounterOptions, RevealOptions } from './types'
 import { initGraphEmbed } from './graph-embed'
 import { initTCG } from './tcg'
+import { graphOnlyMarkdown, profileMarkdown, renderGraphList, wireCopy } from './export'
 import { prefersReducedMotion } from './motion'
 
 const NAV_SECTIONS: NavSection[] = [
@@ -92,6 +93,31 @@ function initCopyEmail(): void {
   })
 }
 
+// Copy-as-Markdown buttons: the whole home page, or only the skills graph
+function initCopyMarkdown(): void {
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(btn =>
+    wireCopy(btn, btn.dataset.copy === 'profile' ? () => profileMarkdown() : graphOnlyMarkdown))
+}
+
+// Skills section: switch between the drawn graph and a plain list of the same data
+function initGraphListToggle(): void {
+  const toggle = document.getElementById('embed-list-toggle')
+  const list = document.getElementById('graph-list')
+  const section = document.getElementById('skills')
+  if (!toggle || !list || !section) return
+  let rendered = false
+  const show = (asList: boolean): void => {
+    if (asList && !rendered) { renderGraphList(list); rendered = true }
+    list.hidden = !asList
+    section.classList.toggle('is-list', asList)
+    toggle.setAttribute('aria-pressed', String(asList))
+    toggle.textContent = asList ? 'Graph view' : 'List view'
+  }
+  toggle.addEventListener('click', () => show(list.hidden))
+  // A force graph is hard to read on a phone, so small screens start with the list
+  if (window.matchMedia('(max-width: 640px)').matches) show(true)
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavTracking()
   initReveal()
@@ -101,4 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTCG()
   const embed = document.getElementById('graph-embed')
   if (embed) initGraphEmbed('graph-embed')
+  initGraphListToggle()
+  initCopyMarkdown()
 })

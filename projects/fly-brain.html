@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fly brain: a taste circuit you can run · Krishnasai Addala</title>
+<meta name="description" content="A 3D view of the adult fruit fly brain with one real circuit simulated in the browser: switch on the sugar taste neurons, watch the signal reach a motor neuron, and silence neurons to see what changes.">
+<link rel="canonical" href="https://krishnasai.is-a.dev/projects/fly-brain.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Krishnasai Addala">
+<meta property="og:title" content="Fly brain: a taste circuit you can run">
+<meta property="og:description" content="A 3D view of the adult fruit fly brain with one real circuit simulated in the browser.">
+<meta property="og:url" content="https://krishnasai.is-a.dev/projects/fly-brain.html">
+<meta property="og:image" content="https://krishnasai.is-a.dev/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Krishnasai Addala: Describing the World, One Model at a Time">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/styles/main.css">
+<link rel="stylesheet" href="../src/styles/paper.css">
+<link rel="stylesheet" href="../src/styles/flybrain.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230d1117'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-size='13' font-weight='600' fill='%234ade80'>KA</text></svg>">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="nav-mark"><strong>KA</strong><span class="nav-mark-name"> · Krishnasai Addala</span></a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#skills">Skills Graph</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+  <header class="wrap fly-head">
+    <a class="back-link" href="../index.html">← Home</a>
+    <h1>Fly brain: a taste circuit you can run</h1>
+    <p class="dek">Each dot is a neuron from the wiring map of an adult fruit fly brain. The bright ones carry a taste of sugar to the motor neuron that extends the proboscis. Switch the sugar neurons on, watch the signal travel, then silence a neuron and see what changes.</p>
+  </header>
+
+  <div class="wrap">
+    <section class="fly" data-flybrain data-src="../data/flybrain/" aria-label="Fly brain simulation">
+
+      <div class="fly-stage">
+        <canvas class="fly-canvas" data-fly="canvas" role="img" aria-label="Point cloud of the fly brain. Neurons in the circuit flash when they fire."></canvas>
+        <p class="fly-hint">Drag to turn the brain. Click or tap a bright neuron to select it.</p>
+        <p class="fly-status" data-fly="status" aria-live="polite">Loading the brain…</p>
+        <canvas class="fly-raster" data-fly="raster" role="img" aria-label="Recent spikes, one row per neuron"></canvas>
+        <p class="fly-note">Spikes over the last 250 ms of brain time. Taste neurons are at the top and the motor neuron is the bottom row.</p>
+      </div>
+
+      <div class="fly-panel">
+        <p class="fly-note" data-fly="summary"></p>
+
+        <div class="fly-row" data-fly="circuits" hidden></div>
+
+        <div class="fly-group">
+          <p class="fly-label">Stimulate</p>
+          <div class="fly-row" data-fly="stimuli"></div>
+        </div>
+
+        <div class="fly-group">
+          <p class="fly-label">Run</p>
+          <div class="fly-row">
+            <button class="demo-btn" type="button" data-action="play" aria-pressed="true">Pause</button>
+            <button class="demo-btn" type="button" data-action="reset">Reset</button>
+            <span class="seg" role="group" aria-label="Speed">
+              <button class="demo-btn" type="button" data-speed="slow" aria-pressed="true" title="60 ms of brain time per second">Slow</button>
+              <button class="demo-btn" type="button" data-speed="fast" aria-pressed="false" title="300 ms of brain time per second">Fast</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="fly-group">
+          <p class="fly-label">Output</p>
+          <div data-fly="readouts"></div>
+        </div>
+
+        <div class="fly-group" data-fly="try-wrap">
+          <p class="fly-label">Neurons to try silencing</p>
+          <div class="fly-row" data-fly="try"></div>
+          <p class="fly-note">Motor neuron rate with and without each one, from the whole-brain run. Select one, press Silence, and compare the average. Fast gets there sooner.</p>
+        </div>
+
+        <div class="fly-row" data-fly="silenced" hidden>
+          <span class="fly-note"></span>
+          <button class="sel-clear" type="button" data-action="restore">Restore all</button>
+        </div>
+
+        <div class="sel-details" data-fly="details" aria-live="polite" hidden></div>
+
+        <ul class="fly-legend" aria-label="Legend">
+          <li><i style="background:#4ade80"></i>excites its targets</li>
+          <li><i style="background:#f59e0b"></i>inhibits its targets</li>
+          <li><i class="ring"></i>stimulated or measured</li>
+          <li><i class="line" style="background:#5eead4"></i>sends to</li>
+          <li><i class="line" style="background:#c4b5fd"></i>hears from</li>
+        </ul>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="wrap fly-text">
+    <article class="project-body">
+      <h2>What this shows</h2>
+      <p>The grey cloud is the brain itself: 22,000 neuron positions sampled from the 139,248 neurons annotated in the FlyWire map of one adult female fly. The coloured dots are the 533 neurons of the circuit, joined by 29,111 connections.</p>
+      <p>Every neuron follows the same simple rule. Its voltage leaks back towards rest, each incoming spike nudges it up or down by 0.275 mV per synapse, and it fires when it crosses a threshold. Whether a neuron excites or inhibits its targets comes from the transmitter predicted for it. The rule and its constants are those of the whole-brain model published by Shiu and colleagues in 2024.</p>
+      <p>The circuit was cut out of that whole-brain model. I ran the full 138,639-neuron model with the sugar neurons driven, alone and with each of the 24 busiest relay neurons silenced, and kept every neuron that fired or came within 2 mV of firing. Neurons that never fire send nothing, so the cut-down circuit behaves like the whole brain for those experiments. Silencing a neuron outside that list is an approximation.</p>
+      <p>Time is slowed down. At the slow setting one second on screen is 60 ms in the fly.</p>
+
+      <h2>How it was checked</h2>
+      <p>The original model runs in the Brian 2 simulator. I rewrote it in plain Python and then in TypeScript for this page. On the published example, the motor neuron fires at 93.3 Hz in the authors' results and 93.7 Hz in my rewrite, and firing rates across all active neurons correlate at 0.999. With the same random seed, the cut-down circuit produces the same spike counts as the whole brain.</p>
+
+      <h2>Sources and limits</h2>
+      <p>I did not produce the data or the model. I wrote the browser version and this page.</p>
+      <ul>
+        <li>Wiring: FlyWire FAFB version 783, <a href="https://doi.org/10.1038/s41586-024-07558-y" rel="noopener">Dorkenwald et al., Nature 2024</a>, released under CC BY 4.0 on <a href="https://zenodo.org/records/10676866" rel="noopener">Zenodo</a>.</li>
+        <li>Model and connection tables: <a href="https://doi.org/10.1038/s41586-024-07763-9" rel="noopener">Shiu et al., Nature 2024</a>, from the authors' <a href="https://github.com/philshiu/Drosophila_brain_model" rel="noopener">repository</a> (MIT licence).</li>
+        <li>Neuron positions, types and transmitters: the FlyWire annotations of <a href="https://doi.org/10.1038/s41586-024-07686-5" rel="noopener">Schlegel et al., Nature 2024</a>, from the <a href="https://github.com/flyconnectome/flywire_annotations" rel="noopener">flywire_annotations</a> repository.</li>
+        <li>I found these through <a href="https://www.virtualflybrain.org/docs/overview/" rel="noopener">Virtual Fly Brain</a> (<a href="https://doi.org/10.3389/fphys.2023.1076533" rel="noopener">Court et al., 2023</a>), which indexes fly brain data from many labs.</li>
+      </ul>
+      <p>A wiring map is a structure, and a model built on it is a guess about activity. Here every neuron has the same constants, nothing fires unless it is driven, and the wiring comes from a single animal. The page shows how a signal could travel through this circuit under those assumptions. It is not a recording of a fly.</p>
+    </article>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <h2 class="footer-head">Let's talk about what you're building.</h2>
+    <div class="footer-ctas">
+      <a class="btn btn-primary" href="mailto:addala.ks@gmail.com">addala.ks@gmail.com</a>
+      <a class="btn" href="../resume.pdf" target="_blank">Download resume</a>
+      <a class="btn" href="https://github.com/D0nu-t" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://linkedin.com/in/krishnasai-addala" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-meta">
+      <a href="../index.html">← Home</a>
+      <span>© 2026 Krishnasai Addala</span>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../src/main.ts"></script>
+<script type="module" src="../src/flybrain/index.ts"></script>
+</body>
+</html>

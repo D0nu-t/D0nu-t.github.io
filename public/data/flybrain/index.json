@@ -1,0 +1,25 @@
+{
+ "format": 1,
+ "brain": {
+  "file": "brain.bin",
+  "points": 22000,
+  "space": {
+   "centre_nm": [
+    494070.0,
+    248496.0,
+    139820.0
+   ],
+   "units_per_nm": 0.07827597172280522
+  },
+  "total_neurons": 139248
+ },
+ "circuits": [
+  {
+   "id": "sugar",
+   "title": "Sugar taste to proboscis",
+   "summary": "Taste neurons that Shiu et al. stimulate as sugar-sensing, and the motor neuron that extends the proboscis.",
+   "meta": "sugar/meta.json",
+   "neurons": 533
+  }
+ ]
+}

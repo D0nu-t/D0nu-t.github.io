@@ -55,9 +55,10 @@ export class Loop {
   private raf = 0
   private last = 0
 
-  constructor(private root: HTMLElement, private frame: (dt: number) => void) {
+  /** `watch` is the element that has to be on screen for the loop to run; it defaults to the whole demo. */
+  constructor(private root: HTMLElement, private frame: (dt: number) => void, watch: Element = root) {
     this.wanted = !prefersReducedMotion()
-    new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; this.sync() }, { threshold: 0.1 }).observe(root)
+    new IntersectionObserver(([e]) => { this.visible = e.isIntersecting; this.sync() }, { threshold: 0.1 }).observe(watch)
     document.addEventListener('visibilitychange', () => this.sync())
     const btn = root.querySelector<HTMLButtonElement>('[data-action="play"]')
     btn?.addEventListener('click', () => { this.wanted = !this.wanted; this.sync() })

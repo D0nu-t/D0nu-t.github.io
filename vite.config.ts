@@ -13,6 +13,7 @@ export default defineConfig({
         policySimulator:   resolve(__dirname, 'projects/policy-simulator.html'),
         graph:             resolve(__dirname, 'projects/graph.html'),
         hiddenChoices:     resolve(__dirname, 'projects/hidden-choices.html'),
+        flyBrain:          resolve(__dirname, 'projects/fly-brain.html'),
       },
     },
   },

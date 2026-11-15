@@ -1,0 +1,86 @@
+/* ─── Fly brain page ───────────────────────────────────────── */
+
+.fly-head { padding-block: clamp(4.75rem, 9vw, 6rem) 1.25rem; }
+.fly-head h1 {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+  margin: 0.75rem 0 0;
+}
+
+.fly {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--hairline-hi);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.fly-stage { position: relative; }
+.fly-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 260px;
+  background: #0d1117;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  cursor: grab;
+  touch-action: pan-y;
+}
+.fly-canvas:active { cursor: grabbing; }
+.fly-hint, .fly-status {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-on-bg);
+  margin: 0.5rem 0 0;
+}
+.fly-hint { color: var(--text-faint); }
+
+.fly-panel { display: grid; gap: 1rem; align-content: start; }
+.fly-group { display: grid; gap: 0.45rem; }
+.fly-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0;
+}
+.fly-row { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; align-items: center; }
+.fly-row[hidden], .fly-group[hidden] { display: none; }
+.fly-row .seg { display: inline-flex; border: 1px solid var(--hairline-hi); border-radius: 4px; overflow: hidden; }
+.fly-row .seg button { border: 0; border-right: 1px solid var(--hairline-hi); border-radius: 0; }
+.fly-row .seg button:last-child { border-right: 0; }
+
+.fly-readout { display: grid; gap: 0.3rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-on-bg); }
+.fly-readout-head { display: flex; justify-content: space-between; gap: 1rem; }
+.fly-readout-head strong { color: var(--text); font-variant-numeric: tabular-nums; }
+.fly-bar { height: 12px; background: #0d1117; border: 1px solid var(--hairline); border-radius: 3px; overflow: hidden; }
+.fly-bar span { display: block; height: 100%; width: 0; background: var(--green-bright); transition: width 0.2s linear; }
+.fly-note { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-faint); margin: 0; }
+
+.fly-raster { display: block; width: 100%; height: 110px; background: #0d1117; border: 1px solid var(--hairline); border-radius: 4px; }
+
+.fly-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-on-bg); margin: 0; padding: 0; list-style: none; }
+.fly-legend li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.fly-legend i { width: 0.65rem; height: 0.65rem; border-radius: 50%; display: inline-block; }
+.fly-legend i.ring { background: transparent; border: 1.5px solid var(--green-bright); }
+.fly-legend i.line { width: 1rem; height: 2px; border-radius: 0; }
+
+.fly .sel-details { margin-top: 0; }
+.fly .sel-item, .fly .sel-clear { font-family: var(--font-mono); font-size: 0.74rem; }
+.fly .sel-items { word-break: break-word; }
+
+.fly-text { padding-block: 2.5rem 4rem; }
+.fly-text .project-body { max-width: 72ch; }
+.fly-text a { color: var(--green-mid); text-decoration: underline; text-underline-offset: 2px; }
+.fly-text a:hover { color: var(--green-bright); }
+
+@media (min-width: 900px) {
+  .fly { grid-template-columns: minmax(0, 1.9fr) minmax(260px, 1fr); padding: 1.25rem; }
+}

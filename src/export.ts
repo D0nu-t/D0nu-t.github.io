@@ -58,7 +58,7 @@ export function profileMarkdown(doc: Document = document): string {
   L.push('', '## Links')
   for (const a of all<HTMLAnchorElement>('.footer-ctas a, .footer-meta a')) {
     const href = a.getAttribute('href') ?? ''
-    L.push(`- ${clean(a.textContent)}: ${href.startsWith('mailto:') ? href.slice(7) : abs(href)}`)
+    L.push(href.startsWith('mailto:') ? `- Email: ${href.slice(7)}` : `- ${clean(a.textContent)}: ${abs(href)}`)
   }
   return L.join('\n').replace(/\n{3,}/g, '\n\n') + '\n'
 }

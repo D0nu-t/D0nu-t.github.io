@@ -1,9 +1,10 @@
 import { surface, type Surface } from '../papers/hidden-choices/common'
 
 // ─── A graph drawn as a 3-D cloud ──────────────────────────────────────────────
-// Nodes, their links, and a marker that travels between them. Like the brain's
-// CloudView it knows nothing about what the nodes mean: callers set colours,
-// sizes, labels, a halo strength per node and which nodes are spent.
+// Nodes, their links, and an optional marker that travels between them. It knows
+// nothing about what the nodes mean: callers set colours, sizes, labels, which
+// nodes are lit or faded, a halo strength per node and which nodes are spent.
+// Used by the skills graph (home and fullscreen pages) and the fly brain page.
 
 const SPAN = 24000
 const CAMERA = SPAN * 5
@@ -24,6 +25,16 @@ export class GraphCloud {
   marker: [number, number, number] | null = null
   /** True while the marker is travelling (its ring turns faster). */
   flying = false
+  /** When set, only these nodes are drawn at full strength and named; the rest fade back. */
+  lit: Set<number> | null = null
+  /** 1 per node to fade it regardless of `lit` (a category filter, say). */
+  readonly faded: Uint8Array
+  /** Node under the pointer, or -1; it gets a name. */
+  hover = -1
+  /** Magnification; 1 fits the whole cloud. */
+  zoom = 1
+  /** The point the view looks at, in the cloud's own coordinates. */
+  centre: [number, number, number] = [0, 0, 0]
 
   private s: Surface
   private sx: Float32Array
@@ -49,6 +60,7 @@ export class GraphCloud {
     this.count = points.length / 3
     this.halo = new Float32Array(this.count)
     this.spent = new Uint8Array(this.count)
+    this.faded = new Uint8Array(this.count)
     this.sx = new Float32Array(this.count)
     this.sy = new Float32Array(this.count)
     this.depth = new Float32Array(this.count)
@@ -62,6 +74,12 @@ export class GraphCloud {
   flash(i: number): void { this.flashes[i] = 1 }
   clearTrail(): void { this.trail = [] }
   position(i: number): [number, number, number] { return [this.points[3 * i], this.points[3 * i + 1], this.points[3 * i + 2]] }
+
+  /** The yaw and pitch that bring node i to the front, facing the viewer. */
+  facing(i: number): [number, number] {
+    const [x, y, z] = this.position(i)
+    return [Math.atan2(-x, z), Math.max(-1.1, Math.min(1.1, Math.atan2(y, Math.hypot(x, z))))]
+  }
 
   pick(x: number, y: number, reach: number): number {
     let best = -1, bestD = Infinity
@@ -78,8 +96,11 @@ export class GraphCloud {
     const { ctx, w, h } = this.s
     this.clock += dt
     const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch)
-    const fit = Math.min(w / 2.7, h / 2.15) / SPAN, ox = w / 2, oy = h / 2 + 6
-    const project = (x: number, y: number, z: number): [number, number, number, number] => {
+    // sized so that the whole cloud stays on the canvas at any angle (near nodes are drawn larger)
+    const fit = this.zoom * Math.min(w / 3.1, h / 2.7) / SPAN, ox = w / 2, oy = h / 2 + 6
+    const [lx, ly, lz] = this.centre
+    const project = (px: number, py: number, pz: number): [number, number, number, number] => {
+      const x = px - lx, y = py - ly, z = pz - lz
       const x1 = x * cy + z * sy, z1 = z * cy - x * sy
       const y1 = y * cp - z1 * sp, z2 = z1 * cp + y * sp
       const f = CAMERA / (CAMERA - z2)
@@ -101,7 +122,8 @@ export class GraphCloud {
     ctx.lineWidth = 1
     for (const [a, b] of this.edges) {
       const hot = a === this.focus || b === this.focus || a === this.pinned || b === this.pinned
-      ctx.globalAlpha = hot ? 0.5 : 0.1
+      const quiet = this.faded[a] || this.faded[b] || (this.lit !== null && !(this.lit.has(a) && this.lit.has(b)))
+      ctx.globalAlpha = quiet ? 0.035 : hot ? 0.5 : 0.1
       ctx.strokeStyle = hot ? '#bbf7d0' : '#7d9a8c'
       ctx.beginPath(); ctx.moveTo(this.sx[a], this.sy[a]); ctx.lineTo(this.sx[b], this.sy[b]); ctx.stroke()
     }
@@ -113,8 +135,9 @@ export class GraphCloud {
       const x = this.sx[i], y = this.sy[i], r = this.sizes[i] * this.scaleAt[i]
       const near = 0.7 + 0.3 * Math.max(-1, Math.min(1, this.depth[i] / SPAN))
       const colour = this.colours[i], state = this.spent[i] as Spent
+      const back = this.faded[i] || (this.lit !== null && !this.lit.has(i)) ? 0.22 : 1
 
-      if (state === 0 && this.halo[i] > 0.02) {
+      if (back === 1 && state === 0 && this.halo[i] > 0.02) {
         ctx.globalCompositeOperation = 'lighter'
         ctx.globalAlpha = 0.03 + 0.16 * this.halo[i] ** 2
         ctx.fillStyle = colour
@@ -123,12 +146,12 @@ export class GraphCloud {
       }
       if (state === 1) {
         // picked up: a bright ring with a hollow middle
-        ctx.globalAlpha = 0.95 * near; ctx.strokeStyle = colour; ctx.lineWidth = 2
+        ctx.globalAlpha = 0.95 * near * back; ctx.strokeStyle = colour; ctx.lineWidth = 2
         ctx.beginPath(); ctx.arc(x, y, r + 1.5, 0, Math.PI * 2); ctx.stroke()
         ctx.globalAlpha = 0.9; ctx.fillStyle = '#0d1117'
         ctx.beginPath(); ctx.arc(x, y, Math.max(1, r - 0.5), 0, Math.PI * 2); ctx.fill()
       } else {
-        ctx.globalAlpha = (state === 2 ? 0.3 : 0.9) * near
+        ctx.globalAlpha = (state === 2 ? 0.3 : 0.9) * near * back
         ctx.fillStyle = colour
         ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
       }
@@ -146,29 +169,36 @@ export class GraphCloud {
       }
     }
 
-    // labels: the node in focus and the selected one always; headline nodes only where there is room,
-    // nearest first, so the names never pile up
+    // labels. Strong: the node in focus, the selected one and the one under the pointer.
+    // Then, where there is room and nearest first: the lit set if there is one, else the
+    // headline nodes. A label that would cover another is tried below its node, then dropped.
     const boxes: [number, number, number, number][] = []
-    const label = (i: number, strong: boolean): void => {
-      const text = this.labels[i], size = strong ? 12 : 10
-      ctx.font = `${strong ? 600 : 400} ${size}px 'IBM Plex Mono', monospace`
-      const tw = ctx.measureText(text).width
+    const label = (i: number, level: 0 | 1 | 2): void => {
+      const text = this.labels[i], size = level === 2 ? 12 : level === 1 ? 10.5 : 10
+      ctx.font = `${level === 2 ? 600 : 400} ${size}px 'IBM Plex Mono', monospace`
+      const tw = ctx.measureText(text).width, r = this.sizes[i] * this.scaleAt[i]
       const x = Math.max(tw / 2 + 4, Math.min(w - tw / 2 - 4, this.sx[i]))
-      const y = Math.max(size + 2, this.sy[i] - this.sizes[i] * this.scaleAt[i] - (i === this.focus ? 22 : 7))
-      const box: [number, number, number, number] = [x - tw / 2 - 3, y - size, x + tw / 2 + 3, y + 3]
-      if (!strong && boxes.some(b => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1])) return
-      boxes.push(box)
-      if (strong) { ctx.globalAlpha = 0.8; ctx.fillStyle = '#0d1117'; ctx.fillRect(box[0], box[1] - 1, box[2] - box[0], box[3] - box[1] + 2) }
-      ctx.globalAlpha = strong ? 1 : 0.7
-      ctx.fillStyle = strong ? '#e6f3ef' : '#c9d1d9'
+      const above = Math.max(size + 2, this.sy[i] - r - (i === this.focus && this.marker ? 22 : 7))
+      const below = Math.min(h - 4, this.sy[i] + r + size + 4)
+      let placed: [number, number, number, number] | null = null, y = above
+      for (const tryY of level === 0 ? [above] : [above, below]) {
+        const box: [number, number, number, number] = [x - tw / 2 - 3, tryY - size, x + tw / 2 + 3, tryY + 3]
+        if (level === 2 || !boxes.some(b => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1])) { placed = box; y = tryY; break }
+      }
+      if (!placed) return
+      boxes.push(placed)
+      if (level > 0) { ctx.globalAlpha = level === 2 ? 0.85 : 0.6; ctx.fillStyle = '#0d1117'; ctx.fillRect(placed[0], placed[1] - 1, placed[2] - placed[0], placed[3] - placed[1] + 2) }
+      ctx.globalAlpha = level === 2 ? 1 : level === 1 ? 0.95 : 0.7
+      ctx.fillStyle = level === 2 ? '#e6f3ef' : '#c9d1d9'
       ctx.textAlign = 'center'
       ctx.fillText(text, x, y)
     }
-    if (this.focus >= 0) label(this.focus, true)
-    if (this.pinned >= 0 && this.pinned !== this.focus) label(this.pinned, true)
-    if (showAll) for (let k = this.order.length - 1; k >= 0; k--) {
+    const strong = [...new Set([this.focus, this.pinned, this.hover])].filter(i => i >= 0)
+    for (const i of strong) label(i, 2)
+    if (showAll || this.lit) for (let k = this.order.length - 1; k >= 0; k--) {
       const i = this.order[k]
-      if (this.alwaysLabelled.has(i) && i !== this.focus && i !== this.pinned) label(i, false)
+      if (strong.includes(i) || this.faded[i]) continue
+      if (this.lit ? this.lit.has(i) : this.alwaysLabelled.has(i)) label(i, this.lit ? 1 : 0)
     }
 
     this.drawMarker(project, dt)

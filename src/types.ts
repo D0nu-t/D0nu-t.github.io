@@ -1,5 +1,3 @@
-import type * as d3 from 'd3'
-
 // ─── Project types ────────────────────────────────────────────────────────────
 
 export interface ProjectMeta {
@@ -46,7 +44,7 @@ export interface RevealOptions {
 
 export type NodeCategory = 'project' | 'work' | 'academic' | 'lang' | 'ml' | 'genai' | 'infra' | 'cloud' | 'data'
 
-export interface GraphNode extends d3.SimulationNodeDatum {
+export interface GraphNode {
   id: string
   label: string
   type: 'project' | 'work' | 'academic'  | 'skill'
@@ -55,7 +53,7 @@ export interface GraphNode extends d3.SimulationNodeDatum {
   since?: number   // year the skill or project was first used; optional, read by the foraging fly
 }
 
-export interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
-  source: GraphNode | string
-  target: GraphNode | string
+export interface GraphLink {
+  source: string
+  target: string
 }

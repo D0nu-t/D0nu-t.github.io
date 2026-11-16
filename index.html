@@ -476,67 +476,41 @@
 
 <!-- ─── Skills graph (embedded widget) ───────────────────── -->
 <section id="skills">
-  <div class="wrap">
+  <div class="wrap" data-skills-graph>
     <h2 class="section-label">Skills &amp; Projects</h2>
 
-    <!-- Filter pills -->
-    <div class="embed-controls" data-reveal>
-      <div class="embed-pills">
-        <button class="embed-pill" data-filter-embed="work">
-          <span class="pill-dot" style="background:#f59e0b"></span>Work
-        </button>
-        <button class="embed-pill" data-filter-embed="academic">
-          <span class="pill-dot" style="background:#a78bfa"></span>Academic
-        </button>
-        <button class="embed-pill" data-filter-embed="lang">
-          <span class="pill-dot" style="background:#5eead4"></span>Languages
-        </button>
-        <button class="embed-pill" data-filter-embed="ml">
-          <span class="pill-dot" style="background:#86efac"></span>ML / DL
-        </button>
-        <button class="embed-pill" data-filter-embed="genai">
-          <span class="pill-dot" style="background:#34d399"></span>GenAI
-        </button>
-        <button class="embed-pill" data-filter-embed="infra">
-          <span class="pill-dot" style="background:#6ee7b7"></span>Infra
-        </button>
-        <button class="embed-pill" data-filter-embed="cloud">
-          <span class="pill-dot" style="background:#a7f3d0"></span>Cloud
-        </button>
-        <button class="embed-pill" data-filter-embed="data">
-          <span class="pill-dot" style="background:#d1fae5"></span>Data
-        </button>
-      </div>
-      <div class="embed-actions">
-        <button class="btn" id="embed-reset" aria-label="Reset view">Reset view</button>
-        <a class="btn" href="projects/graph.html">Fullscreen ↗</a>
-      </div>
-    </div>
-
-    <!-- Find, list view, copy -->
+    <!-- Find, list view, copy, fullscreen -->
     <div class="embed-tools" data-reveal>
-      <label class="embed-find">Find <input type="search" id="embed-search" placeholder="a skill or project" autocomplete="off"></label>
+      <label class="embed-find">Find <input type="search" id="embed-search" data-sg="search" placeholder="a skill or project" autocomplete="off"></label>
       <button class="btn" type="button" id="embed-list-toggle" aria-pressed="false">List view</button>
       <button class="btn" type="button" data-copy="graph" title="Copy the graph as Markdown, ready to paste into an AI assistant">Copy graph as Markdown</button>
+      <a class="btn" href="projects/graph.html">Fullscreen ↗</a>
     </div>
 
-    <!-- Graph canvas -->
-    <div class="embed-wrap" data-reveal>
-      <div class="graph-embed-canvas" id="graph-embed"></div>
-      <!-- Hover tooltip -->
-      <div class="embed-tooltip" id="embed-tooltip">
-        <span class="tt-name"></span>
-        <span class="tt-cat"></span>
-        <span class="tt-links"></span>
+    <!-- The graph, and what the selected node connects to -->
+    <div class="skills-stage" data-reveal>
+      <div class="skills-view">
+        <canvas class="skills-canvas" data-sg="canvas" role="img" aria-label="My projects and skills as a rotating 3D graph. Prev and Next step through the projects, and List view shows the same information as text."></canvas>
+        <div class="skills-nav">
+          <button class="btn" type="button" data-sg="prev" aria-label="Previous project">‹ Prev</button>
+          <button class="btn" type="button" data-sg="next" aria-label="Next project">Next ›</button>
+          <button class="btn" type="button" data-sg="tour" aria-pressed="true">Pause tour</button>
+          <p class="skills-caption" data-sg="caption"></p>
+        </div>
+        <div class="skills-legend" role="group" aria-label="Show one category">
+          <button class="legend-btn" type="button" data-filter="work"><i style="background:#f59e0b"></i>Work</button>
+          <button class="legend-btn" type="button" data-filter="academic"><i style="background:#a78bfa"></i>Academic</button>
+          <button class="legend-btn" type="button" data-filter="lang"><i style="background:#5eead4"></i>Languages</button>
+          <button class="legend-btn" type="button" data-filter="ml"><i style="background:#86efac"></i>ML / DL</button>
+          <button class="legend-btn" type="button" data-filter="genai"><i style="background:#34d399"></i>GenAI</button>
+          <button class="legend-btn" type="button" data-filter="infra"><i style="background:#6ee7b7"></i>Infra</button>
+          <button class="legend-btn" type="button" data-filter="cloud"><i style="background:#a7f3d0"></i>Cloud</button>
+          <button class="legend-btn" type="button" data-filter="data"><i style="background:#d1fae5"></i>Data</button>
+        </div>
+        <p class="skills-hint">Drag to turn. Click a node to select it.</p>
       </div>
-      <!-- Hint overlay (fades on first interaction) -->
-      <div class="embed-hint" id="embed-hint" >
-        <span>Hover or click a node · Drag to rearrange · Scroll to zoom</span>
-      </div>
+      <div class="sel-details" data-sg="details" aria-live="polite" hidden></div>
     </div>
-
-    <!-- What the selected node connects to -->
-    <div class="sel-details" id="embed-details" aria-live="polite" hidden></div>
 
     <!-- The same data as a list -->
     <div class="graph-list" id="graph-list" hidden></div>

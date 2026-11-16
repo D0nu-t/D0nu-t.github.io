@@ -1,5 +1,5 @@
 import type { NavSection, CounterOptions, RevealOptions } from './types'
-import { initGraphEmbed } from './graph-embed'
+import { mountSkillsGraph } from './graph3d/skills-view'
 import { initTCG } from './tcg'
 import { graphOnlyMarkdown, profileMarkdown, renderGraphList, wireCopy } from './export'
 import { prefersReducedMotion } from './motion'
@@ -114,8 +114,9 @@ function initGraphListToggle(): void {
     toggle.textContent = asList ? 'Graph view' : 'List view'
   }
   toggle.addEventListener('click', () => show(list.hidden))
-  // A force graph is hard to read on a phone, so small screens start with the list
-  if (window.matchMedia('(max-width: 640px)').matches) show(true)
+  // A 3D graph is hard to read on a phone, so small screens start with the list.
+  // A page loaded in a hidden tab reports zero width; that is not a phone.
+  if (window.innerWidth > 0 && window.matchMedia('(max-width: 640px)').matches) show(true)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -125,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavShadow()
   initCopyEmail()
   initTCG()
-  const embed = document.getElementById('graph-embed')
-  if (embed) initGraphEmbed('graph-embed')
+  document.querySelectorAll<HTMLElement>('[data-skills-graph]').forEach(mountSkillsGraph)
   initGraphListToggle()
   initCopyMarkdown()
 })

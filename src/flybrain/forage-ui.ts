@@ -2,8 +2,8 @@ import { buildNodes, RAW_LINKS, CATEGORY_COLOR, CATEGORY_LABEL } from '../graph-
 import { nodeName } from '../graph-text'
 import { prefersReducedMotion } from '../motion'
 import { Forager, type ForageSettings } from './forage'
-import { GraphCloud } from './graph-cloud'
-import { layout3d } from './layout3d'
+import { GraphCloud } from '../graph3d/graph-cloud'
+import { layout3d } from '../graph3d/layout3d'
 
 // ─── The foraging fly on the page ──────────────────────────────────────────────
 // Joins three things that otherwise know nothing of each other: the foraging
@@ -59,6 +59,7 @@ export class Foraging {
     const headline = new Set(this.nodes.flatMap((n, i) => n.type === 'skill' ? [] : [i]))
     this.cloud = new GraphCloud(this.q<HTMLCanvasElement>('graph'), this.positions, this.nodes.map(n => CATEGORY_COLOR[n.category]),
       sizes, edges, this.names, headline)
+    this.cloud.zoom = 1.2   // this canvas is small; a little clipping at some angles is fine here
 
     this.q('forage-toggle').addEventListener('click', () => this.setOn(!this.on))
     this.wirePointer()

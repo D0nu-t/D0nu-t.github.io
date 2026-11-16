@@ -2,6 +2,8 @@ import { Loop } from '../papers/hidden-choices/common'
 import { prefersReducedMotion } from '../motion'
 import { Sim, type Network, type Params } from './sim'
 import { CloudView, type Link } from './view'
+import { Foraging, type Brain } from './forage-ui'
+import type { ForageSettings } from './forage'
 
 // ─── Fly brain page ────────────────────────────────────────────────────────────
 // Everything shown comes from data files: index.json lists the circuits, and each
@@ -30,6 +32,7 @@ interface Meta {
   neurons: { flywire_id: string[]; name: string[]; kind: string[]; transmitter: string[]; side: string[]; vfb_id: string[] }
   stimuli: Group[]
   readouts: Group[]
+  forage?: ForageSettings | null
   reference: {
     trials: number
     baseline: { stimulus: string; active_neurons: number; readout_hz: Record<string, number> }[]
@@ -55,7 +58,7 @@ async function get(url: string): Promise<Response> {
 }
 
 /** One loaded circuit: its simulation, its view and the page controls bound to them. */
-class Session {
+class Session implements Brain {
   readonly sim: Sim
   readonly view: CloudView
   private net: Network
@@ -173,6 +176,22 @@ class Session {
     this.root.querySelector(`[data-stimulus="${id}"]`)?.setAttribute('aria-pressed', String(on))
   }
 
+  /** Set the first stimulus to any strength; the foraging fly uses this when it lands on a node. */
+  drive(rateHz: number): void {
+    const g = this.meta.stimuli[0]
+    if (!g) return
+    if (rateHz > 0) this.on.add(g.id); else this.on.delete(g.id)
+    this.sim.stimulate(g.neurons, rateHz)
+    this.changed()
+    this.root.querySelector(`[data-stimulus="${g.id}"]`)?.setAttribute('aria-pressed', String(rateHz > 0))
+  }
+
+  /** While the fly forages it owns the stimulus, so the visitor's buttons are switched off. */
+  setManual(allowed: boolean): void {
+    this.root.querySelectorAll<HTMLButtonElement>('[data-stimulus]').forEach(b => { b.disabled = !allowed })
+    need<HTMLElement>(this.root, '[data-fly="stimuli-note"]').hidden = allowed
+  }
+
   /** Restart the running averages: what is measured from here on belongs to the new set-up. */
   private changed(): void {
     this.avgFrom = this.sim.step
@@ -277,8 +296,8 @@ class Session {
     this.yawHome = this.view.yaw - 0.5 * Math.sin(this.swing)
   }
 
-  // ── one animation frame ──
-  frame(dt: number): void {
+  // ── one animation frame; returns the brain time that passed (ms) and the first readout's spikes ──
+  frame(dt: number): [number, number] {
     // sway slowly once the visitor has let go (not for visitors who asked for less motion)
     this.idle += dt
     if (!this.still && !this.dragging && this.idle > 2.5) {
@@ -290,6 +309,7 @@ class Session {
     const steps = Math.min(80, Math.floor(this.carry))
     this.carry -= steps
     const readouts = this.meta.readouts
+    const before = this.avgCount[0] ?? 0
     for (let s = 0; s < steps; s++) {
       const spikes = this.sim.tick(), t = this.sim.step
       if (!spikes.length) continue
@@ -299,6 +319,7 @@ class Session {
       readouts.forEach((g, r) => { for (const i of spikes) if (g.neurons.includes(i)) { this.readoutSpikes[r].push(t); this.avgCount[r]++ } })
     }
     this.paint(true)
+    return [steps / this.stepsPerMs, (this.avgCount[0] ?? 0) - before]
   }
 
   /** Redraw everything; `advance` lets the spike glow fade. */
@@ -363,7 +384,12 @@ export async function mountFlyBrain(root: HTMLElement): Promise<void> {
   const background = new Int16Array(await (await get(base + index.brain.file)).arrayBuffer())
 
   // run whenever the brain itself is on screen, even if the controls below it are not
-  const loop = new Loop(root, dt => session?.frame(dt), canvas)
+  const foraging = new Foraging(root)
+  const loop = new Loop(root, dt => {
+    if (!session) return
+    const [ms, spikes] = session.frame(dt)
+    foraging.frame(dt, ms, spikes)
+  }, canvas)
 
   async function open(id: string): Promise<void> {
     const entry = index.circuits.find(c => c.id === id) ?? index.circuits[0]
@@ -375,8 +401,9 @@ export async function mountFlyBrain(root: HTMLElement): Promise<void> {
     session?.view.dispose()
     session = new Session(root, meta, background, new Int16Array(pos), edges)
     root.querySelectorAll<HTMLElement>('[data-circuit]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.circuit === entry.id)))
-    // start with the first stimulus on, unless the visitor asked for less motion
-    if (!prefersReducedMotion() && meta.stimuli[0]) session.setStimulus(meta.stimuli[0].id, true)
+    foraging.attach(session, meta.forage)
+    // without a foraging fly, start with the first stimulus on (unless the visitor asked for less motion)
+    if (!foraging.on && !prefersReducedMotion() && meta.stimuli[0]) session.setStimulus(meta.stimuli[0].id, true)
     session.paint()
   }
 
@@ -389,7 +416,7 @@ export async function mountFlyBrain(root: HTMLElement): Promise<void> {
     return b
   }))
 
-  need<HTMLElement>(root, '[data-action="reset"]').addEventListener('click', () => session?.reset())
+  need<HTMLElement>(root, '[data-action="reset"]').addEventListener('click', () => { session?.reset(); foraging.restart(); foraging.paint() })
   need<HTMLElement>(root, '[data-action="restore"]').addEventListener('click', () => session?.restoreAll())
   root.querySelectorAll<HTMLButtonElement>('[data-speed]').forEach(b => b.addEventListener('click', () => {
     if (session) session.speed = SPEEDS[b.dataset.speed ?? 'slow'] ?? SPEEDS.slow

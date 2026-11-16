@@ -20,12 +20,15 @@
   padding: 1rem;
 }
 
-.fly-stage { position: relative; }
+.fly-views { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+.fly-view { margin: 0; min-width: 0; }
+.fly-stage { position: relative; display: grid; gap: 0.5rem; align-content: start; }
+.fly-stage > * { margin: 0; }
 .fly-canvas {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 260px;
+  aspect-ratio: 4 / 3;
+  min-height: 240px;
   background: #0d1117;
   border: 1px solid var(--hairline);
   border-radius: 4px;
@@ -57,7 +60,7 @@
 .fly-row .seg button { border: 0; border-right: 1px solid var(--hairline-hi); border-radius: 0; }
 .fly-row .seg button:last-child { border-right: 0; }
 
-.fly-readout { display: grid; gap: 0.3rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-on-bg); }
+.fly-readout, .fly-meter { display: grid; gap: 0.3rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-on-bg); }
 .fly-readout-head { display: flex; justify-content: space-between; gap: 1rem; }
 .fly-readout-head strong { color: var(--text); font-variant-numeric: tabular-nums; }
 .fly-bar { height: 12px; background: #0d1117; border: 1px solid var(--hairline); border-radius: 3px; overflow: hidden; }
@@ -71,6 +74,13 @@
 .fly-legend i { width: 0.65rem; height: 0.65rem; border-radius: 50%; display: inline-block; }
 .fly-legend i.ring { background: transparent; border: 1.5px solid var(--green-bright); }
 .fly-legend i.line { width: 1rem; height: 2px; border-radius: 0; }
+.fly-legend i.glow { background: var(--green-bright); box-shadow: 0 0 0 4px var(--green-glow); }
+.fly-legend i.faded { background: var(--green-bright); opacity: 0.3; }
+
+.fly-picks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-on-bg); min-height: 1.2rem; }
+.fly-picks li { border-left: 3px solid var(--green-bright); padding-left: 0.5rem; }
+.fly .demo-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.fly .demo-btn:disabled:hover { border-color: var(--hairline-hi); color: var(--text-on-bg); }
 
 .fly .sel-details { margin-top: 0; }
 .fly .sel-item, .fly .sel-clear { font-family: var(--font-mono); font-size: 0.74rem; }
@@ -82,5 +92,9 @@
 .fly-text a:hover { color: var(--green-bright); }
 
 @media (min-width: 900px) {
-  .fly { grid-template-columns: minmax(0, 1.9fr) minmax(260px, 1fr); padding: 1.25rem; }
+  .fly { grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); padding: 1.25rem; }
+  .fly-views { grid-column: 1 / -1; }
+}
+@media (min-width: 700px) {
+  .fly-views { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

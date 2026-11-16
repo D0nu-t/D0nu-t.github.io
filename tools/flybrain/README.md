@@ -44,7 +44,7 @@ python validate.py $RAW 6                  # optional: check lif.py against the 
 ```
 
 A trial of one second of brain time takes about 9 s. The sugar circuit (3 baseline
-trials, 24 silencing runs of 2 trials each) builds in about 8 minutes.
+trials, 4 extra rates and 24 silencing runs of 2 trials each) builds in about 9 minutes.
 
 ## How a circuit is cut out
 
@@ -64,6 +64,30 @@ were run (silencing some other neuron, say) are approximations in the browser.
 The `silencing_listed` neurons whose silencing changed the first readout most are
 written to `meta.json` and shown on the page as "Neurons to try silencing".
 
+## Stimulus strengths and the foraging fly
+
+On the page a fly forages over the skills graph (`src/flybrain/forage.ts`). When it lands
+on a node it drives the circuit's first stimulus at a rate set by the node's sweetness and
+picks the node up once the first readout has fired enough. Two things in `circuits.json`
+support that:
+
+- `extra_rates` on a stimulus: other drive rates (Hz) to run on the whole brain. They count
+  towards the subset and its exactness check, and the measured results are written to
+  `meta.json` as `reference.rate_curve`. Run `extra_trials` trials of each.
+- `forage` on a circuit: `min_rate_hz` and `max_rate_hz` (drive for the least and most sweet
+  node), `spikes_to_eat` and `give_up_ms`. Keep the rates inside the range covered by
+  `rate_hz` and `extra_rates`. A circuit without `forage` shows no foraging panel.
+
+Changing only `forage`, `title` or `summary` does not need a whole-brain run:
+
+```bash
+python build_data.py $RAW --refresh-config
+```
+
+For the sugar circuit the curve is 0 Hz at a 25 Hz drive, 14 Hz at 50, 68 Hz at 100, 79 Hz
+at 150 and 85 Hz at 200. With 12 spikes to eat and 400 ms to give up, a node driven at about
+60 Hz is a coin flip and anything below is left.
+
 ## Adding a circuit
 
 1. Add an entry to `circuits.json` with an `id`, a `title`, a `summary`, one or more
@@ -79,7 +103,8 @@ written to `meta.json` and shown on the page as "Neurons to try silencing".
 index.json            { format, brain: { file, points, space, total_neurons }, circuits: [{ id, title, summary, meta, neurons }] }
 brain.bin             Int16 x, y, z per background point
 <id>/meta.json        format, params (model constants), n, m, index_bits, neurons (parallel arrays),
-                      stimuli, readouts, reference (whole-brain results for comparison)
+                      stimuli, readouts, forage (optional), reference (whole-brain results: baseline,
+                      rate_curve, silencing)
 <id>/pos.bin          Int16 x, y, z per circuit neuron, same space as brain.bin
 <id>/edges.bin        Uint32 ptr[n+1], then Uint16 target[m], then Int16 synapses[m] (signed: negative inhibits)
 ```

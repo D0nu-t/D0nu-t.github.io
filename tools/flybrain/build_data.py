@@ -102,6 +102,25 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
         print(f"  {s['id']}: {np.count_nonzero(rates)} neurons active, "
               + ", ".join(f"{r['id']} {rates[i].mean():.1f} Hz" for r, i in readouts) + f"  ({time.time() - t0:.0f} s)")
 
+    # 1b. the same stimuli at other strengths (`extra_rates`). The page's foraging fly drives
+    #     the taste neurons harder or softer depending on how sweet a node is, so the subset
+    #     has to hold for those strengths too. The measured curve goes into meta.json.
+    rate_runs, curve = [], {}
+    n_extra = min(trials, cfg.get("extra_trials", trials))
+    for (s, idx), run in zip(stimuli, list(runs)):
+        points = [(s["rate_hz"], run[4])]
+        for rate in s.get("extra_rates", []):
+            rates, vp, _ = experiment(idx, rate, n_trials=n_extra)
+            rate_runs.append((f"{s['id']} at {rate} Hz", idx, rate, (), rates))
+            ever |= rates > 0
+            np.maximum(peak, vp, out=peak)
+            points.append((rate, rates))
+            print(f"  {s['id']} at {rate} Hz: {np.count_nonzero(rates)} neurons active, "
+                  + ", ".join(f"{r['id']} {rates[i].mean():.1f} Hz" for r, i in readouts) + f"  ({time.time() - t0:.0f} s)")
+        curve[s["id"]] = [{"rate_hz": rate, "active_neurons": int(np.count_nonzero(rates)),
+                           "readout_hz": {r["id"]: float(rates[i].mean()) for r, i in readouts}}
+                          for rate, rates in sorted(points, key=lambda p: p[0])]
+
     # 2. the first stimulus again with each of the busiest relay neurons silenced in turn.
     #    Every one of these runs counts towards the subset; the page lists the few
     #    whose silencing moved the first readout most.
@@ -139,7 +158,7 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
     sub = Model(len(keep), new[pre[inside]], new[model.post[inside]], model.weight[inside], model.p)
     print(f"  subset: {len(keep)} neurons ({np.count_nonzero(ever)} fired, {np.count_nonzero(near & ~ever)} came close), "
           f"{len(sub.post)} connections")
-    validate_subset(model, sub, new, keep, runs[0], runs[-1])
+    validate_subset(model, sub, new, keep, runs[0], *rate_runs, runs[-1])
 
     # 4. write
     d = out / cfg["id"]
@@ -171,9 +190,11 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
         },
         "stimuli": [{"id": s["id"], "label": s["label"], "rate_hz": s["rate_hz"], "neurons": new[i].tolist()} for s, i in stimuli],
         "readouts": [{"id": r["id"], "label": r["label"], "neurons": new[i].tolist()} for r, i in readouts],
+        "forage": cfg.get("forage"),
         # whole-brain results, so the page (and its tests) can be compared with them
         "reference": {
             "trials": trials,
+            "rate_curve": curve,
             "baseline": [{"stimulus": s["id"], "active_neurons": int(np.count_nonzero(run[4])),
                           "readout_hz": {r["id"]: float(run[4][i].mean()) for r, i in readouts}}
                          for (s, _), run in zip(stimuli, runs)],
@@ -203,10 +224,22 @@ def main() -> None:
     ap.add_argument("raw", type=Path)
     ap.add_argument("--circuit", help="build only this circuit id (default: all)")
     ap.add_argument("--out", type=Path, default=HERE / "../../public/data/flybrain")
+    ap.add_argument("--refresh-config", action="store_true",
+                    help="only copy title, summary and forage settings from circuits.json into existing meta.json files")
     args = ap.parse_args()
     cfg = json.loads((HERE / "circuits.json").read_text(encoding="utf-8"))
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
+
+    if args.refresh_config:
+        for c in cfg["circuits"]:
+            path = out / c["id"] / "meta.json"
+            if path.exists() and (not args.circuit or c["id"] == args.circuit):
+                meta = json.loads(path.read_text(encoding="utf-8"))
+                meta.update(title=c["title"], summary=c["summary"], forage=c.get("forage"))
+                path.write_text(json.dumps(meta, separators=(",", ":")), encoding="utf-8", newline="\n")
+                print(f"refreshed {path}")
+        return
 
     a = load_annotations(args.raw)
     all_nm = positions_nm(a)

@@ -11,6 +11,7 @@
           "id": "sugar",
           "label": "Sugar",
           "rate_hz": 150,
+          "extra_rates": [25, 50, 100, 200],
           "neurons": [
             "720575940624963786", "720575940630233916", "720575940637568838", "720575940638202345",
             "720575940617000768", "720575940630797113", "720575940632889389", "720575940621754367",
@@ -24,6 +25,8 @@
       "readouts": [
         { "id": "mn9", "label": "Proboscis motor neuron (MN9)", "neurons": ["720575940660219265"] }
       ],
+      "extra_trials": 2,
+      "forage": { "min_rate_hz": 50, "max_rate_hz": 200, "spikes_to_eat": 12, "give_up_ms": 400 },
       "silencing_runs": 24,
       "silencing_trials": 2,
       "silencing_listed": 6,

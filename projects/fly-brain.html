@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fly brain: a taste circuit you can run · Krishnasai Addala</title>
-<meta name="description" content="A 3D view of the adult fruit fly brain with one real circuit simulated in the browser: switch on the sugar taste neurons, watch the signal reach a motor neuron, and silence neurons to see what changes.">
+<meta name="description" content="A 3D view of the adult fruit fly brain with one real circuit simulated in the browser. A fly forages over a skills graph and the simulated taste circuit decides what it eats.">
 <link rel="canonical" href="https://krishnasai.is-a.dev/projects/fly-brain.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Krishnasai Addala">
@@ -41,18 +41,28 @@
   <header class="wrap fly-head">
     <a class="back-link" href="../index.html">← Home</a>
     <h1>Fly brain: a taste circuit you can run</h1>
-    <p class="dek">Each dot is a neuron from the wiring map of an adult fruit fly brain. The bright ones carry a taste of sugar to the motor neuron that extends the proboscis. Switch the sugar neurons on, watch the signal travel, then silence a neuron and see what changes.</p>
+    <p class="dek">Each dot is a neuron from the wiring map of an adult fruit fly brain. The bright ones carry a taste of sugar to the motor neuron that extends the proboscis. Beside it, a fly forages over my skills graph, and this circuit decides what it eats. Silence a neuron and see what changes.</p>
   </header>
 
   <div class="wrap">
     <section class="fly" data-flybrain data-src="../data/flybrain/" aria-label="Fly brain simulation">
 
+      <div class="fly-views">
+        <figure class="fly-view">
+          <canvas class="fly-canvas" data-fly="canvas" role="img" aria-label="Point cloud of the fly brain. Neurons in the circuit flash when they fire."></canvas>
+          <figcaption class="fly-hint">The brain. Drag to turn it. Click or tap a bright neuron to select it.</figcaption>
+        </figure>
+        <figure class="fly-view">
+          <canvas class="fly-canvas" data-fly="graph" role="img" aria-label="My skills graph as a 3D cloud. A fly moves between nodes and picks them up."></canvas>
+          <figcaption class="fly-hint">My skills graph. The fly heads for the node that looks sweetest. Click or tap a node to see why.</figcaption>
+        </figure>
+      </div>
+
       <div class="fly-stage">
-        <canvas class="fly-canvas" data-fly="canvas" role="img" aria-label="Point cloud of the fly brain. Neurons in the circuit flash when they fire."></canvas>
-        <p class="fly-hint">Drag to turn the brain. Click or tap a bright neuron to select it.</p>
-        <p class="fly-status" data-fly="status" aria-live="polite">Loading the brain…</p>
+        <p class="fly-status" data-fly="status">Loading the brain…</p>
         <canvas class="fly-raster" data-fly="raster" role="img" aria-label="Recent spikes, one row per neuron"></canvas>
         <p class="fly-note">Spikes over the last 250 ms of brain time. Taste neurons are at the top and the motor neuron is the bottom row.</p>
+        <div class="sel-details" data-fly="node-details" aria-live="polite" hidden></div>
       </div>
 
       <div class="fly-panel">
@@ -60,9 +70,26 @@
 
         <div class="fly-row" data-fly="circuits" hidden></div>
 
+        <div class="fly-group" data-fly="forage-wrap">
+          <p class="fly-label">Foraging</p>
+          <div class="fly-row">
+            <button class="demo-btn" type="button" data-fly="forage-toggle" aria-pressed="true" title="Let the fly choose nodes and drive the taste neurons">Forage</button>
+            <span class="fly-note" data-fly="forage-count"></span>
+          </div>
+          <p class="fly-status" data-fly="forage-status" aria-live="polite"></p>
+          <p class="fly-note" data-fly="forage-progress"></p>
+          <div class="fly-meter">
+            <div class="fly-readout-head"><span>Sweetness of this node</span><strong data-fly="forage-sweet-value">0%</strong></div>
+            <div class="fly-bar"><span data-fly="forage-sweet"></span></div>
+          </div>
+          <p class="fly-note">Last picked</p>
+          <ol class="fly-picks" data-fly="forage-picks"></ol>
+        </div>
+
         <div class="fly-group">
           <p class="fly-label">Stimulate</p>
           <div class="fly-row" data-fly="stimuli"></div>
+          <p class="fly-note" data-fly="stimuli-note" hidden>The fly controls this while it forages. Switch Forage off to use it yourself.</p>
         </div>
 
         <div class="fly-group">
@@ -101,6 +128,9 @@
           <li><i class="ring"></i>stimulated or measured</li>
           <li><i class="line" style="background:#5eead4"></i>sends to</li>
           <li><i class="line" style="background:#c4b5fd"></i>hears from</li>
+          <li><i class="glow"></i>graph node that looks sweet</li>
+          <li><i class="ring"></i>graph node picked up</li>
+          <li><i class="faded"></i>tasted and left</li>
         </ul>
       </div>
 
@@ -110,10 +140,15 @@
   <div class="wrap fly-text">
     <article class="project-body">
       <h2>What this shows</h2>
-      <p>The grey cloud is the brain itself: 22,000 neuron positions sampled from the 139,248 neurons annotated in the FlyWire map of one adult female fly. The coloured dots are the 533 neurons of the circuit, joined by 29,111 connections.</p>
+      <p>The grey cloud is the brain itself: 22,000 neuron positions sampled from the 139,248 neurons annotated in the FlyWire map of one adult female fly. The coloured dots are the 562 neurons of the circuit, joined by 30,383 connections.</p>
       <p>Every neuron follows the same simple rule. Its voltage leaks back towards rest, each incoming spike nudges it up or down by 0.275 mV per synapse, and it fires when it crosses a threshold. Whether a neuron excites or inhibits its targets comes from the transmitter predicted for it. The rule and its constants are those of the whole-brain model published by Shiu and colleagues in 2024.</p>
-      <p>The circuit was cut out of that whole-brain model. I ran the full 138,639-neuron model with the sugar neurons driven, alone and with each of the 24 busiest relay neurons silenced, and kept every neuron that fired or came within 2 mV of firing. Neurons that never fire send nothing, so the cut-down circuit behaves like the whole brain for those experiments. Silencing a neuron outside that list is an approximation.</p>
+      <p>The circuit was cut out of that whole-brain model. I ran the full 138,639-neuron model with the sugar neurons driven at five strengths from 25 to 200 Hz, and at 150 Hz with each of the 24 busiest relay neurons silenced, and kept every neuron that fired or came within 2 mV of firing. Neurons that never fire send nothing, so the cut-down circuit behaves like the whole brain for those experiments. Silencing a neuron outside that list, or at another drive strength, is an approximation.</p>
       <p>Time is slowed down. At the slow setting one second on screen is 60 ms in the fly.</p>
+
+      <h2>The foraging fly</h2>
+      <p>The second view is my skills graph, laid out in three dimensions. A fly moves over it. From where the fly is, every untouched node has a sweetness: well-connected nodes are sweeter, projects and organisations are sweeter than single skills, and nearer nodes smell stronger. The fly goes to the node that looks sweetest. I wrote that scoring rule from the graph. It has nothing to do with fly biology.</p>
+      <p>What happens on landing does go through the circuit. The node's own sweetness sets how hard the sugar neurons are driven, from 50 to 200 Hz. The fly picks the node up once the motor neuron has fired 12 times, and gives up after 400 ms of brain time. In the whole-brain run the motor neuron is silent at 25 Hz, fires at 14 Hz with a 50 Hz drive and at 85 Hz with a 200 Hz drive, so the fly eats sweet nodes quickly and leaves the weakest ones.</p>
+      <p>A picked node's sweetness drops to zero, so the fly moves on, and the node it is standing on is never a candidate, so it cannot pick the same node twice in a row. When nothing is left, everything grows back and a new round starts. Silencing neurons changes what the fly does: without an excitatory relay it eats more slowly and refuses more nodes.</p>
 
       <h2>How it was checked</h2>
       <p>The original model runs in the Brian 2 simulator. I rewrote it in plain Python and then in TypeScript for this page. On the published example, the motor neuron fires at 93.3 Hz in the authors' results and 93.7 Hz in my rewrite, and firing rates across all active neurons correlate at 0.999. With the same random seed, the cut-down circuit produces the same spike counts as the whole brain.</p>

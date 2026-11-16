@@ -52,6 +52,7 @@ export interface GraphNode extends d3.SimulationNodeDatum {
   type: 'project' | 'work' | 'academic'  | 'skill'
   category: NodeCategory
   degree?: number
+  since?: number   // year the skill or project was first used; optional, read by the foraging fly
 }
 
 export interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {

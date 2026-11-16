@@ -112,7 +112,7 @@
         <div class="fly-group" data-fly="try-wrap">
           <p class="fly-label">Neurons to try silencing</p>
           <div class="fly-row" data-fly="try"></div>
-          <p class="fly-note">Motor neuron rate with and without each one, from the whole-brain run. Select one, press Silence, and compare the average. Fast gets there sooner.</p>
+          <p class="fly-note" data-fly="try-note"></p>
         </div>
 
         <div class="fly-row" data-fly="silenced" hidden>
@@ -140,7 +140,7 @@
   <div class="wrap fly-text">
     <article class="project-body">
       <h2>What this shows</h2>
-      <p>The grey cloud is the brain itself: 22,000 neuron positions sampled from the 139,248 neurons annotated in the FlyWire map of one adult female fly. The coloured dots are the 562 neurons of the circuit, joined by 30,383 connections.</p>
+      <p>The grey cloud is the brain itself: 22,000 neuron positions sampled from the 139,248 neurons annotated in the FlyWire map of one adult female fly. The coloured dots are the neurons of the circuit in use: 562 for sugar alone, joined by 30,383 connections, and 628 once the bitter neurons are added.</p>
       <p>Every neuron follows the same simple rule. Its voltage leaks back towards rest, each incoming spike nudges it up or down by 0.275 mV per synapse, and it fires when it crosses a threshold. Whether a neuron excites or inhibits its targets comes from the transmitter predicted for it. The rule and its constants are those of the whole-brain model published by Shiu and colleagues in 2024.</p>
       <p>The circuit was cut out of that whole-brain model. I ran the full 138,639-neuron model with the sugar neurons driven at five strengths from 25 to 200 Hz, and at 150 Hz with each of the 24 busiest relay neurons silenced, and kept every neuron that fired or came within 2 mV of firing. Neurons that never fire send nothing, so the cut-down circuit behaves like the whole brain for those experiments. Silencing a neuron outside that list, or at another drive strength, is an approximation.</p>
       <p>Time is slowed down. At the slow setting one second on screen is 60 ms in the fly.</p>
@@ -149,6 +149,10 @@
       <p>The second view is my skills graph, laid out in three dimensions. A crawler moves over it. From where the crawler is, every untouched node has a signal: well-connected nodes are stronger, projects and organisations are stronger than single skills, and nearer nodes come through more clearly. The crawler goes to the node with the strongest signal. I wrote that scoring rule from the graph. It has nothing to do with fly biology.</p>
       <p>What happens on arrival does go through the circuit. The node's own signal sets how hard the sugar neurons are driven, from 50 to 200 Hz. The crawler picks the node up once the motor neuron has fired 12 times, and gives up after 400 ms of brain time. In the whole-brain run the motor neuron is silent at 25 Hz, fires at 14 Hz with a 50 Hz drive and at 85 Hz with a 200 Hz drive, so strong nodes are picked up quickly and the weakest are left.</p>
       <p>A picked node's signal drops to zero, so the crawler moves on, and the node it is on is never a candidate, so it cannot pick the same node twice in a row. When nothing is left, everything is restored and a new round starts. Silencing neurons changes what the crawler does: without an excitatory relay it picks nodes up more slowly and leaves more of them.</p>
+
+      <h2>Sugar against bitter</h2>
+      <p>The second circuit adds the 21 bitter taste neurons from the same side of the brain. Driven on their own they leave the motor neuron silent. In the whole-brain run with sugar at 150 Hz the motor neuron fires at 79 Hz; with bitter also on at 100 Hz it fires at 18 Hz. Silencing a single inhibitory neuron, DNge031, brings it back to 65 Hz.</p>
+      <p>Bitter can be switched on while the crawler runs. The crawler then leaves most nodes and picks up only the strongest, because even the hardest sugar drive gets the motor neuron to 49 Hz.</p>
 
       <h2>How it was checked</h2>
       <p>The original model runs in the Brian 2 simulator. I rewrote it in plain Python and then in TypeScript for this page. On the published example, the motor neuron fires at 93.3 Hz in the authors' results and 93.7 Hz in my rewrite, and firing rates across all active neurons correlate at 0.999. With the same random seed, the cut-down circuit produces the same spike counts as the whole brain.</p>

@@ -36,6 +36,7 @@ interface Meta {
   reference: {
     trials: number
     baseline: { stimulus: string; active_neurons: number; readout_hz: Record<string, number> }[]
+    combined?: { rates_hz: Record<string, number>; readout_hz: Record<string, number> }[]
     silencing: { neuron: number; stimulus: string; trials: number; with_hz: Record<string, number>; readout_hz: Record<string, number> }[]
   }
 }
@@ -149,6 +150,9 @@ class Session implements Brain {
       box.append(head, bar, avg)
       const ref = meta.reference.baseline[0]?.readout_hz[g.id]
       if (ref !== undefined) box.append(el('p', 'fly-note', `Whole-brain run with ${meta.stimuli[0].label.toLowerCase()} on: ${Math.round(ref)} Hz`))
+      // with several stimuli: what the whole brain did with all of them on at their usual strengths
+      const all = meta.reference.combined?.find(c => meta.stimuli.every(s => c.rates_hz[s.id] === s.rate_hz))
+      if (all) box.append(el('p', 'fly-note', `With ${meta.stimuli.map(s => s.label.toLowerCase()).join(' and ')} on: ${Math.round(all.readout_hz[g.id])} Hz`))
       return box
     }))
 
@@ -162,6 +166,10 @@ class Session implements Brain {
       return b
     }))
     need<HTMLElement>(root, '[data-fly="try-wrap"]').hidden = meta.reference.silencing.length === 0
+    const condition = (meta.reference.silencing[0]?.stimulus ?? '').split(' + ')
+      .map(id => meta.stimuli.find(s => s.id === id)?.label.toLowerCase() ?? id).join(' and ')
+    need<HTMLElement>(root, '[data-fly="try-note"]').textContent =
+      `Motor neuron rate with and without each one, from the whole-brain run with ${condition} on. Select one, press Silence, and compare the average. Fast gets there sooner.`
 
     need<HTMLElement>(root, '[data-fly="summary"]').textContent =
       `${meta.title}. ${meta.n.toLocaleString('en')} of the model's ${meta.source.whole_brain_neurons.toLocaleString('en')} neurons, ${meta.m.toLocaleString('en')} connections.`
@@ -186,10 +194,16 @@ class Session implements Brain {
     this.root.querySelector(`[data-stimulus="${g.id}"]`)?.setAttribute('aria-pressed', String(rateHz > 0))
   }
 
-  /** While the fly forages it owns the stimulus, so the visitor's buttons are switched off. */
+  /** While the crawler runs it owns the first stimulus; any others stay with the visitor. */
   setManual(allowed: boolean): void {
-    this.root.querySelectorAll<HTMLButtonElement>('[data-stimulus]').forEach(b => { b.disabled = !allowed })
-    need<HTMLElement>(this.root, '[data-fly="stimuli-note"]').hidden = allowed
+    const first = this.meta.stimuli[0]
+    if (!first) return
+    const b = this.root.querySelector<HTMLButtonElement>(`[data-stimulus="${first.id}"]`)
+    if (b) b.disabled = !allowed
+    const note = need<HTMLElement>(this.root, '[data-fly="stimuli-note"]')
+    note.hidden = allowed
+    note.textContent = `The crawler controls ${first.label} while it runs. Switch Crawl off to use it yourself.`
+      + (this.meta.stimuli.length > 1 ? ` ${this.meta.stimuli.slice(1).map(s => s.label).join(' and ')} can be switched at any time.` : '')
   }
 
   /** Restart the running averages: what is measured from here on belongs to the new set-up. */
@@ -400,6 +414,8 @@ export async function mountFlyBrain(root: HTMLElement): Promise<void> {
     const [pos, edges] = await Promise.all([get(dir + meta.files.positions), get(dir + meta.files.edges)].map(async r => (await r).arrayBuffer()))
     session?.view.dispose()
     session = new Session(root, meta, background, new Int16Array(pos), edges)
+    // keep the speed the visitor chose
+    session.speed = SPEEDS[root.querySelector<HTMLElement>('[data-speed][aria-pressed="true"]')?.dataset.speed ?? 'slow'] ?? SPEEDS.slow
     root.querySelectorAll<HTMLElement>('[data-circuit]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.circuit === entry.id)))
     foraging.attach(session, meta.forage)
     // without a foraging fly, start with the first stimulus on (unless the visitor asked for less motion)

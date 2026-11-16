@@ -20,6 +20,13 @@
    "summary": "Taste neurons that Shiu et al. stimulate as sugar-sensing, and the motor neuron that extends the proboscis.",
    "meta": "sugar/meta.json",
    "neurons": 562
+  },
+  {
+   "id": "bitter",
+   "title": "Sugar against bitter",
+   "summary": "The sugar circuit with the bitter taste neurons of the same side added. Bitter suppresses the motor neuron's response to sugar.",
+   "meta": "bitter/meta.json",
+   "neurons": 628
   }
  ]
 }

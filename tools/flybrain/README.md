@@ -44,7 +44,8 @@ python validate.py $RAW 6                  # optional: check lif.py against the 
 ```
 
 A trial of one second of brain time takes about 9 s. The sugar circuit (3 baseline
-trials, 4 extra rates and 24 silencing runs of 2 trials each) builds in about 9 minutes.
+trials, 4 extra rates and 24 silencing runs of 2 trials each) builds in about 9 minutes;
+the bitter circuit in about 4.
 
 ## How a circuit is cut out
 
@@ -88,6 +89,27 @@ For the sugar circuit the curve is 0 Hz at a 25 Hz drive, 14 Hz at 50, 68 Hz at 
 at 150 and 85 Hz at 200. With 12 spikes to eat and 400 ms to give up, a node driven at about
 60 Hz is a coin flip and anything below is left.
 
+## More than one stimulus
+
+The `bitter` circuit has two stimuli, sugar and bitter. On the page each gets its own
+button; the crawler owns the first and the visitor can switch the others at any time.
+
+- A stimulus or readout names its neurons with `neurons` (FlyWire IDs) or picks them from
+  the annotation table with `select`, for example
+  `{"cell_class": "gustatory", "cell_sub_class": "bitter", "side": "left"}`.
+- With more than one stimulus the build also runs the first at each of its strengths while
+  all the others are on. Those runs count towards the subset and its check, and are written
+  to `meta.json` as `reference.combined`.
+- `"silencing_condition": "combined"` runs the silencing experiments with every stimulus on,
+  so the page lists the neurons that matter when the tastes compete. The default silences
+  under the first stimulus alone.
+- Each stimulus is also run on its own. Other mixtures (two extra stimuli, one of them off)
+  are not run and are approximate on the page.
+
+For the bitter circuit (bitter at 100 Hz): sugar at 150 Hz gives 79 Hz at the motor neuron
+alone and 18 Hz with bitter; sugar at 200 Hz with bitter gives 49 Hz. Silencing DNge031
+restores 65 Hz.
+
 ## Adding a circuit
 
 1. Add an entry to `circuits.json` with an `id`, a `title`, a `summary`, one or more
@@ -104,7 +126,7 @@ index.json            { format, brain: { file, points, space, total_neurons }, c
 brain.bin             Int16 x, y, z per background point
 <id>/meta.json        format, params (model constants), n, m, index_bits, neurons (parallel arrays),
                       stimuli, readouts, forage (optional), reference (whole-brain results: baseline,
-                      rate_curve, silencing)
+                      rate_curve, combined, silencing)
 <id>/pos.bin          Int16 x, y, z per circuit neuron, same space as brain.bin
 <id>/edges.bin        Uint32 ptr[n+1], then Uint16 target[m], then Int16 synapses[m] (signed: negative inhibits)
 ```

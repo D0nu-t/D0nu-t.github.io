@@ -43,18 +43,21 @@ class Model:
         # CSR row pointers: connections leaving neuron i are ptr[i]:ptr[i+1]
         self.ptr = np.searchsorted(pre[order], np.arange(n + 1))
 
-    def run(self, stimulated, silenced=(), *, rate_hz: float = 150.0, t_run_ms: float = 1000.0,
+    def run(self, stimulated, silenced=(), *, rate_hz=150.0, t_run_ms: float = 1000.0,
             seed: int = 0, record_times: bool = False):
         """One trial. Returns (spike counts, highest potential reached, spike times or None).
 
         `stimulated` neurons get Poisson input at `rate_hz` and have no refractory
-        period. `silenced` neurons still integrate, but nothing they send arrives.
+        period. `rate_hz` is one number for all of them, or one per stimulated neuron
+        (neurons given 0 are left alone). `silenced` neurons still integrate, but nothing they send arrives.
         """
         p, n = self.p, self.n
         rng = np.random.default_rng(seed)
         steps = int(round(t_run_ms / p.dt))
         delay = int(round(p.t_delay / p.dt))
         stimulated = np.asarray(stimulated, dtype=np.int64)
+        rates = np.broadcast_to(np.asarray(rate_hz, dtype=float), stimulated.shape)
+        stimulated, rates = stimulated[rates > 0], rates[rates > 0]
         mute = np.zeros(n, dtype=bool)
         mute[np.asarray(silenced, dtype=np.int64)] = True
 
@@ -72,7 +75,7 @@ class Model:
         v_peak = np.full(n, p.v_rest)
         times = [] if record_times else None
         kick = p.w_syn * p.poisson_factor
-        p_event = rate_hz * p.dt / 1000.0
+        p_event = rates * p.dt / 1000.0
 
         # Only neurons that have ever received input can be away from rest, so only
         # those are integrated. The result is identical and far faster: a taste

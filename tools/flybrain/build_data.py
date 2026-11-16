@@ -70,10 +70,20 @@ def text(v) -> str:
 
 def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, space: Space, out: Path) -> dict:
     index = {int(f): i for i, f in enumerate(ids)}
-    missing = [f for g in cfg["stimuli"] + cfg["readouts"] for f in g["neurons"] if int(f) not in index]
+    def wanted(g: dict) -> list:
+        """A group lists its neurons by FlyWire ID, or picks them from the annotation table with
+        `select`, for example {"cell_sub_class": "bitter", "side": "left"}."""
+        if "select" not in g:
+            return g["neurons"]
+        rows = a
+        for column, value in g["select"].items():
+            rows = rows[rows[column] == value]
+        return sorted(int(f) for f in rows.index)
+
+    missing = [f for g in cfg["stimuli"] + cfg["readouts"] for f in wanted(g) if int(f) not in index]
     if missing:
         print(f"  not in this connectome version, skipped: {missing}")
-    group = lambda g: np.array([index[int(f)] for f in g["neurons"] if int(f) in index], dtype=np.int64)
+    group = lambda g: np.array([index[int(f)] for f in wanted(g) if int(f) in index], dtype=np.int64)
     stimuli = [(s, group(s)) for s in cfg["stimuli"]]
     readouts = [(r, group(r)) for r in cfg["readouts"]]
     trials, t0 = cfg.get("trials", 3), time.time()
@@ -121,11 +131,33 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
                            "readout_hz": {r["id"]: float(rates[i].mean()) for r, i in readouts}}
                           for rate, rates in sorted(points, key=lambda p: p[0])]
 
-    # 2. the first stimulus again with each of the busiest relay neurons silenced in turn.
-    #    Every one of these runs counts towards the subset; the page lists the few
-    #    whose silencing moved the first readout most.
+    # 1c. with more than one stimulus: the first at each of its strengths while all the others
+    #     are on. That is what the page does when a visitor switches a second taste on.
+    combo_runs, combined = [], []
     s0, idx0 = stimuli[0]
-    base = runs[0][4]
+    sil_idx, sil_rate, sil_label, base = idx0, s0["rate_hz"], s0["id"], runs[0][4]
+    if len(stimuli) > 1:
+        others = [(s, idx) for s, idx in stimuli[1:]]
+        both = np.concatenate([idx0] + [idx for _, idx in others])
+        for rate in sorted([s0["rate_hz"]] + s0.get("extra_rates", [])):
+            per_neuron = np.concatenate([np.full(len(idx0), float(rate))] + [np.full(len(idx), float(s["rate_hz"])) for s, idx in others])
+            main = rate == s0["rate_hz"]
+            rates, vp, per_trial = experiment(both, per_neuron, n_trials=trials if main else n_extra)
+            label = f"{s0['id']} at {rate} Hz with " + " and ".join(f"{s['id']} at {s['rate_hz']} Hz" for s, _ in others)
+            combo_runs.append((label, both, per_neuron, (), rates))
+            ever |= rates > 0
+            np.maximum(peak, vp, out=peak)
+            combined.append({"rates_hz": {s0["id"]: rate, **{s["id"]: s["rate_hz"] for s, _ in others}},
+                             "active_neurons": int(np.count_nonzero(rates)),
+                             "readout_hz": {r["id"]: float(rates[i].mean()) for r, i in readouts}})
+            print(f"  {label}: " + ", ".join(f"{r['id']} {rates[i].mean():.1f} Hz" for r, i in readouts) + f"  ({time.time() - t0:.0f} s)")
+            if main and cfg.get("silencing_condition") == "combined":
+                sil_idx, sil_rate, base, first_trials = both, per_neuron, rates, per_trial
+                sil_label = " + ".join(s["id"] for s, _ in stimuli)
+
+    # 2. the first stimulus again (or all of them, with "silencing_condition": "combined") with
+    #    each of the busiest relay neurons silenced in turn. Every one of these runs counts
+    #    towards the subset; the page lists the few whose silencing moved the first readout most.
     fixed = np.concatenate([i for _, i in stimuli] + [i for _, i in readouts])
     fixed_set = set(fixed.tolist())
     candidates = [int(i) for i in np.argsort(-base) if base[i] > 0 and i not in fixed_set][: cfg.get("silencing_runs", 0)]
@@ -133,8 +165,8 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
     key = readouts[0][0]["id"]
     silencing = []
     for c in candidates:
-        rates, vp, per_trial = experiment(idx0, s0["rate_hz"], [c], n_sil)
-        runs.append((f"{s0['id']} without {c}", idx0, s0["rate_hz"], (c,), rates))
+        rates, vp, per_trial = experiment(sil_idx, sil_rate, [c], n_sil)
+        runs.append((f"{sil_label} without {c}", sil_idx, sil_rate, (c,), rates))
         ever |= rates > 0
         np.maximum(peak, vp, out=peak)
         with_it = {r["id"]: float(np.mean([t[r["id"]] for t in first_trials[:n_sil]])) for r, _ in readouts}
@@ -158,7 +190,7 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
     sub = Model(len(keep), new[pre[inside]], new[model.post[inside]], model.weight[inside], model.p)
     print(f"  subset: {len(keep)} neurons ({np.count_nonzero(ever)} fired, {np.count_nonzero(near & ~ever)} came close), "
           f"{len(sub.post)} connections")
-    validate_subset(model, sub, new, keep, runs[0], *rate_runs, runs[-1])
+    validate_subset(model, sub, new, keep, runs[0], *rate_runs, *combo_runs, runs[-1])
 
     # 4. write
     d = out / cfg["id"]
@@ -195,10 +227,11 @@ def build_circuit(cfg: dict, model: Model, ids: np.ndarray, a: pd.DataFrame, spa
         "reference": {
             "trials": trials,
             "rate_curve": curve,
+            "combined": combined,
             "baseline": [{"stimulus": s["id"], "active_neurons": int(np.count_nonzero(run[4])),
                           "readout_hz": {r["id"]: float(run[4][i].mean()) for r, i in readouts}}
                          for (s, _), run in zip(stimuli, runs)],
-            "silencing": [{"neuron": int(new[c]), "stimulus": s0["id"], "trials": n_sil, "with_hz": w, "readout_hz": wo}
+            "silencing": [{"neuron": int(new[c]), "stimulus": sil_label, "trials": n_sil, "with_hz": w, "readout_hz": wo}
                           for c, w, wo in listed],
         },
     }

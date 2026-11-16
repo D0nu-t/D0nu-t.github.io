@@ -22,7 +22,7 @@ export class GraphCloud {
   readonly spent: Uint8Array
   /** Marker position in the cloud's own coordinates, or null to hide it. */
   marker: [number, number, number] | null = null
-  /** True while the marker is travelling (its wings beat). */
+  /** True while the marker is travelling (its ring turns faster). */
   flying = false
 
   private s: Surface
@@ -154,7 +154,7 @@ export class GraphCloud {
       ctx.font = `${strong ? 600 : 400} ${size}px 'IBM Plex Mono', monospace`
       const tw = ctx.measureText(text).width
       const x = Math.max(tw / 2 + 4, Math.min(w - tw / 2 - 4, this.sx[i]))
-      const y = Math.max(size + 2, this.sy[i] - this.sizes[i] * this.scaleAt[i] - (i === this.focus ? 20 : 7))
+      const y = Math.max(size + 2, this.sy[i] - this.sizes[i] * this.scaleAt[i] - (i === this.focus ? 22 : 7))
       const box: [number, number, number, number] = [x - tw / 2 - 3, y - size, x + tw / 2 + 3, y + 3]
       if (!strong && boxes.some(b => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1])) return
       boxes.push(box)
@@ -185,21 +185,25 @@ export class GraphCloud {
     this.trail.forEach(([tx, ty, tz], k) => {
       const [x, y] = project(tx, ty, tz)
       ctx.globalAlpha = 0.5 * (k / this.trail.length) ** 2
-      ctx.fillStyle = '#e6f3ef'
-      ctx.beginPath(); ctx.arc(x, y - 9, 1.2, 0, Math.PI * 2); ctx.fill()
+      ctx.fillStyle = '#5eead4'
+      ctx.beginPath(); ctx.arc(x, y, 1.3, 0, Math.PI * 2); ctx.fill()
     })
-    const [mx, my0] = project(...this.marker)
-    const my = my0 - 9                                   // the fly sits just above its node
-    const beat = this.flying ? Math.sin(this.clock * 42) : 0.25
-    ctx.globalAlpha = 0.55; ctx.fillStyle = '#c9d1d9'
-    for (const side of [-1, 1]) {
-      ctx.beginPath()
-      ctx.ellipse(mx + side * 4.5, my - 2 - beat * 1.5, 5, 2.2 + beat * 0.8, side * (0.5 + beat * 0.35), 0, Math.PI * 2)
-      ctx.fill()
+    // the crawler: a targeting ring centred on its node, turning faster while it travels
+    const [mx, my] = project(...this.marker)
+    const turn = this.clock * (this.flying ? 5 : 1.2)
+    const pulse = this.flying ? 0 : 1.5 * Math.sin(this.clock * 4)
+    ctx.strokeStyle = '#5eead4'; ctx.lineWidth = 1.6; ctx.globalAlpha = 0.95
+    ctx.setLineDash([5, 4]); ctx.lineDashOffset = -turn * 6
+    ctx.beginPath(); ctx.arc(mx, my, 12 + pulse, 0, Math.PI * 2); ctx.stroke()
+    ctx.setLineDash([])
+    // four corner brackets
+    ctx.lineWidth = 2
+    for (let c = 0; c < 4; c++) {
+      const a0 = turn * 0.5 + c * Math.PI / 2
+      ctx.beginPath(); ctx.arc(mx, my, 17, a0 - 0.28, a0 + 0.28); ctx.stroke()
     }
+    // a small diamond at the centre
     ctx.globalAlpha = 1; ctx.fillStyle = '#e6f3ef'
-    ctx.beginPath(); ctx.ellipse(mx, my, 2.4, 4, 0, 0, Math.PI * 2); ctx.fill()
-    ctx.fillStyle = '#f87171'
-    ctx.beginPath(); ctx.arc(mx, my - 3.6, 1.6, 0, Math.PI * 2); ctx.fill()
+    ctx.beginPath(); ctx.moveTo(mx, my - 3.5); ctx.lineTo(mx + 3.5, my); ctx.lineTo(mx, my + 3.5); ctx.lineTo(mx - 3.5, my); ctx.closePath(); ctx.fill()
   }
 }

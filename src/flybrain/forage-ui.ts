@@ -84,10 +84,10 @@ export class Foraging {
       if (this.forager && this.forager.phase !== 'idle') { this.forager.phase = 'idle'; this.forager.target = this.forager.current }
       this.cloud.flying = false
       this.brain?.drive(0)
-      this.say('Foraging is off. The stimulus button is yours.')
+      this.say('The crawler is off. The stimulus button is yours.')
     } else {
       this.brain?.drive(0)
-      this.say('The fly is choosing a node.')
+      this.say('The crawler is choosing a node.')
     }
     this.paint()
   }
@@ -148,7 +148,7 @@ export class Foraging {
     this.brain?.drive(0)
     if (f.round !== this.shownRound) { this.cloud.spent.fill(0); this.shownRound = f.round }   // everything grew back
     this.q('forage-progress').textContent = ''
-    this.say(`Flying to ${this.names[to]}.`, false)
+    this.say(`Moving to ${this.names[to]}.`, false)
     this.setSweetness(f.sweetness(to))
   }
 
@@ -157,7 +157,7 @@ export class Foraging {
     this.cloud.flying = false
     this.cloud.marker = this.cloud.position(f.current)
     this.brain?.drive(rate)
-    this.say(`Tasting ${this.names[f.current]}: taste neurons driven at ${Math.round(rate)} Hz.`)
+    this.say(`Reading ${this.names[f.current]}: taste neurons driven at ${Math.round(rate)} Hz.`)
   }
 
   private decide(f: Forager, outcome: 'picked' | 'refused'): void {
@@ -173,7 +173,7 @@ export class Foraging {
       list.prepend(li)
       while (list.children.length > 5) list.lastElementChild?.remove()
     } else {
-      this.say(`Left ${this.names[i]}: not sweet enough to eat.`)
+      this.say(`Left ${this.names[i]}: signal too weak to pick up.`)
     }
     this.refresh()
     if (this.cloud.pinned >= 0) this.renderNode()
@@ -223,9 +223,9 @@ export class Foraging {
       ['Connections', `${n.degree ?? 0} (scores ${pct(b.connectedness)}, on a log scale)`],
       ['Type', `${n.type}, weight ${b.type}`],
       ['Category', `${CATEGORY_LABEL[n.category]}, weight ${b.category}`],
-      ['Own sweetness', `${pct(b.own)}: taste drive ${Math.round(f.rateFor(i))} Hz`],
-      ['Nearness', i === f.current ? 'the fly is here' : pct(b.nearness)],
-      ['State', this.cloud.spent[i] === 1 ? 'picked up this round, sweetness 0' : this.cloud.spent[i] === 2 ? 'tasted and left this round' : 'untouched'],
+      ['Own signal', `${pct(b.own)}: taste drive ${Math.round(f.rateFor(i))} Hz`],
+      ['Nearness', i === f.current ? 'the crawler is here' : pct(b.nearness)],
+      ['State', this.cloud.spent[i] === 1 ? 'picked up this round, signal 0' : this.cloud.spent[i] === 2 ? 'read and left this round' : 'untouched'],
     ]
     for (const [key, value] of rows) {
       const r = el('div', 'sel-row'); r.append(el('span', 'sel-key', key), el('span', 'sel-items', value)); box.append(r)
